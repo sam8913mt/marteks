@@ -1,12 +1,8 @@
 /* Merteks admin — صفحهٔ مستقل، بدون وابستگی به استایل سایت عمومی */
 :root{
-  --bg:#f4f6fb;--card:#fff;--card2:#f1f4fa;--text:#0f172a;--muted:#5b6478;--line:#dde3ef;
-  --accent:#3157d5;--accent-t:#fff;--ok:#16a34a;--warn:#d97706;--bad:#dc2626;--shadow:0 6px 24px rgba(15,23,42,.08);
+  --bg:#0b1220;--card:#111a2e;--card2:#16213a;--text:#eef2ff;--muted:#9aa6c3;--line:#223052;
+  --accent:#6f8cff;--accent-t:#0b1220;--ok:#16a34a;--warn:#d97706;--bad:#dc2626;--shadow:0 6px 24px rgba(0,0,0,.35);
   --font:"Vazirmatn",Tahoma,"Segoe UI",system-ui,sans-serif;
-}
-@media (prefers-color-scheme:dark){
-  :root{--bg:#0b1220;--card:#111a2e;--card2:#16213a;--text:#eef2ff;--muted:#9aa6c3;--line:#223052;
-    --accent:#6f8cff;--accent-t:#0b1220;--shadow:0 6px 24px rgba(0,0,0,.35)}
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}

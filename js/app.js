@@ -196,26 +196,6 @@ setTimeout(finish, 850);
 intro.addEventListener('click', finish);
 D.addEventListener('keydown', finish, { once: true });
 })();
-(function () {
-var btn = $('themeBtn');
-if (!btn) return;
-function apply(light) {
-D.body.classList.toggle('light', light);
-btn.textContent = light ? '☀' : '☾';
-btn.setAttribute('aria-pressed', String(light));
-var meta = D.querySelector('meta[name="theme-color"]');
-if (meta) meta.setAttribute('content', light ? '#f7f9fd' : '#0b1220');
-}
-var light = false;
-try { light = localStorage.getItem('sam-theme') === 'light'; } catch (e) {}
-apply(light);
-btn.addEventListener('click', function () {
-var next = !D.body.classList.contains('light');
-apply(next);
-try { localStorage.setItem('sam-theme', next ? 'light' : 'dark'); } catch (e) {}
-toast(next ? 'حالت روشن فعال شد' : 'حالت تاریک فعال شد');
-});
-})();
 var links = $('links'), menuBtn = $('menuBtn');
 function closeMenu() {
 if (!links) return;
@@ -457,6 +437,40 @@ if (!slow && 'requestIdleCallback' in W) requestIdleCallback(function () {
 var l = D.createElement('link'); l.rel = 'prefetch'; l.href = 'js/assistant.js'; l.as = 'script'; D.head.appendChild(l);
 }, { timeout: 6000 });
 }
+(function () {
+if (!aiFab) return;
+var shown = false;
+try { shown = sessionStorage.getItem('mxHello') === '1'; } catch (e) {}
+if (shown) return;
+var hello = D.createElement('div');
+hello.className = 'mx-hello';
+hello.setAttribute('role', 'status');
+hello.innerHTML =
+'<button class="mx-hello-body" type="button" aria-label="باز کردن گفتگو با دستیار مرتکس">' +
+'<span class="mx-hello-name">🤖 دستیار مرتکس</span>' +
+'<span class="mx-hello-text">سلام 👋 به مرتکس خوش آمدید! دربارهٔ طراحی سایت، هزینه، زمان تحویل یا نمونه‌کارها سؤالی دارید؟ همین‌جا بپرسید.</span>' +
+'</button>' +
+'<button class="mx-hello-close" type="button" aria-label="بستن پیام">×</button>';
+function hide(remember) {
+if (remember) { try { sessionStorage.setItem('mxHello', '1'); } catch (e) {} }
+hello.classList.remove('show');
+setTimeout(function () { if (hello.parentNode) hello.parentNode.removeChild(hello); }, 350);
+}
+hello.querySelector('.mx-hello-close').addEventListener('click', function () { hide(true); });
+hello.querySelector('.mx-hello-body').addEventListener('click', function () {
+hide(true);
+loadAssistant().then(function () { W.MX.openAssistant(); }, function () { toast('بارگذاری دستیار انجام نشد؛ دوباره تلاش کنید'); });
+});
+aiFab.addEventListener('click', function () { hide(true); });
+setTimeout(function () {
+if (D.body.classList.contains('mx-modal-open') || D.documentElement.classList.contains('intro-active')) return;
+D.body.appendChild(hello);
+void hello.offsetWidth;
+hello.classList.add('show');
+try { sessionStorage.setItem('mxHello', '1'); } catch (e) {}
+setTimeout(function () { if (hello.parentNode) hide(false); }, 16000);
+}, 3500);
+})();
 var grid = $('mxProjectsGrid'), emptyBox = $('mxProjectsEmpty'), projects = null, galleryEl = null;
 var CACHE_KEY = 'mx_projects_v4', CACHE_MS = 5 * 60 * 1000;
 function fetchProjects() {
@@ -532,13 +546,13 @@ galleryEl.innerHTML =
 '<div style="display:flex;align-items:center;gap:8px"><span class="mx-gallery-counter" id="mxGalleryCounter"></span>' +
 '<button class="mx-gallery-close" id="mxGalleryClose" type="button" aria-label="بستن">×</button></div></div>' +
 '<div class="mx-gallery-stage" id="mxGalleryStage">' +
-'<button class="mx-gallery-nav mx-gallery-prev" id="mxGalleryPrev" type="button" aria-label="عکس قبلی">' + CHEV_R + '</button>' +
+'<button class="mx-gallery-nav mx-gallery-prev" id="mxGalleryPrev" type="button" aria-label="عکس قبلی">' + CHEV_L + '</button>' +
 '<div class="mx-gallery-track" id="mxGalleryTrack">' +
 '<img class="mx-gallery-image" alt="" decoding="async" draggable="false">' +
 '<img class="mx-gallery-image" alt="" decoding="async" draggable="false">' +
 '<img class="mx-gallery-image" alt="" decoding="async" draggable="false">' +
 '</div>' +
-'<button class="mx-gallery-nav mx-gallery-next" id="mxGalleryNext" type="button" aria-label="عکس بعدی">' + CHEV_L + '</button>' +
+'<button class="mx-gallery-nav mx-gallery-next" id="mxGalleryNext" type="button" aria-label="عکس بعدی">' + CHEV_R + '</button>' +
 '</div><div class="mx-gallery-dots" id="mxGalleryDots"></div></div>';
 D.body.appendChild(galleryEl);
 var im = qa('.mx-gallery-image', galleryEl);
@@ -653,9 +667,9 @@ cmEl.innerHTML =
 '<section class="mx-cm-pager" id="mxCmPager" aria-roledescription="carousel" aria-label="نظرات بازدیدکنندگان" hidden>' +
 '<div class="mx-cm-stage" id="mxCmStage"><div class="mx-cm-page" id="mxCmPage" aria-live="polite" aria-atomic="true"></div></div>' +
 '<div class="mx-cm-nav">' +
-'<button class="mx-cm-arrow" id="mxCmPrev" type="button" aria-label="نظر قبلی">' + CHEV_R + '</button>' +
+'<button class="mx-cm-arrow" id="mxCmPrev" type="button" aria-label="نظر قبلی">' + CHEV_L + '</button>' +
 '<span class="mx-cm-counter" id="mxCmCounter"></span>' +
-'<button class="mx-cm-arrow" id="mxCmNext" type="button" aria-label="نظر بعدی">' + CHEV_L + '</button>' +
+'<button class="mx-cm-arrow" id="mxCmNext" type="button" aria-label="نظر بعدی">' + CHEV_R + '</button>' +
 '</div>' +
 '<div class="mx-cm-dots" id="mxCmDots"></div>' +
 '</section>' +
