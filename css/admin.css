@@ -43,6 +43,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 
 .ad-pass .ad-ghost[aria-pressed=true]{background:var(--card);box-shadow:0 0 0 1px var(--line) inset}
 
 .ad-btn{border:1px solid var(--line);background:var(--card2);border-radius:12px;padding:8px 14px;cursor:pointer;min-height:40px;white-space:nowrap;transition:transform .12s,background .15s}
+a.ad-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:inherit;box-sizing:border-box}
+.ad-login-card .ad-back{width:100%}
 .ad-btn:hover{background:var(--card);transform:translateY(-1px)}
 .ad-btn:active{transform:none}
 .ad-btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
@@ -55,7 +57,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 
 /* ساختار داشبورد */
 .ad-app{max-width:1100px;margin:0 auto;padding:16px 14px 60px}
 .ad-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-.ad-top-actions{display:flex;gap:8px}
+.ad-top-actions{display:flex;gap:8px;flex-wrap:wrap}
 .ad-tabs{display:flex;gap:6px;overflow-x:auto;padding:5px;background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:14px;scrollbar-width:none}
 .ad-tabs::-webkit-scrollbar{display:none}
 .ad-tab{flex:1;text-align:center;text-decoration:none;border:0;background:none;padding:10px 14px;border-radius:12px;cursor:pointer;white-space:nowrap;color:var(--muted);font-weight:600}

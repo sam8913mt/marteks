@@ -489,7 +489,7 @@ emptyBox.hidden = !!list.length;
 grid.innerHTML = list.map(function (p, i) {
 var cover = p.keys[0];
 return '<article class="mx-project-card reveal show">' +
-'<img class="mx-project-cover" src="' + esc(publicUrl(thumbKey(cover))) + '" data-full="' + esc(publicUrl(cover)) + '" alt="' + esc(p.name) + '" width="640" height="480" loading="lazy" decoding="async">' +
+'<img class="mx-project-cover" src="' + esc(publicUrl(thumbKey(cover))) + '" data-full="' + esc(publicUrl(cover)) + '" alt="' + esc(p.name) + '" width="640" height="480" loading="lazy" decoding="async" data-i="' + i + '" role="button" tabindex="0" title="مشاهده عکس‌ها">' +
 '<div class="mx-project-info"><h3 class="mx-project-name">' + esc(p.name) + '</h3>' +
 (p.description ? '<p class="mx-project-desc">' + esc(p.description) + '</p>' : '') +
 (safeUrl(p.url) ? '<a class="mx-project-link" href="' + esc(safeUrl(p.url)) + '" target="_blank" rel="noopener noreferrer">مشاهدهٔ سایت ↗</a>' : '') +
@@ -500,6 +500,9 @@ return '<article class="mx-project-card reveal show">' +
 thumbFallback(grid);
 qa('[data-i]', grid).forEach(function (b) {
 b.addEventListener('click', function () { openGallery(list[+b.getAttribute('data-i')]); });
+});
+qa('.mx-project-cover', grid).forEach(function (im) {
+im.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); im.click(); } });
 });
 qa('[data-c]', grid).forEach(function (b) {
 b.addEventListener('click', function () { openComments(list[+b.getAttribute('data-c')], b); });
