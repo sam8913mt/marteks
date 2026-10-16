@@ -518,7 +518,9 @@ var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy
 if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) cb(dx > 0 ? 1 : -1);
 }, { passive: true });
 }
-var gal = { imgs: [], i: 0 };
+var SVG_A = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="', SVG_B = '" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var CHEV_R = SVG_A + 'M9 5l7 7-7 7' + SVG_B, CHEV_L = SVG_A + 'M15 5l-7 7 7 7' + SVG_B;
+var gal = { imgs: [], i: 0, busy: false, n: null, c: null, p: null };
 function buildGallery() {
 if (galleryEl) return;
 galleryEl = D.createElement('div');
@@ -530,36 +532,50 @@ galleryEl.innerHTML =
 '<div style="display:flex;align-items:center;gap:8px"><span class="mx-gallery-counter" id="mxGalleryCounter"></span>' +
 '<button class="mx-gallery-close" id="mxGalleryClose" type="button" aria-label="بستن">×</button></div></div>' +
 '<div class="mx-gallery-stage" id="mxGalleryStage">' +
-'<button class="mx-gallery-nav mx-gallery-prev" id="mxGalleryPrev" type="button" aria-label="عکس قبلی">›</button>' +
-'<img class="mx-gallery-image" id="mxGalleryImage" alt="" decoding="async">' +
-'<button class="mx-gallery-nav mx-gallery-next" id="mxGalleryNext" type="button" aria-label="عکس بعدی">‹</button>' +
+'<button class="mx-gallery-nav mx-gallery-prev" id="mxGalleryPrev" type="button" aria-label="عکس قبلی">' + CHEV_R + '</button>' +
+'<div class="mx-gallery-track" id="mxGalleryTrack">' +
+'<img class="mx-gallery-image" alt="" decoding="async" draggable="false">' +
+'<img class="mx-gallery-image" alt="" decoding="async" draggable="false">' +
+'<img class="mx-gallery-image" alt="" decoding="async" draggable="false">' +
+'</div>' +
+'<button class="mx-gallery-nav mx-gallery-next" id="mxGalleryNext" type="button" aria-label="عکس بعدی">' + CHEV_L + '</button>' +
 '</div><div class="mx-gallery-dots" id="mxGalleryDots"></div></div>';
 D.body.appendChild(galleryEl);
+var im = qa('.mx-gallery-image', galleryEl);
+gal.n = im[0]; gal.c = im[1]; gal.p = im[2];
 $('mxGalleryClose').addEventListener('click', closeGallery);
 $('mxGalleryPrev').addEventListener('click', function () { moveGallery(-1); });
 $('mxGalleryNext').addEventListener('click', function () { moveGallery(1); });
 galleryEl.addEventListener('click', function (e) { if (e.target === galleryEl) closeGallery(); });
 $('mxGalleryDots').addEventListener('click', function (e) {
 var b = e.target.closest('[data-d]');
-if (b) { gal.i = +b.getAttribute('data-d'); paintGallery(); }
+if (b && !gal.busy) { gal.i = +b.getAttribute('data-d'); paintGallery(); }
 });
-onSwipe($('mxGalleryStage'), moveGallery);
+dragGallery($('mxGalleryStage'), $('mxGalleryTrack'));
 }
+function galAt(k) { var n = gal.imgs.length; return gal.imgs[((k % n) + n) % n]; }
+function setSrc(el, u) { if (el.getAttribute('src') !== u) { if (u) el.src = u; else el.removeAttribute('src'); } }
 function paintGallery() {
-if (!gal.imgs.length) return;
-var img = $('mxGalleryImage');
-img.alt = ($('mxGalleryTitle').textContent || 'پروژه') + ' — عکس ' + (gal.i + 1);
-img.src = gal.imgs[gal.i];
-$('mxGalleryCounter').textContent = (gal.i + 1) + ' / ' + gal.imgs.length;
+var n = gal.imgs.length;
+if (!n) return;
+var track = $('mxGalleryTrack');
+track.classList.remove('anim'); track.style.transform = '';
+gal.n.className = 'mx-gallery-image mx-gallery-side-next';
+gal.c.className = 'mx-gallery-image';
+gal.p.className = 'mx-gallery-image mx-gallery-side-prev';
+gal.c.alt = ($('mxGalleryTitle').textContent || 'پروژه') + ' — عکس ' + (gal.i + 1);
+setSrc(gal.c, galAt(gal.i));
+setSrc(gal.n, n > 1 ? galAt(gal.i + 1) : '');
+setSrc(gal.p, n > 1 ? galAt(gal.i - 1) : '');
+$('mxGalleryCounter').textContent = (gal.i + 1) + ' / ' + n;
 $('mxGalleryDots').innerHTML = gal.imgs.map(function (_, i) {
 return '<button class="mx-gallery-dot' + (i === gal.i ? ' active' : '') + '" type="button" data-d="' + i + '" aria-label="عکس ' + (i + 1) + '"></button>';
 }).join('');
-var nx = gal.imgs[(gal.i + 1) % gal.imgs.length];
-if (nx) { var pre = new Image(); pre.decoding = 'async'; pre.src = nx; }
+galleryEl.classList.toggle('single', n < 2);
 }
 function openGallery(p) {
 buildGallery();
-gal.imgs = (p.keys || []).map(publicUrl); gal.i = 0;
+gal.imgs = (p.keys || []).map(publicUrl); gal.i = 0; gal.busy = false;
 $('mxGalleryTitle').textContent = p.name || 'پروژه';
 openOverlay('mxGalleryModal', true);
 paintGallery();
@@ -568,7 +584,56 @@ setTimeout(function () { var c = $('mxGalleryClose'); if (c) c.focus(); }, 60);
 function closeGallery() {
 closeOverlay('mxGalleryModal', true);
 }
-function moveGallery(d) { if (!gal.imgs.length) return; gal.i = (gal.i + d + gal.imgs.length) % gal.imgs.length; paintGallery(); }
+function moveGallery(d) {
+var n = gal.imgs.length;
+if (n < 2 || gal.busy) return;
+gal.busy = true;
+var track = $('mxGalleryTrack'), w = $('mxGalleryStage').clientWidth, fin = false, tm;
+function done() {
+if (fin) return; fin = true;
+track.removeEventListener('transitionend', onEnd); clearTimeout(tm);
+var o = { n: gal.n, c: gal.c, p: gal.p };
+if (d > 0) { gal.c = o.n; gal.p = o.c; gal.n = o.p; } else { gal.c = o.p; gal.n = o.c; gal.p = o.n; }
+gal.i = (gal.i + d + n) % n; gal.busy = false; paintGallery();
+}
+function onEnd(e) { if (e.target === track) done(); }
+if (reduced) { done(); return; }
+tm = setTimeout(done, 340);
+track.addEventListener('transitionend', onEnd);
+track.classList.remove('dragging'); track.classList.add('anim');
+track.style.transform = 'translate3d(' + (d > 0 ? w : -w) + 'px,0,0)';
+}
+function dragGallery(stage, track) {
+var id = null, sx = 0, sy = 0, st = 0, dx = 0, drag = false;
+stage.addEventListener('pointerdown', function (e) {
+if (gal.busy || gal.imgs.length < 2 || id !== null || (e.pointerType === 'mouse' && e.button !== 0)) return;
+if (e.target.closest('.mx-gallery-nav')) return;
+id = e.pointerId; sx = e.clientX; sy = e.clientY; st = Date.now(); dx = 0; drag = false;
+});
+stage.addEventListener('pointermove', function (e) {
+if (e.pointerId !== id) return;
+var mx = e.clientX - sx, my = e.clientY - sy;
+if (!drag) {
+if (Math.abs(mx) < 8 && Math.abs(my) < 8) return;
+if (Math.abs(my) > Math.abs(mx)) { id = null; return; }
+drag = true; track.classList.remove('anim'); track.classList.add('dragging');
+try { stage.setPointerCapture(id); } catch (err) {}
+}
+dx = mx;
+track.style.transform = 'translate3d(' + dx + 'px,0,0)';
+});
+function end(e) {
+if (e.pointerId !== id) return;
+var w = stage.clientWidth || 1, d = dx, was = drag;
+var fast = Math.abs(d) / Math.max(1, Date.now() - st) > 0.45 && Math.abs(d) > 30;
+id = null; drag = false; track.classList.remove('dragging');
+if (!was) return;
+if (e.type === 'pointerup' && (Math.abs(d) > w * 0.2 || fast)) moveGallery(d > 0 ? 1 : -1);
+else { track.classList.add('anim'); track.style.transform = ''; }
+}
+stage.addEventListener('pointerup', end);
+stage.addEventListener('pointercancel', end);
+}
 var cmEl = null, cmProject = null, cmBtn = null, cmBusy = false, CM_MAX = 1000, CM_LEFT = CM_MAX.toLocaleString('fa-IR');
 function cmDate(iso) {
 var d = new Date(iso);
@@ -588,9 +653,9 @@ cmEl.innerHTML =
 '<section class="mx-cm-pager" id="mxCmPager" aria-roledescription="carousel" aria-label="نظرات بازدیدکنندگان" hidden>' +
 '<div class="mx-cm-stage" id="mxCmStage"><div class="mx-cm-page" id="mxCmPage" aria-live="polite" aria-atomic="true"></div></div>' +
 '<div class="mx-cm-nav">' +
-'<button class="mx-cm-arrow" id="mxCmPrev" type="button" aria-label="نظر قبلی">›</button>' +
+'<button class="mx-cm-arrow" id="mxCmPrev" type="button" aria-label="نظر قبلی">' + CHEV_R + '</button>' +
 '<span class="mx-cm-counter" id="mxCmCounter"></span>' +
-'<button class="mx-cm-arrow" id="mxCmNext" type="button" aria-label="نظر بعدی">‹</button>' +
+'<button class="mx-cm-arrow" id="mxCmNext" type="button" aria-label="نظر بعدی">' + CHEV_L + '</button>' +
 '</div>' +
 '<div class="mx-cm-dots" id="mxCmDots"></div>' +
 '</section>' +
@@ -599,6 +664,7 @@ cmEl.innerHTML =
 '<div class="merteks-field"><label for="mxCmName">نام شما *</label><input id="mxCmName" name="name" maxlength="60" autocomplete="name"></div>' +
 '<div class="merteks-field"><label for="mxCmBody">نظر شما *</label><textarea id="mxCmBody" name="body" maxlength="' + CM_MAX + '" rows="3" placeholder="نظر یا پرسش خود دربارهٔ این پروژه را بنویسید…"></textarea></div>' +
 '<div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>' +
+'<p class="mx-cm-note">نظر شما پس از تأیید مدیر در سایت نمایش داده می‌شود.</p>' +
 '<div class="merteks-actions"><button class="merteks-btn primary" type="submit" id="mxCmSubmit">ثبت نظر</button><span class="mx-cm-left" id="mxCmLeft">' + CM_LEFT + '</span></div>' +
 '</form>' +
 '</div>';
@@ -660,10 +726,10 @@ function loadComments(p) {
 var box = $('mxCmList');
 $('mxCmPager').hidden = true; cmRows = [];
 box.innerHTML = '<p class="mx-cm-empty">در حال بارگذاری…</p>';
-sbFetch('GET', '/rest/v1/project_comments?project_id=eq.' + encodeURIComponent(p.id) + '&select=id,name,body,created_at&order=created_at.desc&limit=100').then(function (res) {
+sbFetch('GET', '/rest/v1/project_comments?project_id=eq.' + encodeURIComponent(p.id) + '&status=eq.approved&select=id,name,body,created_at&order=created_at.desc&limit=100').then(function (res) {
 if (cmProject !== p) return;
 if (!res.ok || !Array.isArray(res.data)) {
-box.innerHTML = '<p class="mx-cm-empty">' + (res.status === 404 ? 'بخش نظرات هنوز فعال نشده است.' : 'بارگذاری نظرات انجام نشد.') + '</p>';
+box.innerHTML = '<p class="mx-cm-empty">' + (res.status === 404 || res.status === 400 ? 'بخش نظرات هنوز فعال نشده است.' : 'بارگذاری نظرات انجام نشد.') + '</p>';
 return;
 }
 renderComments(res.data);
@@ -708,8 +774,7 @@ return;
 }
 try { sessionStorage.setItem('mx_cname', name); } catch (err) {}
 $('mxCmBody').value = ''; $('mxCmLeft').textContent = CM_LEFT;
-toast('نظر شما ثبت شد؛ ممنون');
-if (cmProject === p) loadComments(p);
+toast('نظر شما ثبت شد و پس از تأیید مدیر نمایش داده می‌شود');
 }, function () {
 cmBusy = false; btn.disabled = false; btn.textContent = 'ثبت نظر';
 toast('اتصال به سرور برقرار نشد');

@@ -84,6 +84,12 @@
     <div class="ad-stats" id="commentStats"></div>
     <div class="ad-toolbar">
       <input class="ad-search" id="commentSearch" type="search" placeholder="جستجو: نام، متن نظر یا نام پروژه…" aria-label="جستجوی نظرات">
+      <select class="ad-select" id="commentFilter" aria-label="فیلتر وضعیت نظر">
+        <option value="">همهٔ نظرها</option>
+        <option value="pending">در انتظار تأیید</option>
+        <option value="approved">نمایش داده می‌شود</option>
+        <option value="hidden">مخفی</option>
+      </select>
     </div>
     <div class="ad-list" id="commentList"></div>
   </section>

@@ -321,29 +321,53 @@ return '<div class="ad-msg q"><small>👤 ' + esc(c.name) + ' · ' + esc(dateFa(
 }).join('');
 }
 $('chatSearch').addEventListener('input', renderChats);
+var CM_LABEL = { pending: '⏳ در انتظار تأیید', approved: '✅ نمایش داده می‌شود', hidden: '🚫 مخفی' };
+function cmStatus(c) { return c.status === 'approved' || c.status === 'hidden' ? c.status : 'pending'; }
 function loadComments() {
-loadList('commentList', '/rest/v1/project_comments?select=id,project_id,name,body,created_at,projects(name)&order=created_at.desc&limit=1000', function (res) {
-return res.status === 404 ? 'جدول نظرات ساخته نشده؛ فایل supabase/migration-comments.sql را در Supabase اجرا کنید.' : 'بارگذاری نظرات انجام نشد: ' + esc(errText(res));
+loadList('commentList', '/rest/v1/project_comments?select=id,project_id,name,body,created_at,status,projects(name)&order=created_at.desc&limit=1000', function (res) {
+if (res.status === 404) return 'جدول نظرات ساخته نشده؛ فایل supabase/migration-comments.sql را در Supabase اجرا کنید.';
+if (res.status === 400) return 'ستون وضعیت نظرها ساخته نشده؛ فایل supabase/migration-comment-moderation.sql را در Supabase اجرا کنید.';
+return 'بارگذاری نظرات انجام نشد: ' + esc(errText(res));
 }, function (rows) { state.comments = rows; renderComments(); });
 }
 function renderComments() {
-var all = state.comments || [], today = new Date().toDateString(), td = 0, names = {};
-all.forEach(function (c) { if (new Date(c.created_at).toDateString() === today) td++; if (c.projects && c.projects.name) names[c.project_id] = 1; });
-statBox('commentStats', [[all.length, 'کل نظرها'], [td, 'نظرهای امروز'], [Object.keys(names).length, 'پروژهٔ دارای نظر']]);
-var q = norm($('commentSearch').value);
+var all = state.comments || [], cnt = { pending: 0, approved: 0, hidden: 0 };
+all.forEach(function (c) { cnt[cmStatus(c)]++; });
+statBox('commentStats', [[all.length, 'کل نظرها'], [cnt.pending, 'در انتظار تأیید'], [cnt.approved, 'نمایش داده می‌شود'], [cnt.hidden, 'مخفی']]);
+var q = norm($('commentSearch').value), f = $('commentFilter').value;
 var list = all.filter(function (c) {
-return !q || norm([c.name, c.body, c.projects && c.projects.name].join(' ')).indexOf(q) > -1;
+return (!f || cmStatus(c) === f) && (!q || norm([c.name, c.body, c.projects && c.projects.name].join(' ')).indexOf(q) > -1);
+}).sort(function (a, b) {
+return (cmStatus(a) === 'pending' ? 0 : 1) - (cmStatus(b) === 'pending' ? 0 : 1);
 });
 if (!list.length) { setEmpty('commentList', all.length ? 'موردی پیدا نشد.' : 'هنوز نظری ثبت نشده است.'); return; }
 $('commentList').innerHTML = list.map(function (c) {
-return '<article class="ad-item"><div class="ad-item-head"><div><strong>' + esc(c.name) + '</strong>' +
+var st = cmStatus(c), id = esc(c.id), act;
+if (st === 'pending') act = '<button class="ad-btn ad-show" type="button" data-cset="approved" data-cid="' + id + '">✓ تأیید و نمایش</button>';
+else if (st === 'approved') act = '<button class="ad-btn ad-hide" type="button" data-cset="hidden" data-cid="' + id + '">مخفی کردن</button>';
+else act = '<button class="ad-btn ad-show" type="button" data-cset="approved" data-cid="' + id + '">نمایش دادن</button>';
+return '<article class="ad-item ad-cm-' + st + '"><div class="ad-item-head"><div><strong>' + esc(c.name) + '</strong>' +
 '<div class="ad-id">' + esc(dateFa(c.created_at)) + '</div></div>' +
-'<span class="ad-muted">پروژه: <b>' + esc((c.projects && c.projects.name) || 'حذف‌شده') + '</b></span></div>' +
+'<span class="ad-badge ad-badge-' + st + '">' + CM_LABEL[st] + '</span></div>' +
+'<span class="ad-muted">پروژه: <b>' + esc((c.projects && c.projects.name) || 'حذف‌شده') + '</b></span>' +
 '<div class="ad-desc">' + esc(c.body) + '</div>' +
-'<div class="ad-row-actions"><button class="ad-btn ad-danger" type="button" data-cdel="' + esc(c.id) + '">حذف نظر</button></div></article>';
+'<div class="ad-row-actions">' + act + '<button class="ad-btn ad-danger" type="button" data-cdel="' + id + '">حذف نظر</button></div></article>';
 }).join('');
 }
 $('commentSearch').addEventListener('input', renderComments);
+$('commentFilter').addEventListener('change', renderComments);
+$('commentList').addEventListener('click', function (e) {
+var t = e.target.closest('[data-cset]');
+if (!t) return;
+var id = t.getAttribute('data-cid'), st = t.getAttribute('data-cset'); t.disabled = true;
+sb('PATCH', '/rest/v1/project_comments?id=eq.' + encodeURIComponent(id), { json: { status: st }, prefer: 'return=representation' }).then(function (res) {
+if (res.ok && Array.isArray(res.data) && res.data.length) {
+(state.comments || []).forEach(function (c) { if (String(c.id) === id) c.status = res.data[0].status; });
+clearSiteCache(); renderComments();
+toast(st === 'approved' ? 'نظر در سایت نمایش داده می‌شود' : 'نظر مخفی شد');
+} else { t.disabled = false; toast('تغییر وضعیت انجام نشد: ' + (res.ok ? 'دسترسی یا نظر پیدا نشد (فایل migration-comment-moderation.sql اجرا شده؟)' : errText(res))); }
+}, function () { t.disabled = false; toast('اتصال به سرور برقرار نشد'); });
+});
 $('commentList').addEventListener('click', function (e) {
 var b = e.target.closest('[data-cdel]');
 if (!b) return;

@@ -363,7 +363,9 @@ create table if not exists public.project_comments (
   project_id uuid not null references public.projects (id) on delete cascade,
   name       text not null check (char_length(name) between 1 and 60),
   body       text not null check (char_length(body) between 2 and 1000),
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  status     text not null default 'pending'
+             check (status in ('pending', 'approved', 'hidden'))   -- نمایش فقط بعد از تأیید مدیر
 );
 create index if not exists project_comments_proj_idx
   on public.project_comments (project_id, created_at desc);
@@ -374,10 +376,20 @@ alter table public.project_comments enable row level security;
 revoke insert, update, delete on public.project_comments from anon, authenticated;
 grant  select on public.project_comments to anon, authenticated;
 grant  delete on public.project_comments to authenticated;   -- فقط مدیر (policy پایین)
+grant  update (status) on public.project_comments to authenticated;   -- تأیید / مخفی‌سازی توسط مدیر
 
 drop policy if exists "public can read comments" on public.project_comments;
-create policy "public can read comments" on public.project_comments
-  for select to anon, authenticated using (true);
+drop policy if exists "public can read approved comments" on public.project_comments;
+create policy "public can read approved comments" on public.project_comments
+  for select to anon using (status = 'approved');
+
+drop policy if exists "authenticated reads comments" on public.project_comments;
+create policy "authenticated reads comments" on public.project_comments
+  for select to authenticated using (status = 'approved' or public.is_admin());
+
+drop policy if exists "admin updates comments" on public.project_comments;
+create policy "admin updates comments" on public.project_comments
+  for update to authenticated using (public.is_admin()) with check (public.is_admin());
 
 drop policy if exists "admin deletes comments" on public.project_comments;
 create policy "admin deletes comments" on public.project_comments

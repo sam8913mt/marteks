@@ -21,9 +21,8 @@ revoke insert, update, delete on public.project_comments from anon, authenticate
 grant  select on public.project_comments to anon, authenticated;
 grant  delete on public.project_comments to authenticated;   -- فقط مدیر (policy پایین)
 
+-- توجه: خواندن عمومی نظرها (فقط تأییدشده‌ها) در migration-comment-moderation.sql تعریف می‌شود؛ آن را هم اجرا کن.
 drop policy if exists "public can read comments" on public.project_comments;
-create policy "public can read comments" on public.project_comments
-  for select to anon, authenticated using (true);
 
 drop policy if exists "admin deletes comments" on public.project_comments;
 create policy "admin deletes comments" on public.project_comments
