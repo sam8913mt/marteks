@@ -1,0 +1,15 @@
+# Supabase free projects are paused after about a week without database activity.
+# This tiny job reads one row every 3 days so that never happens.
+name: keep-supabase-awake
+on:
+  schedule:
+    - cron: "17 6 */3 * *"
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read one row
+        run: |
+          curl -fsS "https://xpkckkosnnixshbarieo.supabase.co/rest/v1/projects?select=id&limit=1" \
+            -H "apikey: sb_publishable_TboHxYoN_qQLAzZTuRErvw_nbDP5TZW"

@@ -1,0 +1,15 @@
+# برای Netlify / Cloudflare Pages (در GitHub Pages نادیده گرفته می‌شود)
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  X-Frame-Options: DENY
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+/css/*
+  Cache-Control: public, max-age=86400, must-revalidate
+/js/*
+  Cache-Control: public, max-age=86400, must-revalidate
+/admin*.html
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store

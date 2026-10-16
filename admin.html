@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پنل مدیریت مرتکس</title>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="dark light">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://xpkckkosnnixshbarieo.supabase.co; connect-src 'self' https://xpkckkosnnixshbarieo.supabase.co; object-src 'none'; base-uri 'none'; form-action 'none'">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="preconnect" href="https://xpkckkosnnixshbarieo.supabase.co" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&amp;display=swap">
+<link rel="stylesheet" href="css/admin.css">
+<script src="js/config.js" defer></script>
+<script src="js/admin.js" defer></script>
+</head>
+<body>
+
+<!-- ورود -->
+<main class="ad-login" id="adLogin">
+  <form class="ad-card ad-login-card" id="adLoginForm" autocomplete="on">
+    <div class="ad-brand"><img src="assets/ms-logo-64.webp" width="48" height="48" alt=""><div><div class="ad-kicker">ADMIN</div><h1>ورود مدیر</h1></div></div>
+    <p class="ad-muted">برای مشاهده و مدیریت سفارش‌ها، گفتگوها و پروژه‌ها وارد شوید.</p>
+    <label class="ad-field"><span>ایمیل مدیر</span>
+      <input id="adEmail" type="email" required autocomplete="username" dir="ltr" inputmode="email"></label>
+    <label class="ad-field"><span>رمز عبور</span>
+      <span class="ad-pass"><input id="adPass" type="password" required autocomplete="current-password" dir="ltr">
+      <button type="button" id="adPassToggle" class="ad-ghost" aria-label="نمایش رمز عبور" aria-pressed="false">👁</button></span></label>
+    <div class="ad-error" id="adLoginError" role="alert" hidden></div>
+    <button class="ad-btn ad-primary" type="submit" id="adLoginBtn">ورود</button>
+  </form>
+</main>
+
+<!-- داشبورد -->
+<div class="ad-app" id="adApp" hidden>
+  <header class="ad-top">
+    <div class="ad-brand"><img src="assets/ms-logo-64.webp" width="40" height="40" alt=""><div><div class="ad-kicker">ADMIN DASHBOARD</div><h1>پنل مدیریت مرتکس</h1></div></div>
+    <div class="ad-top-actions">
+      <button class="ad-btn" id="adRefresh" type="button">↻ بازخوانی</button>
+      <button class="ad-btn" id="adLogout" type="button">خروج</button>
+    </div>
+  </header>
+
+  <nav class="ad-tabs" role="tablist" aria-label="بخش‌های پنل">
+    <button class="ad-tab is-on" role="tab" type="button" data-tab="orders">📦 سفارش‌ها</button>
+    <button class="ad-tab" role="tab" type="button" data-tab="chats">💬 گفتگوها</button>
+    <a class="ad-tab" href="admin-projects.html">🖼️ پروژه‌ها</a>
+    <button class="ad-tab" role="tab" type="button" data-tab="comments">💭 نظرات</button>
+  </nav>
+
+  <!-- سفارش‌ها -->
+  <section id="paneOrders" class="ad-pane">
+    <div class="ad-stats" id="orderStats"></div>
+    <div class="ad-toolbar">
+      <input class="ad-search" id="orderSearch" type="search" placeholder="جستجو: نام، شماره، کد سفارش…" aria-label="جستجوی سفارش‌ها">
+      <select class="ad-select" id="orderFilter" aria-label="فیلتر وضعیت"><option value="">همهٔ وضعیت‌ها</option></select>
+      <span class="ad-spacer"></span>
+      <button class="ad-btn" data-export="orders-json" type="button">JSON</button>
+      <button class="ad-btn" data-export="orders-csv" type="button">CSV</button>
+      <button class="ad-btn" data-export="orders-word" type="button">Word</button>
+      <button class="ad-btn" data-export="orders-pdf" type="button">PDF</button>
+      <button class="ad-btn ad-danger" id="orderClear" type="button">حذف همه</button>
+    </div>
+    <div class="ad-list" id="orderList"></div>
+  </section>
+
+  <!-- گفتگوها -->
+  <section id="paneChats" class="ad-pane" hidden>
+    <div class="ad-stats" id="chatStats"></div>
+    <div class="ad-toolbar">
+      <input class="ad-search" id="chatSearch" type="search" placeholder="جستجو: نام، شماره یا متن پیام…" aria-label="جستجوی گفتگوها">
+      <span class="ad-spacer"></span>
+      <button class="ad-btn" data-export="chats-csv" type="button">CSV</button>
+      <button class="ad-btn" data-export="chats-word" type="button">Word</button>
+    </div>
+    <div class="ad-list" id="chatList"></div>
+  </section>
+
+  <!-- نظرات نمونه‌کارها -->
+  <section id="paneComments" class="ad-pane" hidden>
+    <div class="ad-stats" id="commentStats"></div>
+    <div class="ad-toolbar">
+      <input class="ad-search" id="commentSearch" type="search" placeholder="جستجو: نام، متن نظر یا نام پروژه…" aria-label="جستجوی نظرات">
+    </div>
+    <div class="ad-list" id="commentList"></div>
+  </section>
+</div>
+
+<div class="ad-toast" id="adToast" role="status" aria-live="polite"></div>
+</body>
+</html>
