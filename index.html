@@ -90,7 +90,7 @@
 
       <div class="wordmark reveal" style="--d:120ms">
         <img src="assets/ms-logo-128.webp" width="128" height="128" decoding="async" alt="لوگوی مرتکس">
-        <div class="wm-name">مرتکس</div>
+        <div class="wm-name" lang="fa" dir="rtl">مرتکس</div>
       </div>
 
       <p class="tagline reveal" style="--d:260ms">یک تیم، دو نفر، یک مسیر مشترک</p>
@@ -167,8 +167,10 @@
         <h2 class="section-title">نمونه‌کارها</h2>
         <p class="section-desc">کارهایی که تا امروز انجام داده‌ایم.</p>
       </div>
-      <div id="mxProjectsGrid" class="mx-projects-grid"></div>
+      <div id="mxProjectsGrid" class="mx-projects-grid" aria-live="polite"></div>
       <div id="mxProjectsEmpty" class="mx-projects-empty" hidden><p>نمونه‌کارها به‌زودی در این بخش اضافه می‌شود. برای دیدن کارهای قبلی یا شروع پروژه، با ما در ارتباط باشید.</p><a class="btn btn-primary" href="#order" data-open-order>شروع پروژه</a></div>
+      <div id="mxProjectsError" class="mx-projects-empty" role="alert" hidden><p>دریافت نمونه‌کارها انجام نشد. اتصال اینترنت را بررسی کنید و دوباره تلاش کنید.</p><button class="btn btn-primary" id="mxProjectsRetry" type="button">تلاش دوباره</button></div>
+      <div id="mxProjectsMore" class="mx-projects-more" hidden><button class="btn btn-ghost" type="button">نمایش نمونه‌کارهای بیشتر</button></div>
       <div class="mx-ideas">
         <h3 class="mx-ideas-title reveal">ایده‌هایی که می‌توانیم برایتان بسازیم</h3>
         <p class="mx-ideas-desc reveal">نمونه‌ای از پروژه‌هایی که می‌توانیم طراحی و توسعه دهیم (این‌ها ایده‌اند، نه پروژهٔ تحویل‌شده).</p>

@@ -44,7 +44,11 @@ function publicUrl(key) { return API + '/storage/v1/object/public/' + BUCKET + '
 function thumbKey(key) { return /\.webp$/.test(key) ? key.slice(0, -5) + '-t.webp' : key; }
 function thumbFallback(root) {
 qa('img[data-full]', root).forEach(function (img) {
-img.addEventListener('error', function () { var f = img.getAttribute('data-full'); if (f && img.src !== f) img.src = f; });
+img.addEventListener('error', function () {
+var f = img.getAttribute('data-full');
+if (f && !img.getAttribute('data-fb') && img.getAttribute('src') !== f) { img.setAttribute('data-fb', '1'); img.src = f; return; }
+if (img.parentNode && img.parentNode.classList) img.parentNode.classList.add('is-broken');
+});
 });
 }
 function mapProject(p) {
@@ -477,7 +481,7 @@ function fetchProjects() {
 if (projects) return Promise.resolve(projects);
 try {
 var c = JSON.parse(sessionStorage.getItem(CACHE_KEY) || 'null');
-if (c && Date.now() - c.t < CACHE_MS) { projects = c.rows; return Promise.resolve(projects); }
+if (c && Date.now() - c.t < CACHE_MS && c.rows && c.rows.length) { projects = c.rows; return Promise.resolve(projects); }
 } catch (e) {}
 if (!API || !KEY) return Promise.reject(new Error('no api'));
 return fetchProjectRows(['id,name,description,url,created_at,project_comments(count)', 'id,name,description,url,created_at', 'id,name,created_at'], 100, { cache: 'default' }).then(function (res) {
@@ -492,36 +496,49 @@ return projects;
 });
 }
 function saveProjectsCache() {
+if (!projects || !projects.length) return;
 try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), rows: projects })); } catch (e) {}
 }
 function safeUrl(u) {
 try { var x = new URL(String(u || '')); return /^https?:$/.test(x.protocol) ? x.href : ''; } catch (e) { return ''; }
 }
-function renderProjects() {
-fetchProjects().then(function (list) {
-emptyBox.hidden = !!list.length;
-grid.innerHTML = list.map(function (p, i) {
-var cover = p.keys[0];
-return '<article class="mx-project-card reveal show">' +
-'<img class="mx-project-cover" src="' + esc(publicUrl(thumbKey(cover))) + '" data-full="' + esc(publicUrl(cover)) + '" alt="' + esc(p.name) + '" width="640" height="480" loading="lazy" decoding="async" data-i="' + i + '" role="button" tabindex="0" title="مشاهده عکس‌ها">' +
-'<div class="mx-project-info"><h3 class="mx-project-name">' + esc(p.name) + '</h3>' +
+var errBox = $('mxProjectsError'), moreBox = $('mxProjectsMore'), PAGE = 9, shown = 0, listAll = [];
+function cardHtml(p, i) {
+var cover = p.keys[0], name = esc(p.name), url = safeUrl(p.url);
+return '<article class="mx-project-card">' +
+'<button class="mx-project-media" type="button" data-i="' + i + '" aria-label="مشاهده عکس‌های «' + name + '»">' +
+'<img class="mx-project-cover" src="' + esc(publicUrl(thumbKey(cover))) + '" data-full="' + esc(publicUrl(cover)) + '" alt="" width="640" height="400" loading="lazy" decoding="async">' +
+'<span class="mx-project-badge">' + p.keys.length.toLocaleString('fa-IR') + ' عکس</span></button>' +
+'<div class="mx-project-info"><h3 class="mx-project-name">' + name + '</h3>' +
 (p.description ? '<p class="mx-project-desc">' + esc(p.description) + '</p>' : '') +
-(safeUrl(p.url) ? '<a class="mx-project-link" href="' + esc(safeUrl(p.url)) + '" target="_blank" rel="noopener noreferrer">مشاهدهٔ سایت ↗</a>' : '') +
-'<p class="mx-project-count">' + p.keys.length + ' عکس</p>' +
+(url ? '<a class="mx-project-link" href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">مشاهدهٔ سایت ↗</a>' : '') +
+'<div class="mx-project-actions">' +
 '<button class="btn btn-ghost mx-project-view" type="button" data-i="' + i + '">مشاهده عکس‌ها <span>←</span></button>' +
-'<button class="btn btn-ghost mx-project-comments" type="button" data-c="' + i + '">💬 نظرات <span class="mx-ccount">' + (p.comments ? '(' + p.comments + ')' : '') + '</span></button></div></article>';
-}).join('');
-thumbFallback(grid);
-qa('[data-i]', grid).forEach(function (b) {
-b.addEventListener('click', function () { openGallery(list[+b.getAttribute('data-i')]); });
+'<button class="btn btn-ghost mx-project-comments" type="button" data-c="' + i + '">💬 نظرات <span class="mx-ccount">' + (p.comments ? '(' + p.comments + ')' : '') + '</span></button>' +
+'</div></div></article>';
+}
+function showMoreProjects() {
+var next = Math.min(listAll.length, shown + PAGE), tmp = D.createElement('div'), html = '';
+for (var i = shown; i < next; i++) html += cardHtml(listAll[i], i);
+tmp.innerHTML = html;
+thumbFallback(tmp);
+while (tmp.firstChild) grid.appendChild(tmp.firstChild);
+shown = next;
+moreBox.hidden = shown >= listAll.length;
+}
+function renderProjects() {
+errBox.hidden = true; emptyBox.hidden = true; moreBox.hidden = true;
+grid.setAttribute('aria-busy', 'true');
+grid.innerHTML = '<div class="mx-project-skel"></div><div class="mx-project-skel"></div><div class="mx-project-skel"></div>';
+fetchProjects().then(function (list) {
+grid.removeAttribute('aria-busy'); grid.innerHTML = '';
+listAll = list; shown = 0;
+emptyBox.hidden = !!list.length;
+showMoreProjects();
+}).catch(function () {
+grid.removeAttribute('aria-busy'); grid.innerHTML = '';
+listAll = []; shown = 0; moreBox.hidden = true; errBox.hidden = false;
 });
-qa('.mx-project-cover', grid).forEach(function (im) {
-im.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); im.click(); } });
-});
-qa('[data-c]', grid).forEach(function (b) {
-b.addEventListener('click', function () { openComments(list[+b.getAttribute('data-c')], b); });
-});
-}).catch(function () { emptyBox.hidden = false; });
 }
 function onSwipe(el, cb) {
 var sx = 0, sy = 0;
@@ -534,25 +551,26 @@ if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) cb(dx > 0 ? 1 : -1);
 }
 var SVG_A = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="', SVG_B = '" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var CHEV_R = SVG_A + 'M9 5l7 7-7 7' + SVG_B, CHEV_L = SVG_A + 'M15 5l-7 7 7 7' + SVG_B;
-var gal = { imgs: [], i: 0, busy: false, n: null, c: null, p: null };
+var gal = { imgs: [], i: 0, busy: false, moved: false, n: null, c: null, p: null };
 function buildGallery() {
 if (galleryEl) return;
 galleryEl = D.createElement('div');
 galleryEl.className = 'mx-gallery-modal';
 galleryEl.id = 'mxGalleryModal';
+galleryEl.setAttribute('aria-hidden', 'true');
 galleryEl.innerHTML =
-'<div class="mx-gallery-shell" role="dialog" aria-modal="true" aria-label="مشاهده عکس‌های پروژه">' +
+'<div class="mx-gallery-shell" role="dialog" aria-modal="true" aria-labelledby="mxGalleryTitle">' +
 '<div class="mx-gallery-top"><div class="mx-gallery-title" id="mxGalleryTitle"></div>' +
-'<div style="display:flex;align-items:center;gap:8px"><span class="mx-gallery-counter" id="mxGalleryCounter"></span>' +
+'<div class="mx-gallery-tools"><span class="mx-gallery-counter" id="mxGalleryCounter" aria-live="polite"></span>' +
 '<button class="mx-gallery-close" id="mxGalleryClose" type="button" aria-label="بستن">×</button></div></div>' +
 '<div class="mx-gallery-stage" id="mxGalleryStage">' +
-'<button class="mx-gallery-nav mx-gallery-prev" id="mxGalleryPrev" type="button" aria-label="عکس قبلی">' + CHEV_L + '</button>' +
+'<button class="mx-gallery-nav mx-gallery-prev" id="mxGalleryPrev" type="button" aria-label="عکس قبلی">' + CHEV_R + '</button>' +
 '<div class="mx-gallery-track" id="mxGalleryTrack">' +
 '<img class="mx-gallery-image" alt="" decoding="async" draggable="false">' +
 '<img class="mx-gallery-image" alt="" decoding="async" draggable="false">' +
 '<img class="mx-gallery-image" alt="" decoding="async" draggable="false">' +
 '</div>' +
-'<button class="mx-gallery-nav mx-gallery-next" id="mxGalleryNext" type="button" aria-label="عکس بعدی">' + CHEV_R + '</button>' +
+'<button class="mx-gallery-nav mx-gallery-next" id="mxGalleryNext" type="button" aria-label="عکس بعدی">' + CHEV_L + '</button>' +
 '</div><div class="mx-gallery-dots" id="mxGalleryDots"></div></div>';
 D.body.appendChild(galleryEl);
 var im = qa('.mx-gallery-image', galleryEl);
@@ -560,12 +578,32 @@ gal.n = im[0]; gal.c = im[1]; gal.p = im[2];
 $('mxGalleryClose').addEventListener('click', closeGallery);
 $('mxGalleryPrev').addEventListener('click', function () { moveGallery(-1); });
 $('mxGalleryNext').addEventListener('click', function () { moveGallery(1); });
-galleryEl.addEventListener('click', function (e) { if (e.target === galleryEl) closeGallery(); });
+var stageEl = $('mxGalleryStage');
+im.forEach(function (el) {
+el.addEventListener('load', function () { if (el === gal.c) stageEl.classList.remove('loading', 'failed'); });
+el.addEventListener('error', function () { if (el === gal.c && el.getAttribute('src')) { stageEl.classList.remove('loading'); stageEl.classList.add('failed'); } });
+});
+galleryEl.addEventListener('click', function (e) {
+if (gal.moved) { gal.moved = false; return; }
+if (e.target.closest('.mx-gallery-nav,.mx-gallery-close,.mx-gallery-dot')) return;
+if (outsideImage(e.clientX, e.clientY)) closeGallery();
+});
 $('mxGalleryDots').addEventListener('click', function (e) {
 var b = e.target.closest('[data-d]');
 if (b && !gal.busy) { gal.i = +b.getAttribute('data-d'); paintGallery(); }
 });
 dragGallery($('mxGalleryStage'), $('mxGalleryTrack'));
+}
+function outsideImage(x, y) {
+var im = gal.c;
+if (!im || !im.naturalWidth) return true;
+var r = im.getBoundingClientRect(), cs = W.getComputedStyle(im);
+var pl = parseFloat(cs.paddingLeft) || 0, pr = parseFloat(cs.paddingRight) || 0, pt = parseFloat(cs.paddingTop) || 0, pb = parseFloat(cs.paddingBottom) || 0;
+var bw = r.width - pl - pr, bh = r.height - pt - pb;
+if (bw <= 0 || bh <= 0) return true;
+var s = Math.min(bw / im.naturalWidth, bh / im.naturalHeight), w = im.naturalWidth * s, h = im.naturalHeight * s;
+var left = r.left + pl + (bw - w) / 2, top = r.top + pt + (bh - h) / 2;
+return x < left || x > left + w || y < top || y > top + h;
 }
 function galAt(k) { var n = gal.imgs.length; return gal.imgs[((k % n) + n) % n]; }
 function setSrc(el, u) { if (el.getAttribute('src') !== u) { if (u) el.src = u; else el.removeAttribute('src'); } }
@@ -579,6 +617,9 @@ gal.c.className = 'mx-gallery-image';
 gal.p.className = 'mx-gallery-image mx-gallery-side-prev';
 gal.c.alt = ($('mxGalleryTitle').textContent || 'پروژه') + ' — عکس ' + (gal.i + 1);
 setSrc(gal.c, galAt(gal.i));
+var stg = $('mxGalleryStage'), cs = gal.c.getAttribute('src');
+stg.classList.remove('loading', 'failed');
+if (cs && !(gal.c.complete && gal.c.naturalWidth)) stg.classList.add(gal.c.complete ? 'failed' : 'loading');
 setSrc(gal.n, n > 1 ? galAt(gal.i + 1) : '');
 setSrc(gal.p, n > 1 ? galAt(gal.i - 1) : '');
 $('mxGalleryCounter').textContent = (gal.i + 1) + ' / ' + n;
@@ -586,8 +627,11 @@ $('mxGalleryDots').innerHTML = gal.imgs.map(function (_, i) {
 return '<button class="mx-gallery-dot' + (i === gal.i ? ' active' : '') + '" type="button" data-d="' + i + '" aria-label="عکس ' + (i + 1) + '"></button>';
 }).join('');
 galleryEl.classList.toggle('single', n < 2);
+var act = galleryEl.querySelector('.mx-gallery-dot.active');
+if (act && act.scrollIntoView) { try { act.scrollIntoView({ block: 'nearest', inline: 'center' }); } catch (err) {} }
 }
 function openGallery(p) {
+if (!p || !p.keys || !p.keys.length) return;
 buildGallery();
 gal.imgs = (p.keys || []).map(publicUrl); gal.i = 0; gal.busy = false;
 $('mxGalleryTitle').textContent = p.name || 'پروژه';
@@ -630,7 +674,7 @@ var mx = e.clientX - sx, my = e.clientY - sy;
 if (!drag) {
 if (Math.abs(mx) < 8 && Math.abs(my) < 8) return;
 if (Math.abs(my) > Math.abs(mx)) { id = null; return; }
-drag = true; track.classList.remove('anim'); track.classList.add('dragging');
+drag = true; gal.moved = true; track.classList.remove('anim'); track.classList.add('dragging');
 try { stage.setPointerCapture(id); } catch (err) {}
 }
 dx = mx;
@@ -642,6 +686,7 @@ var w = stage.clientWidth || 1, d = dx, was = drag;
 var fast = Math.abs(d) / Math.max(1, Date.now() - st) > 0.45 && Math.abs(d) > 30;
 id = null; drag = false; track.classList.remove('dragging');
 if (!was) return;
+setTimeout(function () { gal.moved = false; }, 60);
 if (e.type === 'pointerup' && (Math.abs(d) > w * 0.2 || fast)) moveGallery(d > 0 ? 1 : -1);
 else { track.classList.add('anim'); track.style.transform = ''; }
 }
@@ -832,6 +877,16 @@ if (e.key === 'Escape') closeMenu();
 if (grid) {
 var sec = $('projects'), started = false;
 function startProjects() { if (started) return; started = true; renderProjects(); }
+grid.addEventListener('click', function (e) {
+var v = e.target.closest('[data-i]');
+if (v && grid.contains(v)) { openGallery(listAll[+v.getAttribute('data-i')]); return; }
+var m = e.target.closest('[data-c]');
+if (m && grid.contains(m)) openComments(listAll[+m.getAttribute('data-c')], m);
+});
+if (moreBox) moreBox.addEventListener('click', showMoreProjects);
+var retryBtn = $('mxProjectsRetry');
+if (retryBtn) retryBtn.addEventListener('click', renderProjects);
+W.addEventListener('online', function () { if (errBox && !errBox.hidden) renderProjects(); });
 if ('IntersectionObserver' in W && sec) {
 var po = new IntersectionObserver(function (en) {
 if (en[0].isIntersecting) { po.disconnect(); startProjects(); }
