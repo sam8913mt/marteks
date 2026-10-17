@@ -13,7 +13,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 img{max-width:100%}
 
 .ad-muted{color:var(--muted);font-size:12.5px}
-.ad-kicker{font:700 10px/1.4 Arial,sans-serif;letter-spacing:3px;color:var(--accent);direction:ltr;text-align:right}
+.ad-kicker{font:700 10px/1.4 var(--font);letter-spacing:3px;color:var(--accent);direction:ltr;text-align:right}
 .ad-brand{display:flex;align-items:center;gap:12px}
 .ad-brand img{border-radius:12px}
 
@@ -125,3 +125,7 @@ a.ad-btn{display:inline-flex;align-items:center;justify-content:center;text-deco
 
 /* گزینه‌های لیست کشویی: پس‌زمینهٔ ثابت تا روی تم تاریک متن سفید روی سفید نشود */
 select option{background:var(--card);color:var(--text)}
+
+.ad-count{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;margin-inline-start:7px;border-radius:999px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;line-height:1;vertical-align:middle;box-shadow:0 0 0 2px rgba(239,68,68,.25);animation:adPop .35s ease}
+.ad-count[hidden]{display:none}
+@keyframes adPop{0%{transform:scale(.4)}70%{transform:scale(1.2)}100%{transform:scale(1)}}

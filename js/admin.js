@@ -70,13 +70,51 @@ clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove
 }
 function getTok() { try { return sessionStorage.getItem(TOK_KEY) || ''; } catch (e) { return ''; } }
 function setTok(t) { try { t ? sessionStorage.setItem(TOK_KEY, t) : sessionStorage.removeItem(TOK_KEY); } catch (e) {} }
+var RT_KEY = 'mx_adm_rt';
+function getRt() { try { return sessionStorage.getItem(RT_KEY) || ''; } catch (e) { return ''; } }
+function setRt(t) { try { t ? sessionStorage.setItem(RT_KEY, t) : sessionStorage.removeItem(RT_KEY); } catch (e) {} }
+function saveSession(d) { setTok(d.access_token); if (d.refresh_token) setRt(d.refresh_token); }
+function expSoon(t) {
+try { var p = JSON.parse(atob(t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))); return p.exp * 1000 - Date.now() < 60000; } catch (e) { return false; }
+}
+var refreshing = null;
+function refreshSession() {
+var rt = getRt();
+if (!rt) return Promise.resolve(false);
+if (!refreshing) {
+refreshing = sbFetch('POST', '/auth/v1/token?grant_type=refresh_token', { json: { refresh_token: rt } }).then(function (res) {
+refreshing = null;
+if (res.ok && res.data && res.data.access_token) { saveSession(res.data); return true; }
+return false;
+}, function () { refreshing = null; return false; });
+}
+return refreshing;
+}
+function isAuthErr(res) {
+if (res.status === 401) return true;
+if (res.status === 400 || res.status === 403) { var m = String(errText(res)); return /jwt|exp claim|token.*expired|expired/i.test(m); }
+return false;
+}
 function sb(method, path, o) {
 o = o || {};
-var tok = o.auth !== false && getTok();
+var useAuth = o.auth !== false;
+function run() {
+var tok = useAuth && getTok();
 o.token = tok; o.timeout = o.timeout || 30000;
-return sbFetch(method, path, o).then(function (res) {
-if (res.status === 401 && tok && getTok()) logout('نشست مدیر تمام شد؛ دوباره وارد شوید');
-return res;
+return sbFetch(method, path, o).then(function (res) { return { res: res, tok: tok }; });
+}
+var pre = (useAuth && getTok() && expSoon(getTok())) ? refreshSession() : Promise.resolve();
+return pre.then(run).then(function (x) {
+if (x.tok && getTok() && isAuthErr(x.res)) {
+return refreshSession().then(function (ok) {
+if (!ok) { if (getTok()) logout('نشست مدیر تمام شد؛ دوباره وارد شوید'); return x.res; }
+return run().then(function (y) {
+if (isAuthErr(y.res) && getTok()) logout('نشست مدیر تمام شد؛ دوباره وارد شوید');
+return y.res;
+});
+});
+}
+return x.res;
 });
 }
 var idleTimer;
@@ -92,7 +130,7 @@ $('adApp').hidden = !on;
 D.title = on ? PAGE_TITLE : 'ورود به پنل مدیریت';
 }
 function logout(msg) {
-setTok(''); clearTimeout(idleTimer);
+setTok(''); setRt(''); clearTimeout(idleTimer);
 onLogout();
 $('adPass').value = '';
 showApp(false);
@@ -121,11 +159,11 @@ function reset() { btn.disabled = false; btn.textContent = 'ورود'; }
 sb('POST', '/auth/v1/token?grant_type=password', { auth: false, json: { email: email, password: pass } }).then(function (res) {
 var d = res.data;
 if (res.ok && d && d.access_token) {
-setTok(d.access_token);
+saveSession(d);
 return sb('POST', '/rest/v1/rpc/is_admin', { json: {} }).then(function (r2) {
 reset();
 if (r2.ok && r2.data === true) { $('adPass').value = ''; enter(); }
-else { setTok(''); loginFail('این حساب دسترسی مدیر ندارد'); }
+else { setTok(''); setRt(''); loginFail('این حساب دسترسی مدیر ندارد'); }
 });
 }
 reset();
@@ -137,12 +175,12 @@ else loginFail('ورود انجام نشد' + (code ? ' (' + code + ')' : ''));
 }, function () { reset(); loginFail('اتصال به سرور برقرار نشد'); });
 });
 function clearSiteCache() { try { ['mx_projects_v2', 'mx_projects_v3', 'mx_projects_v4'].forEach(function (k) { sessionStorage.removeItem(k); }); } catch (e) {} }
-function enter() { showApp(true); touch(); onEnter(); }
+function enter() { showApp(true); touch(); onEnter(); pollBadges(); }
 $('adLogout').addEventListener('click', function () { logout('از پنل خارج شدید'); });
 function startSession() {
 if (!getTok()) return;
 sb('POST', '/rest/v1/rpc/is_admin', { json: {} }).then(function (r) {
-if (r.ok && r.data === true) enter(); else { setTok(''); showApp(false); }
+if (r.ok && r.data === true) enter(); else if (r.status === 401 || r.status === 403) { setTok(''); setRt(''); showApp(false); } else showApp(false);
 }, function () { showApp(false); });
 }
 var PAGE_TITLE = 'پنل مدیریت مرتکس';
@@ -187,26 +225,74 @@ if (!w) { toast('اجازهٔ باز شدن پنجرهٔ جدید را فعال 
 w.document.open(); w.document.write(html); w.document.close();
 w.focus(); setTimeout(function () { w.print(); }, 500);
 }
-var state = { orders: [], chatRows: null, comments: null, tab: 'orders' };
+var state = { orders: [], chatRows: null, comments: null, projects: null, tab: 'orders' };
 function onLogout() {
-state.orders = []; state.chatRows = null; state.comments = null;
-['orderList', 'chatList', 'commentList'].forEach(function (id) { $(id).innerHTML = ''; });
+state.orders = []; state.chatRows = null; state.comments = null; state.projects = null;
+['orderList', 'chatList', 'commentList', 'projList'].forEach(function (id) { $(id).innerHTML = ''; });
+clearPreview(); setBadge('chats', 0); setBadge('comments', 0);
 }
 function switchTab(name) {
 state.tab = name;
 qa('button.ad-tab').forEach(function (t) { var on = t.getAttribute('data-tab') === name; t.classList.toggle('is-on', on); t.setAttribute('aria-selected', String(on)); });
 Object.keys(LOAD).forEach(function (t) { $('pane' + t.charAt(0).toUpperCase() + t.slice(1)).hidden = name !== t; });
-if (STATE_KEY[name] && !state[STATE_KEY[name]]) LOAD[name]();
+if (STATE_KEY[name] && (!state[STATE_KEY[name]] || badgeN[name] > 0)) LOAD[name]();
+if (name === 'chats' || name === 'comments') setBadge(name, 0);
+try { history.replaceState(null, '', '#' + name); } catch (e) {}
 }
-var LOAD = { orders: loadOrders, chats: loadChats, comments: loadComments };
-var STATE_KEY = { chats: 'chatRows', comments: 'comments' };
+var LOAD = { orders: loadOrders, chats: loadChats, comments: loadComments, projects: loadProjects };
+var STATE_KEY = { chats: 'chatRows', comments: 'comments', projects: 'projects' };
 qa('button.ad-tab').forEach(function (t) { t.addEventListener('click', function () { switchTab(t.getAttribute('data-tab')); }); });
 $('adRefresh').addEventListener('click', function () { LOAD[state.tab](); });
+W.addEventListener('hashchange', function () { var h = location.hash.slice(1); if (getTok() && LOAD[h] && h !== state.tab) switchTab(h); });
 function onEnter() {
 var h = location.hash.slice(1);
 switchTab(LOAD[h] ? h : 'orders');
 if (!LOAD[h] || h === 'orders') loadOrders();
 }
+var SEEN_KEY = 'mx_seen_', badgeN = { chats: 0, comments: 0 };
+function getSeen(n) { try { return localStorage.getItem(SEEN_KEY + n) || ''; } catch (e) { return ''; } }
+function setSeen(n, v) { try { localStorage.setItem(SEEN_KEY + n, v); } catch (e) {} }
+function setBadge(n, c) {
+badgeN[n] = c;
+var el = $(n === 'chats' ? 'badgeChats' : 'badgeComments');
+if (!el) return;
+el.textContent = c > 99 ? '99+' : fa(c);
+el.hidden = !c;
+}
+function markSeen(n, stamps) {
+var best = getSeen(n);
+stamps.forEach(function (s) { if (s && (!best || Date.parse(s) > Date.parse(best))) best = s; });
+if (best) setSeen(n, best);
+setBadge(n, 0);
+}
+function baseline(n) {
+var path = n === 'chats' ? '/rest/v1/chats?select=at&order=at.desc&limit=1' : '/rest/v1/project_comments?select=created_at&order=created_at.desc&limit=1';
+sb('GET', path).then(function (res) {
+if (!res.ok || !Array.isArray(res.data)) return;
+var r = res.data[0];
+setSeen(n, r ? (r.at || r.created_at) : new Date().toISOString());
+}, function () {});
+}
+function pollBadges() {
+if (!getTok()) return;
+['chats', 'comments'].forEach(function (n) {
+var seen = getSeen(n);
+if (!seen) { baseline(n); return; }
+var path = n === 'chats'
+? '/rest/v1/chats?select=chat_id,phone&at=gt.' + encodeURIComponent(seen) + '&order=at.desc&limit=1000'
+: '/rest/v1/project_comments?select=id&created_at=gt.' + encodeURIComponent(seen) + '&limit=1000';
+sb('GET', path).then(function (res) {
+if (!getTok() || !res.ok || !Array.isArray(res.data)) return;
+var cnt;
+if (n === 'chats') { var u = {}; res.data.forEach(function (r) { u[r.phone || r.chat_id] = 1; }); cnt = Object.keys(u).length; }
+else cnt = res.data.length;
+if (state.tab === n) { if (cnt) LOAD[n](); return; }
+setBadge(n, cnt);
+}, function () {});
+});
+}
+setInterval(pollBadges, 30000);
+D.addEventListener('visibilitychange', function () { if (D.visibilityState === 'visible') pollBadges(); });
 var filterSel = $('orderFilter');
 STATUSES.forEach(function (s) { var o = D.createElement('option'); o.value = s; o.textContent = s; filterSel.appendChild(o); });
 var ORDERS_URL = '/rest/v1/orders?select=id,created_at,name,phone,service,budget,description,status&order=created_at.desc&limit=1000';
@@ -286,6 +372,7 @@ if (res.ok) { state.orders = []; renderOrders(); toast('همهٔ سفارش‌ه
 function loadChats() {
 loadList('chatList', '/rest/v1/chats?select=chat_id,name,phone,device,question,answer,at,type&order=at.asc&limit=5000', function (res) { return 'بارگذاری گفتگوها انجام نشد: ' + esc(errText(res)); }, function (rows) {
 state.chatRows = rows; renderChats();
+if (state.tab === 'chats') markSeen('chats', rows.map(function (r) { return r.at; }));
 });
 }
 function groupChats() {
@@ -328,7 +415,7 @@ loadList('commentList', '/rest/v1/project_comments?select=id,project_id,name,bod
 if (res.status === 404) return 'جدول نظرات ساخته نشده؛ فایل supabase/migration-comments.sql را در Supabase اجرا کنید.';
 if (res.status === 400) return 'ستون وضعیت نظرها ساخته نشده؛ فایل supabase/migration-comment-moderation.sql را در Supabase اجرا کنید.';
 return 'بارگذاری نظرات انجام نشد: ' + esc(errText(res));
-}, function (rows) { state.comments = rows; renderComments(); });
+}, function (rows) { state.comments = rows; renderComments(); if (state.tab === 'comments') markSeen('comments', rows.map(function (r) { return r.created_at; })); });
 }
 function renderComments() {
 var all = state.comments || [], cnt = { pending: 0, approved: 0, hidden: 0 };
@@ -422,5 +509,151 @@ if (name.indexOf('chats') === 0 && !state.chatRows) { toast('ابتدا تب گ�
 var fn = EXPORTS[name];
 if (fn) fn();
 });
+function loadProjects() {
+setEmpty('projList', 'در حال بارگذاری…');
+fetchProjectRows(['id,name,description,url,created_at', 'id,name,created_at'], 200).then(function (res) {
+if (!res.ok || !Array.isArray(res.data)) { setEmpty('projList', 'بارگذاری پروژه‌ها انجام نشد: ' + esc(errText(res))); return; }
+state.projects = res.data.map(mapProject);
+renderProjects();
+}, function () { setEmpty('projList', 'اتصال به سرور برقرار نشد.'); });
+}
+function renderProjects() {
+var list = state.projects || [];
+if (!list.length) { setEmpty('projList', 'هنوز پروژه‌ای اضافه نشده است.'); return; }
+$('projList').innerHTML = list.map(function (p) {
+var cover = p.keys[0];
+return '<article class="ad-item ad-proj">' +
+(cover ? '<img src="' + esc(publicUrl(thumbKey(cover))) + '" data-full="' + esc(publicUrl(cover)) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async">' : '<span></span>') +
+'<div><strong>' + esc(p.name) + '</strong><span class="ad-muted">' + fa(p.keys.length) + ' عکس · ' + esc(new Date(p.createdAt).toLocaleDateString('fa-IR')) + '</span>' +
+(p.description ? '<div class="ad-muted">' + esc(p.description) + '</div>' : '') + (p.url ? '<div class="ad-id">' + esc(p.url) + '</div>' : '') + '</div>' +
+'<button class="ad-btn ad-danger" type="button" data-pdel="' + esc(p.id) + '">حذف پروژه</button></article>';
+}).join('');
+thumbFallback($('projList'));
+}
+$('projList').addEventListener('click', function (e) {
+var b = e.target.closest('[data-pdel]');
+if (!b) return;
+if (!W.confirm('این پروژه و همهٔ عکس‌های آن حذف شود؟')) return;
+var id = b.getAttribute('data-pdel'), p = (state.projects || []).filter(function (x) { return x.id === id; })[0];
+if (!p) return;
+b.disabled = true;
+var keys = p.keys.slice();
+if (keys[0]) keys.push(thumbKey(keys[0]));
+keys = keys.filter(function (k, i) { return keys.indexOf(k) === i; });
+sb('DELETE', '/storage/v1/object/' + BUCKET, { json: { prefixes: keys } }).then(function (r1) {
+if (!r1.ok) throw new Error(errText(r1));
+return sb('DELETE', '/rest/v1/projects?id=eq.' + encodeURIComponent(id), { prefer: 'return=minimal' });
+}).then(function (r2) {
+if (!r2.ok) throw new Error(errText(r2));
+state.projects = state.projects.filter(function (x) { return x.id !== id; });
+clearSiteCache();
+renderProjects(); toast('پروژه حذف شد');
+}).catch(function (err) { b.disabled = false; toast('حذف انجام نشد: ' + (err && err.message || 'خطا')); });
+});
+var picked = [], previewUrls = [];
+function clearPreview() { previewUrls.forEach(function (u) { URL.revokeObjectURL(u); }); previewUrls = []; $('projPreview').innerHTML = ''; }
+function showPicked() {
+clearPreview();
+$('projInfo').textContent = picked.length ? fa(picked.length) + ' عکس انتخاب شده است.' : 'هنوز عکسی انتخاب نشده است.';
+picked.slice(0, 30).forEach(function (f) {
+var u = URL.createObjectURL(f); previewUrls.push(u);
+var im = D.createElement('img'); im.src = u; im.alt = 'پیش‌نمایش'; im.decoding = 'async'; $('projPreview').appendChild(im);
+});
+}
+$('projFiles').addEventListener('change', function () {
+var files = Array.prototype.slice.call(this.files || []).filter(function (f) { return /^image\//.test(f.type); });
+if (files.length > 30) { toast('حداکثر ۳۰ عکس مجاز است'); files = files.slice(0, 30); }
+picked = files; showPicked();
+});
+$('projReset').addEventListener('click', function () { picked = []; $('projFiles').value = ''; $('projName').value = ''; $('projDesc').value = ''; $('projUrl').value = ''; showPicked(); });
+function loadImg(file) {
+return new Promise(function (resolve, reject) {
+var u = URL.createObjectURL(file), im = new Image();
+im.onload = function () { URL.revokeObjectURL(u); resolve(im); };
+im.onerror = function () { URL.revokeObjectURL(u); reject(new Error('خواندن تصویر ناموفق بود')); };
+im.src = u;
+});
+}
+function encode(img, max, q) {
+var scale = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+var w = Math.max(1, Math.round(img.naturalWidth * scale)), h = Math.max(1, Math.round(img.naturalHeight * scale));
+var c = D.createElement('canvas'); c.width = w; c.height = h;
+c.getContext('2d').drawImage(img, 0, 0, w, h);
+return new Promise(function (resolve, reject) {
+c.toBlob(function (b) {
+if (b && b.type === 'image/webp') return resolve(b);
+c.toBlob(function (j) { j ? resolve(j) : reject(new Error('فشرده‌سازی تصویر ناموفق بود')); }, 'image/jpeg', q);
+}, 'image/webp', q);
+});
+}
+function setProgress(n, total, label) {
+var box = $('projProgress'); box.hidden = false;
+box.firstElementChild.style.width = Math.round((n / total) * 100) + '%';
+box.lastElementChild.textContent = label;
+}
+$('projForm').addEventListener('submit', function (e) {
+e.preventDefault();
+var name = $('projName').value.trim();
+if (!name) { toast('نام پروژه را وارد کنید'); return; }
+if (picked.length < 1) { toast('حداقل یک عکس انتخاب کنید'); return; }
+if (picked.length > 30) { toast('حداکثر ۳۰ عکس مجاز است'); return; }
+var btn = $('projSave'); btn.disabled = true;
+var pid = null, uploaded = [], total = picked.length;
+function rollback(err) {
+var undo = Promise.resolve();
+if (uploaded.length) undo = sb('DELETE', '/storage/v1/object/' + BUCKET, { json: { prefixes: uploaded } }).catch(function () {});
+if (pid) undo = undo.then(function () { return sb('DELETE', '/rest/v1/projects?id=eq.' + encodeURIComponent(pid), { prefer: 'return=minimal' }).catch(function () {}); });
+return undo.then(function () { throw err; });
+}
+function upload(key, blob) {
+return sb('POST', '/storage/v1/object/' + BUCKET + '/' + key, { raw: blob, type: blob.type, timeout: 120000 }).then(function (r) {
+if (!r.ok) throw new Error('آپلود عکس ناموفق بود: ' + errText(r));
+uploaded.push(key);
+});
+}
+var desc = $('projDesc').value.trim(), url = $('projUrl').value.trim();
+if (url && !/^https?:\/\//i.test(url)) { btn.disabled = false; toast('لینک باید با http:// یا https:// شروع شود'); return; }
+setProgress(0, total, 'در حال ساخت پروژه…');
+var createP = sb('POST', '/rest/v1/projects', { json: { name: name, description: desc || null, url: url || null }, prefer: 'return=representation' }).then(function (r) {
+if (r.ok) return r;
+if (!desc && !url) return r;
+toast('برای ذخیرهٔ توضیح و لینک، فایل migration-portfolio.sql را در Supabase اجرا کنید');
+return sb('POST', '/rest/v1/projects', { json: { name: name }, prefer: 'return=representation' });
+});
+createP.then(function (r) {
+if (!r.ok || !Array.isArray(r.data) || !r.data[0]) throw new Error('ساخت پروژه ناموفق بود: ' + errText(r));
+pid = r.data[0].id;
+return picked.reduce(function (chain, file, i) {
+return chain.then(function () {
+setProgress(i, total, 'عکس ' + fa(i + 1) + ' از ' + fa(total) + '…');
+return loadImg(file).then(function (img) {
+return encode(img, 1800, 0.82).then(function (full) {
+var ext = full.type === 'image/webp' ? 'webp' : 'jpg';
+var key = pid + '/' + i + '-' + Math.random().toString(36).slice(2, 8) + '.' + ext;
+return upload(key, full).then(function () {
+if (i === 0 && ext === 'webp') {
+return encode(img, 640, 0.8).then(function (th) { return upload(thumbKey(key), th); });
+}
+}).then(function () {
+return sb('POST', '/rest/v1/project_images', { json: { project_id: pid, pos: i, key: key }, prefer: 'return=minimal' }).then(function (r2) {
+if (!r2.ok) throw new Error('ثبت عکس ناموفق بود: ' + errText(r2));
+});
+});
+});
+});
+});
+}, Promise.resolve());
+}).catch(rollback).then(function () {
+setProgress(total, total, 'انجام شد');
+toast('پروژه با موفقیت اضافه شد');
+clearSiteCache();
+$('projReset').click(); state.projects = null; loadProjects();
+setTimeout(function () { $('projProgress').hidden = true; }, 1200);
+}, function (err) {
+$('projProgress').hidden = true;
+toast(err && err.message ? err.message : 'ذخیرهٔ پروژه انجام نشد؛ دوباره امتحان کنید');
+}).then(function () { btn.disabled = false; });
+});
+W.addEventListener('pagehide', function () { clearPreview(); });
 startSession();
 })();

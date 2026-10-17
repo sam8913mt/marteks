@@ -10,7 +10,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://xpkckkosnnixshbarieo.supabase.co; connect-src 'self' https://xpkckkosnnixshbarieo.supabase.co; object-src 'none'; base-uri 'none'; form-action 'none'">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="preconnect" href="https://xpkckkosnnixshbarieo.supabase.co" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&amp;display=swap">
 <link rel="stylesheet" href="css/admin.css">
 <script src="js/config.js" defer></script>
 <script src="js/admin.js" defer></script>
@@ -46,10 +46,26 @@
 
   <nav class="ad-tabs" role="tablist" aria-label="بخش‌های پنل">
     <button class="ad-tab is-on" role="tab" type="button" data-tab="orders">📦 سفارش‌ها</button>
-    <button class="ad-tab" role="tab" type="button" data-tab="chats">💬 گفتگوها</button>
-    <a class="ad-tab" href="admin-projects.html">🖼️ پروژه‌ها</a>
-    <button class="ad-tab" role="tab" type="button" data-tab="comments">💭 نظرات</button>
+    <button class="ad-tab" role="tab" type="button" data-tab="chats">💬 گفتگوها<span class="ad-count" id="badgeChats" hidden></span></button>
+    <button class="ad-tab" role="tab" type="button" data-tab="projects">🖼️ پروژه‌ها</button>
+    <button class="ad-tab" role="tab" type="button" data-tab="comments">💭 نظرات<span class="ad-count" id="badgeComments" hidden></span></button>
   </nav>
+
+  <!-- پروژه‌ها -->
+  <section id="paneProjects" class="ad-pane" hidden>
+    <form class="ad-card" id="projForm">
+      <div class="ad-card-head"><strong>افزودن پروژه</strong><span class="ad-muted">نام پروژه و ۱ تا ۳۰ عکس (عکس‌ها خودکار بهینه و فشرده می‌شوند)</span></div>
+      <label class="ad-field"><span>نام پروژه</span><input id="projName" type="text" maxlength="100" required placeholder="مثلاً طراحی سایت فروشگاهی"></label>
+      <label class="ad-field"><span>توضیح کوتاه (اختیاری، حداکثر ۳۰۰ حرف)</span><textarea id="projDesc" maxlength="300" rows="2" placeholder="مثلاً: سایت معرفی و فروش برای یک کسب‌وکار کوچک؛ طراحی ریسپانسیو و سریع"></textarea></label>
+      <label class="ad-field"><span>لینک سایت (اختیاری)</span><input id="projUrl" type="url" dir="ltr" maxlength="300" placeholder="https://example.com"></label>
+      <label class="ad-field"><span>عکس‌های پروژه</span><input id="projFiles" type="file" accept="image/*" multiple></label>
+      <div class="ad-muted" id="projInfo">هنوز عکسی انتخاب نشده است.</div>
+      <div class="ad-previews" id="projPreview"></div>
+      <div class="ad-progress" id="projProgress" hidden><i></i><span></span></div>
+      <div class="ad-actions"><button class="ad-btn ad-primary" id="projSave" type="submit">➕ افزودن پروژه</button><button class="ad-btn" id="projReset" type="button">پاک کردن</button></div>
+    </form>
+    <div class="ad-list" id="projList"></div>
+  </section>
 
   <!-- سفارش‌ها -->
   <section id="paneOrders" class="ad-pane">
