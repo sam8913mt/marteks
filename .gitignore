@@ -1,0 +1,14 @@
+# secrets & local env (never commit these)
+.env
+.env.*
+!.env.example
+.dev.vars
+worker/.dev.vars
+*.key
+*.pem
+
+# tooling
+node_modules/
+.wrangler/
+.DS_Store
+*.log

@@ -1,11 +1,18 @@
 /* ============================================================
    Merteks quick-answer assistant (پرسش‌وپاسخ سریع)
-   - Local, rule-based FAQ: no AI model, no server calls, nothing is stored.
-   - Every answer matches what is written on the website.
+   - Local, rule-based FAQ first; answers match what is written on the website.
+   - If no ready-made answer matches, the question goes to the Gemini proxy (MERTEKS_CONFIG.aiEndpoint).
+     If the proxy is missing or fails, the old "no exact answer" reply is shown instead.
+   - Every question + answer is saved to Supabase (public.chats via the chat_message RPC)
+     so the admin can read it in admin.html -> «گفتگوها». Failed sends go to the outbox and retry.
    ============================================================ */
 (function () {
 'use strict';
 var MX = window.MX, esc = MX.esc, D = document;
+var AI_URL = (function () {
+  var u = String((window.MERTEKS_CONFIG || {}).aiEndpoint || '').trim();
+  return /^https:\/\/[^\s]+$/.test(u) ? u : '';
+})();
 
 var PHONE_DISPLAY = '۰۹۱۹۷۰۲۹۲۱۳', PHONE_TEL = '09197029213';
 var LINKS = {
@@ -71,9 +78,11 @@ var KB = [
     a: 'راه‌های ارتباطی:\n• تلفن: ' + PHONE_DISPLAY + '\n• تلگرام، ایتا، بله و اینستاگرام (دکمه‌های پایین)\nایمیل فعلاً نداریم.',
     act: [A_TEL, A_TG, { t: 'ایتا', href: LINKS.eitaa }, { t: 'بله', href: LINKS.bale }] },
   { k: ['حریم', 'اطلاعات من', 'ذخیره', 'امنیت داده', 'محرمانه'],
-    a: 'این گفتگو هیچ‌جا ذخیره نمی‌شود. فقط اطلاعاتی که خودتان در فرم «شروع پروژه» ثبت می‌کنید برای پاسخ‌گویی نگه‌داری می‌شود؛ جزئیات در صفحهٔ «حریم خصوصی» پایین سایت است.' },
+    a: 'پرسش‌ها و پاسخ‌های این گفتگو برای بهبود پاسخ‌گویی ذخیره می‌شود و فقط مدیر سایت آن را می‌بیند؛ لطفاً شمارهٔ تماس یا اطلاعات شخصی در گفتگو ننویسید. اطلاعات فرم «شروع پروژه» جدا نگه‌داری می‌شود؛ جزئیات در صفحهٔ «حریم خصوصی» پایین سایت است.' },
   { k: ['ربات', 'هوش مصنوعی', 'انسان', 'آدم', 'واقعی'],
-    a: 'من یک دستیار ساده با پاسخ‌های آماده‌ام، نه مدل هوش مصنوعی و نه انسان. برای صحبت با خود تیم، از «شروع پروژه» یا پیام‌رسان‌ها استفاده کنید.',
+    a: AI_URL
+      ? 'من یک دستیار خودکار هستم، نه انسان. به پرسش‌های رایج با پاسخ‌های آماده جواب می‌دهم و سؤال‌های دیگر را به هوش مصنوعی (Gemini از گوگل) می‌دهم. برای صحبت با خود تیم، از «شروع پروژه» یا پیام‌رسان‌ها استفاده کنید.'
+      : 'من یک دستیار ساده با پاسخ‌های آماده‌ام، نه مدل هوش مصنوعی و نه انسان. برای صحبت با خود تیم، از «شروع پروژه» یا پیام‌رسان‌ها استفاده کنید.',
     act: [A_TG, A_ORDER] },
   { k: ['ممنون', 'مرسی', 'سپاس', 'thanks', 'تشکر'],
     a: 'خواهش می‌کنم 🙏 اگر سؤال دیگری دارید بپرسید.' },
@@ -124,30 +133,32 @@ function answer(q) {
   if (best && bestScore >= 3) return best;
   return {
     a: 'پاسخ دقیق این سؤال را ندارم؛ من فقط به پرسش‌های رایج دربارهٔ خدمات، زمان، هزینه و شروع پروژه جواب می‌دهم.\nبرای پاسخ مستقیم از خود تیم، پیام بدهید یا درخواست ثبت کنید.',
-    act: [A_TG, A_ORDER]
+    act: [A_TG, A_ORDER],
+    miss: true
   };
 }
 
-D.body.insertAdjacentHTML('beforeend',
-'<div class="merteks-overlay" id="mxAiModal" aria-hidden="true">' +
-'<div class="mx-ai-panel" role="dialog" aria-modal="true" aria-labelledby="mxAiTitle">' +
+/* The assistant lives on its own page (chat.html) and renders inside #mxChatMount. */
+var mount = D.getElementById('mxChatMount');
+if (!mount) return;
+mount.innerHTML =
+'<div class="mx-ai-panel mx-ai-page" role="region" aria-labelledby="mxAiTitle">' +
 '<div class="mx-ai-head">' +
 '<div class="mx-ai-avatars"><div class="mx-ai-dot" aria-hidden="true">م</div><div>' +
 '<h3 id="mxAiTitle">پرسش‌وپاسخ سریع مرتکس</h3>' +
-'<p class="mx-ai-sub">پاسخ‌های آماده · ذخیره نمی‌شود</p></div></div>' +
-'<div class="mx-ai-avatars"><button class="merteks-close" type="button" id="mxAiClose" aria-label="بستن گفتگو">×</button></div>' +
+'<p class="mx-ai-sub">پاسخ‌های آماده · برای بهبود ذخیره می‌شود</p></div></div>' +
+'<div class="mx-ai-avatars"><a class="btn btn-ghost btn-sm" href="index.html">بازگشت به سایت</a></div>' +
 '</div>' +
 '<div class="mx-ai-body" id="mxAiBody" aria-live="polite"></div>' +
 '<div class="mx-ai-suggest" id="mxAiSuggest"></div>' +
 '<div class="mx-ai-compose" id="mxAiCompose">' +
 '<div class="mx-ai-row"><textarea id="mxAiInput" rows="1" maxlength="300" placeholder="سؤال خود را بنویسید…" aria-label="متن سؤال"></textarea>' +
 '<button class="mx-ai-send" type="button" id="mxAiSend" aria-label="ارسال">➤</button></div>' +
-'<div class="mx-ai-tools"><span class="mx-ai-hint">این گفتگو ذخیره نمی‌شود · ارسال فایل ممکن نیست</span></div>' +
+'<div class="mx-ai-tools"><span class="mx-ai-hint">گفتگو برای بهبود ذخیره می‌شود · شمارهٔ شخصی ننویسید · ارسال فایل ممکن نیست</span></div>' +
 '</div>' +
-'</div>' +
-'</div>');
+'</div>';
 
-var modal = D.getElementById('mxAiModal'), body = D.getElementById('mxAiBody');
+var body = D.getElementById('mxAiBody');
 var input = D.getElementById('mxAiInput'), suggest = D.getElementById('mxAiSuggest');
 var started = false;
 
@@ -172,24 +183,110 @@ function bubble(who, text, act) {
 function scroll() { body.scrollTop = body.scrollHeight; }
 function say(who, text, act) { body.insertAdjacentHTML('beforeend', bubble(who, text, act)); scroll(); }
 
+/* one id per browser tab session; every exchange is stored under it */
+var CHAT_ID = (function () {
+  var id = '';
+  try { id = sessionStorage.getItem('mx_chat_id') || ''; } catch (e) {}
+  if (!/^[A-Za-z0-9_-]{3,100}$/.test(id)) {
+    id = 'C-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    try { sessionStorage.setItem('mx_chat_id', id); } catch (e) {}
+  }
+  return id;
+})();
+var DEVICE = (window.innerWidth < 720 ? 'mobile' : 'desktop') + ' ' + window.innerWidth + 'x' + window.innerHeight;
+
+function saveExchange(q, a) {
+  if (!MX.cloudPost) return;
+  try {
+    MX.cloudPost({ action: 'chatMessage', chatId: CHAT_ID, name: '', phone: '', device: DEVICE, question: q, answer: a });
+  } catch (e) {}
+}
+
+var AI_NOTE = '\n\n(پاسخ هوش مصنوعی؛ برای اطمینان از خود تیم بپرسید.)';
+var AI_ERR = {
+  429: 'در حال حاضر درخواست‌ها زیاد است؛ چند دقیقهٔ دیگر دوباره امتحان کنید یا مستقیم به تیم پیام بدهید.'
+};
+var aiBusy = false, aiCache = {};
+var sendBtn = D.getElementById('mxAiSend');
+
+function setBusy(on) {
+  aiBusy = on;
+  sendBtn.disabled = on;
+  input.setAttribute('aria-busy', on ? 'true' : 'false');
+}
+function typingOn() {
+  body.insertAdjacentHTML('beforeend', '<div class="mx-ai-msg bot" id="mxAiTyping"><div class="mx-ai-av" aria-hidden="true">م</div><div><div class="mx-ai-bubble">در حال نوشتن پاسخ…</div></div></div>');
+  scroll();
+}
+function typingOff() { var t = D.getElementById('mxAiTyping'); if (t && t.parentNode) t.parentNode.removeChild(t); }
+
+/* asks the Gemini proxy; resolves {a, act} and never rejects */
+function askAI(q) {
+  var key = norm(q);
+  if (aiCache[key]) return Promise.resolve(aiCache[key]);
+  var ctl = window.AbortController ? new AbortController() : null;
+  var timer = ctl ? setTimeout(function () { ctl.abort(); }, 25000) : null;
+  return fetch(AI_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question: q }),
+    cache: 'no-store',
+    signal: ctl ? ctl.signal : undefined
+  }).then(function (res) {
+    if (timer) clearTimeout(timer);
+    return res.json().catch(function () { return {}; }).then(function (d) {
+      if (res.ok && d && typeof d.answer === 'string' && d.answer.trim()) {
+        var out = { a: d.answer.trim() + AI_NOTE, raw: d.answer.trim(), act: [A_TG, A_ORDER], ai: true };
+        aiCache[key] = out;
+        return out;
+      }
+      return { a: AI_ERR[res.status] || null, fail: true };
+    });
+  }, function () {
+    if (timer) clearTimeout(timer);
+    return { a: null, fail: true };
+  });
+}
+
 function ask(text) {
   text = String(text || '').trim();
   if (!text) return;
+  if (aiBusy) { MX.toast('لطفاً تا آمدن پاسخ قبلی صبر کنید'); return; }
   say('user', text);
   input.value = ''; input.style.height = 'auto';
   var r = answer(text);
-  setTimeout(function () { say('bot', r.a, r.act); }, 250);
+
+  /* 1) ready-made answer: same behaviour as before */
+  if (!r.miss || !AI_URL) {
+    saveExchange(text, r.a);
+    setTimeout(function () { say('bot', r.a, r.act); }, 250);
+    return;
+  }
+
+  /* 2) no ready-made answer: ask Gemini, fall back to the old reply on any failure */
+  setBusy(true); typingOn();
+  askAI(text).then(function (g) {
+    typingOff(); setBusy(false);
+    if (g.ai) {
+      saveExchange(text, g.raw);
+      say('bot', g.a, g.act);
+    } else {
+      var msg = g.a ? g.a + '\n' : '';
+      saveExchange(text, r.a);
+      say('bot', msg + r.a, r.act);
+    }
+  });
 }
 
 body.addEventListener('click', function (e) {
   var b = e.target.closest('[data-act]');
   if (!b) return;
   var a = b.getAttribute('data-act');
-  MX.close('mxAiModal');
   if (a === 'order') { var o = D.getElementById('merteksOrderOpen'); if (o) o.click(); }
   if (a === 'projects') {
     var p = D.getElementById('projects');
     if (p) p.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    else location.href = 'projects.html';
   }
 });
 suggest.addEventListener('click', function (e) {
@@ -204,29 +301,12 @@ input.addEventListener('input', function () {
   input.style.height = 'auto';
   input.style.height = Math.min(120, input.scrollHeight) + 'px';
 });
-function closeChat() { MX.close('mxAiModal'); }
-D.getElementById('mxAiClose').addEventListener('click', closeChat);
-modal.addEventListener('click', function (e) { if (e.target === modal) closeChat(); });
-
-/* keyboard: Escape closes, Tab stays inside the dialog */
-D.addEventListener('keydown', function (e) {
-  if (!modal.classList.contains('open')) return;
-  if (e.key === 'Escape') { closeChat(); return; }
-  if (e.key !== 'Tab') return;
-  var f = Array.prototype.slice.call(modal.querySelectorAll('a[href],button:not([disabled]),textarea:not([disabled])'))
-    .filter(function (x) { return x.offsetParent !== null; });
-  if (!f.length) return;
-  var first = f[0], last = f[f.length - 1];
-  if (e.shiftKey && (D.activeElement === first || !modal.contains(D.activeElement))) { e.preventDefault(); last.focus(); }
-  else if (!e.shiftKey && (D.activeElement === last || !modal.contains(D.activeElement))) { e.preventDefault(); first.focus(); }
-});
-
 MX.openAssistant = function () {
-  MX.open('mxAiModal');
   if (!started) {
     started = true;
-    say('bot', 'سلام 👋 من دستیار ساده مرتکس هستم و به پرسش‌های رایج دربارهٔ خدمات، زمان، هزینه و شروع پروژه جواب می‌دهم.\nمن ربات هوش مصنوعی نیستم و این گفتگو ذخیره نمی‌شود. یکی از سؤال‌های پایین را انتخاب کنید یا سؤالتان را بنویسید.');
+    say('bot', 'سلام 👋 من دستیار مرتکس هستم و به پرسش‌های رایج دربارهٔ خدمات، زمان، هزینه و شروع پروژه جواب می‌دهم.\n' + (AI_URL ? 'سؤال‌هایی که پاسخ آماده ندارند به هوش مصنوعی (Gemini) فرستاده می‌شوند و پاسخ آن ممکن است دقیق نباشد. ' : 'من مدل هوش مصنوعی نیستم. ') + 'پرسش‌ها و پاسخ‌های این گفتگو برای بهبود پاسخ‌گویی ذخیره می‌شود (لطفاً اطلاعات شخصی ننویسید). یکی از سؤال‌های پایین را انتخاب کنید یا سؤالتان را بنویسید.');
   }
-  setTimeout(function () { input.focus(); }, 140);
+  setTimeout(function () { input.focus({ preventScroll: true }); }, 140);
 };
+MX.openAssistant();
 })();

@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://YOUR-DOMAIN.com/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://sam8913mt.github.io/marteks/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://sam8913mt.github.io/marteks/about.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sam8913mt.github.io/marteks/projects.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sam8913mt.github.io/marteks/services.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sam8913mt.github.io/marteks/faq.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sam8913mt.github.io/marteks/contact.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sam8913mt.github.io/marteks/chat.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>

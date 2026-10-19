@@ -7,5 +7,10 @@
    ============================================================ */
 window.MERTEKS_CONFIG = Object.freeze({
   supabaseUrl: 'https://xpkckkosnnixshbarieo.supabase.co',
-  supabaseKey: 'sb_publishable_TboHxYoN_qQLAzZTuRErvw_nbDP5TZW'
+  supabaseKey: 'sb_publishable_TboHxYoN_qQLAzZTuRErvw_nbDP5TZW',
+  /* Address of the Cloudflare Worker that talks to Gemini (see README.md).
+     Example: 'https://merteks-ai.your-name.workers.dev'
+     Leave '' to disable the AI fallback; the ready-made answers keep working.
+     NEVER put the Gemini API key here. */
+  aiEndpoint: ''
 });

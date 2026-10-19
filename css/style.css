@@ -1589,3 +1589,43 @@ a.merteks-btn:hover, .merteks-btn:hover { border-color: var(--accent); color: va
   .js .fx.done:hover:not(details) { transform: none; }
   #mxGlow { display: none; }
 }
+
+/* ---- multi-page additions ---- */
+.section.page-first { border-top: 0; padding-top: calc(var(--nav-h) + clamp(40px, 6vw, 80px)); }
+.pagecards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.pagecard {
+  display: flex; flex-direction: column; gap: 8px; padding: 24px;
+  background: var(--ink-1); border: 1px solid var(--line); border-radius: var(--r-box);
+  color: inherit; text-decoration: none;
+  transition: border-color .25s, transform .25s var(--ease), background .25s;
+}
+.pagecard:hover, .pagecard:focus-visible { border-color: var(--accent-lo); background: var(--ink-2); transform: translateY(-3px); }
+.pagecard h3 { font-size: 1.15rem; color: var(--bone); }
+.pagecard p { color: var(--muted); font-size: 14px; line-height: 1.9; flex: 1; }
+.pagecard-go { margin-top: 6px; font-size: 14px; font-weight: 700; color: var(--accent-hi); }
+.home-cta-in { max-width: 40em; }
+.home-cta-in .actions { margin-top: 24px; }
+@media (prefers-reduced-motion: reduce) { .pagecard { transition: none; } .pagecard:hover { transform: none; } }
+
+/* ---- chatbot page ---- */
+.chat-section { padding-bottom: clamp(24px, 4vw, 48px); }
+#mxChatMount .mx-ai-panel {
+  display: flex; flex-direction: column;
+  width: min(760px, 100%); margin-inline: auto;
+  height: min(720px, calc(100dvh - var(--nav-h) - 72px)); min-height: 440px;
+  overflow: hidden;
+  border: 1px solid var(--line-2); border-radius: var(--r-lg); background: var(--ink-1);
+}
+@media (max-width: 600px) {
+  .chat-section .wrap { padding-inline: 0; }
+  #mxChatMount .mx-ai-panel { border-inline: 0; border-radius: 0; height: calc(100dvh - var(--nav-h) - 24px); }
+}
+/* chat bubbles keep their natural width (fixes letters wrapping in short user messages) */
+.mx-ai-msg > div:not(.mx-ai-av) { min-width: 0; max-width: calc(100% - 46px); }
+.mx-ai-msg .mx-ai-bubble { width: max-content; max-width: 100%; }
+.chat-section.page-first { padding-top: calc(var(--nav-h) + 20px); }
+#mxChatMount .mx-ai-panel { height: min(720px, calc(100dvh - var(--nav-h) - 60px)); }
+@media (max-width: 600px) {
+  #mxChatMount .mx-ai-panel { height: calc(100dvh - var(--nav-h) - 28px); }
+}
+@media (max-width: 600px) { #mxChatMount .mx-ai-head .btn { display: none; } }

@@ -13,7 +13,7 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://xpkckkosnnixshbarieo.supabase.co; connect-src 'self' https://xpkckkosnnixshbarieo.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://xpkckkosnnixshbarieo.supabase.co; connect-src 'self' https://xpkckkosnnixshbarieo.supabase.co https://*.workers.dev; object-src 'none'; base-uri 'self'; form-action 'self'">
 
   <!-- DOMAIN-TAGS-START -->
   <!-- canonical / og:url / og:image / sitemap are added by set-domain.sh once the real domain exists -->
@@ -22,12 +22,10 @@
   <meta property="og:site_name" content="مرتکس">
   <meta property="og:locale" content="fa_IR">
   <meta property="og:title" content="مرتکس | طراحی سایت و برنامه‌نویسی">
-  <meta property="og:description"
-    content="تیم دو نفرهٔ مرتکس؛ طراحی وب‌سایت، برنامه‌نویسی و تولید محتوا. مشاورهٔ اولیه رایگان.">
+  <meta property="og:description" content="مرتکس؛ تیم دو نفرهٔ طراحی و ساخت وب‌سایت. سایت معرفی، شرکتی و لندینگ، بازطراحی، سازگاری با موبایل و ویدیو. مشاورهٔ اولیه رایگان.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="مرتکس | طراحی سایت و برنامه‌نویسی">
-  <meta name="twitter:description"
-    content="تیم دو نفرهٔ مرتکس؛ طراحی وب‌سایت، برنامه‌نویسی و تولید محتوا. مشاورهٔ اولیه رایگان.">
+  <meta name="twitter:description" content="مرتکس؛ تیم دو نفرهٔ طراحی و ساخت وب‌سایت. سایت معرفی، شرکتی و لندینگ، بازطراحی، سازگاری با موبایل و ویدیو. مشاورهٔ اولیه رایگان.">
 
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
@@ -44,20 +42,12 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&amp;family=Vazirmatn:wght@400;500;700;800&amp;display=swap">
   </noscript>
   <link rel="preload" as="image" href="assets/ms-logo-256.webp" type="image/webp">
-  <link rel="stylesheet" href="css/style.css?v=6">
-  <script src="js/config.js?v=2" defer></script>
-  <script src="js/app.js?v=6" defer></script>
+  <link rel="stylesheet" href="css/style.css?v=11">
+  <script src="js/config.js?v=3" defer></script>
+  <script src="js/app.js?v=9" defer></script>
 
   <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","name":"مرتکس","alternateName":"Merteks","description":"تیم دو نفرهٔ طراحی وب‌سایت، برنامه‌نویسی و تولید محتوا","telephone":"+989197029213","areaServed":"IR","availableLanguage":"fa","sameAs":["https://www.instagram.com/merteks.m/","https://t.me/merteks_m","https://eitaa.com/mmd2010s"],"makesOffer":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"طراحی وب‌سایت"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"توسعه فرانت‌اند"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"بازطراحی و بهبود سایت"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"تولید محتوا و تدوین ویدیو"}}]}
-</script>
-  <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
-{"@type":"Question","name":"هزینهٔ طراحی سایت چقدر است؟","acceptedAnswer":{"@type":"Answer","text":"هزینه به نوع و حجم کار بستگی دارد. مشاورهٔ اولیه و برآورد رایگان است؛ بعد از شنیدن نیاز شما قیمت شفاف اعلام می‌شود."}},
-{"@type":"Question","name":"ساخت سایت چقدر زمان می‌برد؟","acceptedAnswer":{"@type":"Answer","text":"لندینگ‌پیج و سایت تک‌صفحه‌ای حدود ۳ تا ۷ روز و سایت چندصفحه‌ای حدود ۲ تا ۴ هفته؛ زمان نهایی قبل از شروع کار هماهنگ می‌شود."}},
-{"@type":"Question","name":"بعد از تحویل پشتیبانی دارید؟","acceptedAnswer":{"@type":"Answer","text":"بله، رفع اشکال‌های مربوط به کار انجام‌شده پوشش داده می‌شود و مدت و دامنهٔ آن قبل از شروع در توافق نوشته می‌شود."}},
-{"@type":"Question","name":"فروشگاه آنلاین یا اپلیکیشن هم می‌سازید؟","acceptedAnswer":{"@type":"Answer","text":"تمرکز ما روی سایت‌های معرفی، شرکتی، لندینگ و پرتفولیو است. برای فروشگاه یا اپلیکیشن، نیاز را بنویسید تا بعد از بررسی صادقانه بگوییم از عهده‌اش برمی‌آییم یا نه."}}
-]}
 </script>
 </head>
 
@@ -68,17 +58,18 @@
 
   <nav class="nav" aria-label="ناوبری اصلی">
     <div class="nav-in">
-      <a class="brand" href="#home">
+      <a class="brand" href="index.html">
         <img class="brand-logo" src="assets/ms-logo-64.webp" width="40" height="40" decoding="async" alt="">
         <span>مرتکس</span>
       </a>
       <div class="links" id="links">
-        <a href="#home">خانه</a>
-        <a href="#about">درباره ما</a>
-        <a href="#projects">نمونه‌کارها</a>
-        <a href="#services">خدمات</a>
-        <a href="#faq">سؤالات متداول</a>
-        <a href="#contact">ارتباط با ما</a>
+        <a href="index.html" class="active" aria-current="page">خانه</a>
+        <a href="about.html">درباره ما</a>
+        <a href="projects.html">نمونه‌کارها</a>
+        <a href="services.html">خدمات</a>
+        <a href="faq.html">سؤالات متداول</a>
+        <a href="chat.html">پرسش‌وپاسخ</a>
+        <a href="contact.html">ارتباط با ما</a>
       </div>
       <div class="nav-tools">
         <button class="btn btn-primary btn-sm order-nav-btn" id="merteksOrderOpen" type="button">شروع پروژه</button>
@@ -98,7 +89,7 @@
             مستقیم با دو نفری که کار را انجام می‌دهند.</p>
           <div class="actions reveal" style="--d:180ms">
             <a class="btn btn-primary" href="#order" data-open-order>شروع پروژه</a>
-            <a class="btn btn-ghost" href="#projects">مشاهده نمونه‌کارها</a>
+            <a class="btn btn-ghost" href="projects.html">مشاهده نمونه‌کارها</a>
           </div>
           <p class="hero-note reveal" style="--d:240ms">مشاورهٔ اولیه و برآورد رایگان است و پاسخ را مستقیم از خود تیم
             می‌گیرید. <a href="https://t.me/merteks_m" target="_blank" rel="noopener noreferrer">پیام در تلگرام</a></p>
@@ -116,340 +107,45 @@
 
     <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>طراحی وب‌سایت</span><span>توسعه فرانت‌اند</span><span>بهبود ظاهر سایت</span><span>سازگاری با موبایل و سرعت</span><span>تولید محتوا و ویدیو</span><span>طراحی وب‌سایت</span><span>توسعه فرانت‌اند</span><span>بهبود ظاهر سایت</span><span>سازگاری با موبایل و سرعت</span><span>تولید محتوا و ویدیو</span></div></div>
 
-    <section class="section" id="about">
-      <div class="wrap split">
-        <header class="split-head reveal">
-          <h2 class="section-title">درباره ما</h2>
-          <p class="section-desc">تیم ما، شیوهٔ کار و ابزارهایی که با آن‌ها کار می‌کنیم.</p>
-        </header>
-
-        <div class="split-body">
-          <h3 class="lead reveal">مرتکس؛ گروهی برای طراحی، برنامه‌نویسی و ساختن</h3>
-          <p class="about-text reveal">مرتکس یک تیم دو نفره است. هر پروژه را خود ما طراحی و کدنویسی می‌کنیم، پس بین شما و کسی که
-            کار را انجام می‌دهد واسطه‌ای نیست. روی رابط‌های مدرن، تجربهٔ کاربری و سایت‌های سریع و سازگار با موبایل
-            تمرکز داریم.</p>
-          <blockquote class="pull reveal">
-            <p>«یک طراحی خوب فقط زیبا نیست؛ باید حس خوب استفاده کردن را هم منتقل کند.»</p>
-          </blockquote>
-
-          <div class="about-grid">
-            <div class="reveal" aria-label="اعضای تیم">
-              <h3>تیم</h3>
-              <ul class="team-list">
-                <li><span class="avatar" aria-hidden="true">م</span>
-                  <div><b>محمدسام</b><span>عضو تیم مرتکس</span></div>
-                </li>
-                <li><span class="avatar" aria-hidden="true">م</span>
-                  <div><b>مهدی</b><span>عضو تیم مرتکس</span></div>
-                </li>
-              </ul>
-            </div>
-
-            <div class="reveal" id="skills">
-              <h3>با چه چیزهایی کار می‌کنیم</h3>
-              <div class="skill-group">
-                <h4>ساخت وب‌سایت</h4>
-                <div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span
-                    class="tag">JavaScript</span><span class="tag">UI / UX</span><span class="tag">ریسپانسیو</span></div>
-              </div>
-              <div class="skill-group">
-                <h4>خدمات تکمیلی</h4>
-                <div class="tags"><span class="tag">Python</span><span class="tag">هوش مصنوعی</span><span
-                    class="tag">ساخت و تدوین ویدیو</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="facts reveal">
-            <div class="fact"><b>۲</b><span>نفر در تیم</span></div>
-            <div class="fact"><b>۴</b><span>مرحلهٔ روشن کار</span></div>
-            <div class="fact"><b>رایگان</b><span>مشاوره و برآورد اولیه</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section alt" id="projects" aria-label="پروژه‌های مرتکس">
+    <section class="section" id="explore" aria-label="بخش‌های سایت">
       <div class="wrap">
         <header class="head-row reveal">
-          <h2 class="section-title">نمونه‌کارها</h2>
-          <p class="section-desc">کارهایی که تا امروز انجام داده‌ایم.</p>
+          <h2 class="section-title">از کجا شروع کنیم؟</h2>
+          <p class="section-desc">هر بخش در یک صفحهٔ جدا است تا سریع به چیزی که می‌خواهید برسید.</p>
         </header>
-        <div id="mxProjectsGrid" class="mx-projects-grid" aria-live="polite"></div>
-        <div id="mxProjectsEmpty" class="mx-projects-empty" hidden>
-          <p>نمونه‌کارهای تحویل‌شده به‌زودی در این بخش اضافه می‌شود. در این فاصله می‌توانید دربارهٔ پروژه‌تان با ما صحبت
-            کنید و برای سبک کار، نمونه‌های مفهومی پایین را ببینید.</p>
-          <a class="btn btn-primary" href="#order" data-open-order>شروع پروژه</a>
-        </div>
-        <div id="mxProjectsError" class="mx-projects-empty" role="alert" hidden>
-          <p>دریافت نمونه‌کارها انجام نشد. اتصال اینترنت را بررسی کنید و دوباره تلاش کنید؛ یا برای دیدن کارها در تلگرام
-            پیام بدهید.</p>
-          <div class="mx-empty-actions">
-            <button class="btn btn-primary" id="mxProjectsRetry" type="button">تلاش دوباره</button>
-            <a class="btn btn-ghost" href="https://t.me/merteks_m" target="_blank" rel="noopener noreferrer">پیام در تلگرام</a>
-          </div>
-        </div>
-        <div id="mxProjectsMore" class="mx-projects-more" hidden>
-          <button class="btn btn-ghost" type="button">نمایش نمونه‌کارهای بیشتر</button>
-        </div>
-
-        <div class="ideas reveal">
-          <h3>نمونه‌های مفهومی؛ سبک کار ما</h3>
-          <p>این‌ها پروژهٔ تحویل‌شده نیستند؛ نمونه‌ای از چیزهایی‌اند که می‌توانیم طراحی و توسعه دهیم.</p>
-          <ul class="idea-list">
-            <li class="idea reveal">
-              <h4>وب‌سایت شخصی</h4>
-              <p>پرتفولیویی مدرن با تمرکز روی هویت شخصی، تایپوگرافی، انیمیشن و تجربه کاربری روان.</p>
-              <div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span></div>
-            </li>
-            <li class="idea reveal">
-              <h4>داشبورد هوشمند</h4>
-              <p>رابط داده‌محور برای نمایش اطلاعات، وضعیت‌ها و ابزارهای هوشمند با ظاهر حرفه‌ای.</p>
-              <div class="tags"><span class="tag">UI/UX</span><span class="tag">Python</span><span class="tag">AI</span></div>
-            </li>
-            <li class="idea reveal">
-              <h4>لندینگ پیج</h4>
-              <p>صفحه فرود سریع و واکنش‌گرا با ساختار واضح، دعوت به اقدام و جزئیات بصری جذاب.</p>
-              <div class="tags"><span class="tag">Responsive</span><span class="tag">UX</span><span class="tag">Frontend</span></div>
-            </li>
-            <li class="idea reveal">
-              <h4>ساخت و ادیت ویدیو</h4>
-              <p>ساخت، ادیت و تدوین ویدیوهای حرفه‌ای برای معرفی، تبلیغات و شبکه‌های اجتماعی.</p>
-              <div class="tags"><span class="tag">Video</span><span class="tag">Editing</span><span class="tag">Content</span></div>
-            </li>
-            <li class="idea reveal">
-              <h4>تولید محتوا</h4>
-              <p>تولید محتوای خلاقانه و هدفمند برای معرفی برند، شبکه‌های اجتماعی و جذب مخاطب.</p>
-              <div class="tags"><span class="tag">Content</span><span class="tag">Social Media</span><span class="tag">Creative</span></div>
-            </li>
-          </ul>
+        <div class="pagecards">
+          <a class="pagecard reveal" href="projects.html">
+            <h3>نمونه‌کارها</h3>
+            <p>کارهایی که تا امروز انجام داده‌ایم، با عکس و نظرات.</p>
+            <span class="pagecard-go">دیدن نمونه‌کارها ←</span>
+          </a>
+          <a class="pagecard reveal" href="services.html">
+            <h3>خدمات و مراحل کار</h3>
+            <p>طراحی وب‌سایت، فرانت‌اند، بازطراحی، موبایل و ویدیو؛ همراه با زمان تقریبی و مراحل کار.</p>
+            <span class="pagecard-go">دیدن خدمات ←</span>
+          </a>
+          <a class="pagecard reveal" href="about.html">
+            <h3>درباره ما</h3>
+            <p>تیم دو نفرهٔ مرتکس و ابزارهایی که با آن‌ها کار می‌کنیم.</p>
+            <span class="pagecard-go">آشنایی با تیم ←</span>
+          </a>
+          <a class="pagecard reveal" href="faq.html">
+            <h3>سؤالات متداول</h3>
+            <p>هزینه، زمان، پرداخت، پشتیبانی و پاسخ پرسش‌های رایج.</p>
+            <span class="pagecard-go">دیدن پاسخ‌ها ←</span>
+          </a>
         </div>
       </div>
     </section>
 
-    <section class="section" id="services">
+    <section class="section alt home-cta" aria-label="شروع پروژه">
       <div class="wrap">
-
-        <div class="block split">
-          <header class="split-head reveal">
-            <h2 class="section-title">خدمات ما</h2>
-            <p class="section-desc">زمینه‌هایی که برای ساخت و بهتر شدن یک وب‌سایت روی آن‌ها تمرکز می‌کنیم.</p>
-          </header>
-          <ul class="svc-list">
-            <li class="svc reveal">
-              <h3>طراحی وب‌سایت</h3>
-              <p>صفحات مدرن، مرتب و واکنش‌گرا برای نمایش حرفه‌ای در موبایل، تبلت و کامپیوتر.</p>
-            </li>
-            <li class="svc reveal">
-              <h3>توسعه فرانت‌اند</h3>
-              <p>ساخت صفحات تعاملی با HTML، CSS و JavaScript و ایجاد تجربه‌ای روان و کاربردی.</p>
-            </li>
-            <li class="svc reveal">
-              <h3>بهبود ظاهر سایت</h3>
-              <p>بازطراحی رنگ، فاصله‌ها، تایپوگرافی و جزئیات بصری برای حرفه‌ای‌تر شدن سایت.</p>
-            </li>
-            <li class="svc reveal">
-              <h3>سازگاری با موبایل و سرعت</h3>
-              <p>بهینه‌سازی چیدمان و سرعت تا سایت در همه صفحه‌ها مرتب، سریع و قابل استفاده باشد.</p>
-            </li>
-            <li class="svc reveal">
-              <h3>تولید محتوا و ویدیو</h3>
-              <p>ساخت و تدوین ویدیو و محتوای بصری برای سایت و شبکه‌های اجتماعی.</p>
-            </li>
-          </ul>
-        </div>
-
-        <div class="block">
-          <header class="head-row reveal">
-            <h2 class="section-title">نوع پروژه و زمان تقریبی</h2>
-            <p class="section-desc">قیمت هر پروژه بعد از مشاورهٔ رایگان و شنیدن نیاز شما اعلام می‌شود.</p>
-          </header>
-          <div class="plans">
-            <article class="plan reveal">
-              <h3>لندینگ‌پیج</h3>
-              <p class="plan-time">حدود ۳ تا ۷ روز</p>
-              <p>یک صفحهٔ متمرکز برای معرفی یک محصول، خدمت یا فرد.</p>
-              <ul>
-                <li>طراحی ریسپانسیو</li>
-                <li>ساختار و سرعت مناسب</li>
-                <li>بررسی روی موبایل و کامپیوتر</li>
-              </ul>
-              <a class="btn btn-ghost" href="#order" data-open-order>برآورد رایگان</a>
-            </article>
-            <article class="plan reveal">
-              <h3>سایت چندصفحه‌ای</h3>
-              <p class="plan-time">حدود ۲ تا ۴ هفته</p>
-              <p>معرفی کسب‌وکار یا شرکت با چند صفحه، مثل خدمات، درباره ما و تماس.</p>
-              <ul>
-                <li>طراحی ریسپانسیو</li>
-                <li>سئوی پایه</li>
-                <li>بررسی روی موبایل و کامپیوتر</li>
-              </ul>
-              <a class="btn btn-ghost" href="#order" data-open-order>برآورد رایگان</a>
-            </article>
-            <article class="plan reveal">
-              <h3>پروژهٔ اختصاصی</h3>
-              <p class="plan-time">بعد از نیازسنجی</p>
-              <p>بازطراحی سایت موجود یا نیازهای خاص مثل پنل مدیریت و داشبورد.</p>
-              <ul>
-                <li>نیازسنجی مشترک</li>
-                <li>زمان‌بندی و هزینهٔ مشخص</li>
-                <li>توافق مرحله‌ای</li>
-              </ul>
-              <a class="btn btn-ghost" href="#order" data-open-order>برآورد رایگان</a>
-            </article>
-          </div>
-          <p class="plans-note">زمان‌ها تقریبی‌اند و قبل از شروع کار با شما هماهنگ می‌شوند.</p>
-        </div>
-
-        <div class="block">
-          <header class="head-row reveal">
-            <h2 class="section-title">مراحل کار</h2>
-            <p class="section-desc">مسیر ساده از اولین پیام تا تحویل پروژه.</p>
-          </header>
-          <ol class="steps">
-            <li class="step reveal">
-              <span class="step-no" aria-hidden="true">۱</span>
-              <h3>گفتگو و نیازسنجی</h3>
-              <p>هدف سایت، مخاطب و نمونه‌های موردعلاقه‌تان را می‌شنویم و زمان و هزینه را هماهنگ می‌کنیم.</p>
-            </li>
-            <li class="step reveal">
-              <span class="step-no" aria-hidden="true">۲</span>
-              <h3>طراحی</h3>
-              <p>ظاهر و چیدمان صفحه‌ها پیش از شروع کدنویسی مشخص و با شما بازبینی می‌شود.</p>
-            </li>
-            <li class="step reveal">
-              <span class="step-no" aria-hidden="true">۳</span>
-              <h3>توسعه و آزمایش</h3>
-              <p>ساخت صفحه‌ها و بررسی آن‌ها در موبایل و کامپیوتر.</p>
-            </li>
-            <li class="step reveal">
-              <span class="step-no" aria-hidden="true">۴</span>
-              <h3>تحویل</h3>
-              <p>تحویل پروژه، اصلاحات نهایی و رفع اشکال‌های مربوط به کار انجام‌شده.</p>
-            </li>
-          </ol>
-        </div>
-
-      </div>
-    </section>
-
-    <section class="section alt" id="faq">
-      <div class="wrap split">
-        <header class="split-head reveal">
-          <h2 class="section-title">سؤالات متداول</h2>
-          <p class="section-desc">پاسخ کوتاه به پرسش‌هایی که بیشتر از ما می‌پرسند.</p>
-        </header>
-        <div class="faq">
-          <details class="reveal">
-            <summary>هزینهٔ طراحی سایت چقدر است؟</summary>
-            <p>هزینه به نوع و حجم کار بستگی دارد و بدون شنیدن نیاز شما عدد دقیقی نمی‌دهیم. مشاورهٔ اولیه و برآورد رایگان
-              است؛ بعد از آن قیمت شفاف اعلام می‌شود. در فرم «شروع پروژه» می‌توانید بودجهٔ تقریبی را هم بنویسید.</p>
-          </details>
-          <details class="reveal">
-            <summary>ساخت سایت چقدر زمان می‌برد؟</summary>
-            <p>لندینگ‌پیج حدود ۳ تا ۷ روز و سایت چندصفحه‌ای حدود ۲ تا ۴ هفته. پروژه‌های اختصاصی بعد از نیازسنجی
-              زمان‌بندی می‌شوند. زمان نهایی قبل از شروع کار با شما هماهنگ می‌شود.</p>
-          </details>
-          <details class="reveal">
-            <summary>چطور شروع کنیم؟</summary>
-            <p>روی «شروع پروژه» بزنید و نام، شمارهٔ تماس، نوع پروژه و توضیح کوتاه را بنویسید. بعد با شما تماس می‌گیریم.
-              اگر ترجیح می‌دهید، مستقیم در تلگرام، ایتا یا بله پیام بدهید.</p>
-          </details>
-          <details class="reveal">
-            <summary>پرداخت چطور است؟</summary>
-            <p>پرداخت معمولاً مرحله‌ای است؛ بخشی در شروع کار و باقی هنگام تحویل. جزئیات دقیق قبل از شروع با شما هماهنگ و
-              توافق می‌شود.</p>
-          </details>
-          <details class="reveal">
-            <summary>بعد از تحویل پشتیبانی دارید؟</summary>
-            <p>بله، رفع اشکال‌های مربوط به کار انجام‌شده را پوشش می‌دهیم. مدت و دامنهٔ دقیق پشتیبانی قبل از شروع، در
-              توافق نوشته می‌شود. بعد از تسویهٔ نهایی، فایل‌های پروژه به شما تحویل داده می‌شود.</p>
-          </details>
-          <details class="reveal">
-            <summary>فروشگاه آنلاین یا اپلیکیشن هم می‌سازید؟</summary>
-            <p>تمرکز ما روی سایت‌های معرفی، شرکتی، لندینگ و پرتفولیو و بخش ظاهری و تعاملی (فرانت‌اند) است. برای فروشگاه
-              یا اپلیکیشن، نیازتان را بنویسید تا بعد از بررسی صادقانه بگوییم از عهده‌اش برمی‌آییم یا نه.</p>
-          </details>
-          <details class="reveal">
-            <summary>دامنه و هاست هم لازم است؟</summary>
-            <p>اگر دامنه یا هاست دارید همان را استفاده می‌کنیم؛ اگر ندارید، در زمان توافق راهنمایی‌تان می‌کنیم.</p>
-          </details>
-        </div>
-      </div>
-    </section>
-
-    <section class="section contact" id="contact">
-      <div class="wrap contact-grid">
-        <div class="contact-lead reveal">
-          <h2 class="section-title">ارتباط با ما</h2>
-          <p class="section-desc">برای شروع پروژه یا پرسیدن سؤال، از راه‌های زیر با ما در ارتباط باشید.</p>
+        <div class="home-cta-in reveal">
+          <h2 class="section-title">پروژه‌ای در ذهن دارید؟</h2>
+          <p class="section-desc">مشاورهٔ اولیه و برآورد رایگان است و پاسخ را مستقیم از خود تیم می‌گیرید.</p>
           <div class="actions">
-            <a class="btn btn-ink" href="#order" data-open-order>شروع پروژه</a>
-          </div>
-          <p class="contact-note">مشاورهٔ اولیه و برآورد رایگان است.</p>
-        </div>
-
-        <div class="contact-channels">
-          <div class="cgroup reveal">
-            <h3>شبکه‌های اجتماعی</h3>
-            <p>برای دیدن کارهای جدید و خبرهای ما، دنبالمان کنید یا همان‌جا پیام بدهید.</p>
-            <div class="social-row">
-              <a class="social" href="https://www.instagram.com/merteks.m/" target="_blank" rel="noopener noreferrer">
-                <span class="social-icon"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"
-                    focusable="false">
-                    <defs>
-                      <linearGradient id="igGradient" x1="0" y1="1" x2="1" y2="0">
-                        <stop offset="0" stop-color="#F9CE34" />
-                        <stop offset=".45" stop-color="#EE2A7B" />
-                        <stop offset="1" stop-color="#8E5CF0" />
-                      </linearGradient>
-                    </defs>
-                    <rect x="3" y="3" width="18" height="18" rx="5.2" fill="none" stroke="url(#igGradient)"
-                      stroke-width="2" />
-                    <circle cx="12" cy="12" r="4.1" fill="none" stroke="url(#igGradient)" stroke-width="2" />
-                    <circle cx="17.2" cy="6.8" r="1.2" fill="url(#igGradient)" />
-                  </svg></span>
-                <span>اینستاگرام</span>
-              </a>
-              <a class="social" href="https://t.me/merteks_m" target="_blank" rel="noopener noreferrer">
-                <span class="social-icon"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"
-                    focusable="false">
-                    <circle cx="12" cy="12" r="10" fill="#26A5E4" />
-                    <path
-                      d="M17.2 7.3 15 17c-.16.69-.56.86-1.13.54l-3.08-2.27-1.49 1.43c-.17.17-.31.31-.64.31l.22-3.14 5.72-5.17c.25-.22-.05-.35-.39-.13L7.15 12.2l-3.02-.94c-.66-.2-.67-.66.14-.98l11.8-4.55c.55-.2 1.03.13.85.96z"
-                      fill="#fff" />
-                  </svg></span>
-                <span>تلگرام</span>
-              </a>
-            </div>
-          </div>
-
-          <div class="cgroup reveal">
-            <h3>پیام و تماس مستقیم</h3>
-            <p>برای مشاوره، پرسیدن سؤال یا پیگیری درخواست، مستقیم پیام بدهید یا تماس بگیرید.</p>
-            <div class="social-row">
-              <a class="social" href="https://eitaa.com/mmd2010s" target="_blank" rel="noopener noreferrer"
-                aria-label="ایتا">
-                <span class="social-icon"><img src="assets/eitaa.webp" width="22" height="22" alt=""
-                    loading="lazy"></span>
-                <span>ایتا</span>
-              </a>
-              <a class="social" href="https://ble.ir/mmd2010s" target="_blank" rel="noopener noreferrer"
-                aria-label="بله">
-                <span class="social-icon"><img src="assets/bale.webp" width="22" height="22" alt=""
-                    loading="lazy"></span>
-                <span>بله</span>
-              </a>
-              <a class="social phone-order" href="tel:09197029213" aria-label="تماس تلفنی با 09197029213">
-                <span class="social-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"
-                    focusable="false">
-                    <path fill="currentColor"
-                      d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" />
-                  </svg></span>
-                <span dir="ltr">09197029213</span>
-              </a>
-            </div>
+            <a class="btn btn-primary" href="#order" data-open-order>شروع پروژه</a>
+            <a class="btn btn-ghost" href="contact.html">راه‌های ارتباطی</a>
           </div>
         </div>
       </div>
@@ -463,8 +159,8 @@
       <nav class="mx-foot-links" aria-label="پیوندهای پایین صفحه"><a href="privacy.html">حریم خصوصی</a><a
           href="https://t.me/merteks_m" target="_blank" rel="noopener noreferrer">تلگرام</a><a
           href="https://www.instagram.com/merteks.m/" target="_blank" rel="noopener noreferrer">اینستاگرام</a></nav>
-      <small>اطلاعاتی که در فرم «شروع پروژه» می‌نویسید فقط برای پاسخ به شما نگه‌داری می‌شود. گفتگو با دستیار ذخیره
-        نمی‌شود.</small>
+      <small>اطلاعاتی که در فرم «شروع پروژه» می‌نویسید فقط برای پاسخ به شما نگه‌داری می‌شود. پرسش‌ها و پاسخ‌های گفتگو
+        با دستیار برای بهبود پاسخ‌گویی ذخیره می‌شود؛ شمارهٔ تماس یا اطلاعات شخصی در آن ننویسید.</small>
     </div>
   </footer>
 

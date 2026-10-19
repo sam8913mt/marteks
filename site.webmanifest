@@ -3,7 +3,7 @@
   "short_name": "مرتکس",
   "lang": "fa",
   "dir": "rtl",
-  "start_url": "/",
+  "start_url": "./",
   "display": "browser",
   "background_color": "#101827",
   "theme_color": "#101827",
