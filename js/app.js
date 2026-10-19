@@ -893,3 +893,59 @@ po.observe(sec);
 } else startProjects();
 }
 })();
+
+/* Round 3 motion: staggered card entrances, cursor light, 3D tilt, magnetic buttons */
+(function () {
+'use strict';
+var D = document, W = window;
+function mm(q) { try { return W.matchMedia(q).matches; } catch (e) { return false; } }
+var reduced = mm('(prefers-reduced-motion:reduce)'), hover = mm('(hover:hover) and (pointer:fine)');
+var SEL = '.svc,.idea,.plan,.step,.fact,.team-list li,.faq details';
+var cards = [].slice.call(D.querySelectorAll(SEL));
+cards.forEach(function (c) { c.classList.add('fx'); });
+[].forEach.call(D.querySelectorAll('.svc-list,.idea-list,.plans,.steps,.facts,.team-list,.faq'), function (g) {
+[].forEach.call(g.children, function (c, i) { c.style.setProperty('--d', i * 90 + 'ms'); });
+});
+if (!reduced && 'IntersectionObserver' in W) {
+var io = new IntersectionObserver(function (en) {
+en.forEach(function (e) {
+if (!e.isIntersecting) return;
+io.unobserve(e.target);
+var t = e.target;
+t.classList.add('show');
+setTimeout(function () { t.classList.add('done'); }, 1400);
+});
+}, { threshold: .15, rootMargin: '0px 0px -5% 0px' });
+cards.forEach(function (c) { c.classList.add('reveal'); io.observe(c); });
+} else {
+cards.forEach(function (c) { c.classList.add('show', 'done'); });
+}
+if (!hover || reduced) return;
+var glow = D.createElement('div');
+glow.id = 'mxGlow';
+glow.setAttribute('aria-hidden', 'true');
+D.body.appendChild(glow);
+var curCard = null, curBtn = null;
+function clearCard(c) { if (c) { c.style.removeProperty('--rx'); c.style.removeProperty('--ry'); } }
+function clearBtn(b) { if (b) { b.style.removeProperty('--bx'); b.style.removeProperty('--by'); } }
+D.addEventListener('pointermove', function (e) {
+glow.classList.add('on');
+glow.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px)';
+var t = e.target, c = t.closest ? t.closest(SEL) : null, b = t.closest ? t.closest('.btn') : null;
+if (c !== curCard) { clearCard(curCard); curCard = c; }
+if (b !== curBtn) { clearBtn(curBtn); curBtn = b; }
+if (c) {
+var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+c.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+c.style.setProperty('--ry', ((x - .5) * 10).toFixed(1) + 'deg');
+c.style.setProperty('--rx', ((.5 - y) * 8).toFixed(1) + 'deg');
+}
+if (b) {
+var q = b.getBoundingClientRect();
+b.style.setProperty('--bx', ((e.clientX - q.left - q.width / 2) * .16).toFixed(1) + 'px');
+b.style.setProperty('--by', ((e.clientY - q.top - q.height / 2) * .22).toFixed(1) + 'px');
+}
+}, { passive: true });
+D.documentElement.addEventListener('pointerleave', function () { glow.classList.remove('on'); clearCard(curCard); clearBtn(curBtn); });
+})();

@@ -1444,3 +1444,148 @@ a.merteks-btn:hover, .merteks-btn:hover { border-color: var(--accent); color: va
   .mx-project-card:hover, .btn-primary:hover, .btn-ghost:hover, .social:hover { transform: none; }
 }
 @keyframes fadeOnly { from { opacity: 0; } }
+
+:root{--i-web:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%238cc4f0'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Crect%20x='3'%20y='4'%20width='18'%20height='16'%20rx='2'/%3E%3Cpath%20d='M3%209h18M7%206.5h.01M10%206.5h.01'/%3E%3C/svg%3E");--i-code:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%238cc4f0'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M8%208l-4%204%204%204M16%208l4%204-4%204M13.5%205l-3%2014'/%3E%3C/svg%3E");--i-spark:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%238cc4f0'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M12%203l1.8%205.2L19%2010l-5.2%201.8L12%2017l-1.8-5.2L5%2010l5.2-1.8z'/%3E%3Cpath%20d='M19%2016v4M17%2018h4'/%3E%3C/svg%3E");--i-phone:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%238cc4f0'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Crect%20x='7'%20y='3'%20width='10'%20height='18'%20rx='2'/%3E%3Cpath%20d='M11%2018h2'/%3E%3C/svg%3E");--i-video:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%238cc4f0'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Crect%20x='3'%20y='5'%20width='18'%20height='14'%20rx='2'/%3E%3Cpath%20d='M10%209.5v5l4.5-2.5z'/%3E%3C/svg%3E");--i-chart:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%238cc4f0'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M4%2020V10M10%2020V4M16%2020v-7M22%2020H2'/%3E%3C/svg%3E");--i-rocket:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%238cc4f0'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M4%2020c1-4%203-6%206-7M14%204c4%200%206%202%206%206-3%200-6%202-8%206l-4-4c2-4%203-6%206-8z'/%3E%3C/svg%3E");--i-user:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%238cc4f0'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Ccircle%20cx='12'%20cy='8'%20r='4'/%3E%3Cpath%20d='M4%2021c0-4%204-6%208-6s8%202%208%206'/%3E%3C/svg%3E");--i-pen:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%238cc4f0'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M4%2020l1-5L16%204l4%204L9%2019z'/%3E%3C/svg%3E");}
+.svc:nth-child(1){--ic:var(--i-web)}
+.svc:nth-child(2){--ic:var(--i-code)}
+.svc:nth-child(3){--ic:var(--i-spark)}
+.svc:nth-child(4){--ic:var(--i-phone)}
+.svc:nth-child(5){--ic:var(--i-video)}
+.idea:nth-child(1){--ic:var(--i-user)}
+.idea:nth-child(2){--ic:var(--i-chart)}
+.idea:nth-child(3){--ic:var(--i-rocket)}
+.idea:nth-child(4){--ic:var(--i-video)}
+.idea:nth-child(5){--ic:var(--i-pen)}
+
+/* ==========================================================================
+   Round 3: living cards + richer motion
+   Cards get icon tiles, a cursor-following light, 3D tilt and staggered entrances.
+   ========================================================================== */
+@property --sp { syntax: "<number>"; inherits: true; initial-value: 0; }
+@keyframes orbit { to { transform: rotate(360deg); } }
+@keyframes bob { 50% { transform: translateY(-14px) rotate(2deg); } }
+@keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(90,169,230,.55); } 100% { box-shadow: 0 0 0 18px rgba(90,169,230,0); } }
+@keyframes glowDrift { to { transform: translate(-80px, 60px) scale(1.25); } }
+
+/* the card surface */
+.wrap :is(.svc, .idea, .plan, .step, .fact, .team-list li, .faq details) {
+  --sp: 0;
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background:
+    radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(90,169,230, calc(.22 * var(--sp))), transparent 70%),
+    linear-gradient(165deg, var(--ink-2), var(--ink-1));
+  transition: --sp .35s, border-color .3s, box-shadow .35s, background-color .3s,
+    opacity .8s var(--ease) var(--d, 0ms), transform .8s var(--ease) var(--d, 0ms), filter .8s var(--ease) var(--d, 0ms);
+}
+.wrap :is(.svc, .idea, .plan, .step, .fact, .team-list li, .faq details):hover {
+  --sp: 1; border-color: var(--accent-lo); box-shadow: 0 20px 48px rgba(90,169,230,.15);
+}
+.js .fx.reveal { transform: translateY(48px) scale(.94) rotateX(-10deg); filter: blur(8px); }
+.js .fx.reveal.show { transform: none; filter: none; }
+.js .fx.done { transition: --sp .35s, border-color .3s, box-shadow .35s, transform .22s ease-out; }
+.js .fx.done:hover:not(details) {
+  transform: perspective(800px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-6px);
+}
+
+/* services + ideas: icon tile on top */
+.svc-list, .idea-list { display: grid; gap: 16px; border: 0; margin-top: 0; grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr)); }
+.idea-list { margin-top: 28px; }
+.wrap .svc, .wrap .idea { display: block; padding: 26px 24px 24px; }
+.svc::before, .idea::before {
+  content: ""; display: block; width: 52px; height: 52px; margin-bottom: 18px; border-radius: 15px;
+  border: 1px solid var(--accent-lo);
+  background: var(--ic) center / 25px no-repeat, linear-gradient(145deg, rgba(90,169,230,.28), rgba(90,169,230,.04));
+  transition: transform .45s var(--ease), box-shadow .35s;
+}
+.fx:hover::before { transform: rotate(-9deg) scale(1.12); box-shadow: 0 8px 22px rgba(90,169,230,.3); }
+.svc p, .idea p { margin-top: 8px; }
+
+/* plans: separate cards, the middle one lit by a travelling light */
+.plans { gap: 16px; border: 0; border-radius: 0; overflow: visible; }
+.wrap .plans .plan + .plan { border: 1px solid var(--line); }
+.wrap .plan { padding: 30px 26px 26px; }
+.wrap .plan:nth-child(2) { border-color: var(--accent-lo); }
+.plan:nth-child(2)::after {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 2px; pointer-events: none;
+  background: conic-gradient(from var(--ang), transparent 0 60%, var(--accent) 82%, var(--accent-hi) 92%, transparent);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude; animation: spinAng 5s linear infinite;
+}
+.plan li::before { background: var(--accent-hi); box-shadow: 0 0 10px var(--accent); }
+
+/* steps: numbered cards */
+.steps { gap: 16px; }
+.wrap .step { padding: 84px 24px 26px; overflow: hidden; }
+.wrap .step::before { display: none !important; }
+.wrap .step .step-no {
+  inset-block-start: 24px; inset-inline-start: 24px; width: 46px; height: 46px; border: 0;
+  background: var(--metal); color: var(--on-accent); box-shadow: 0 0 0 0 rgba(90,169,230,.5);
+}
+.js .step.show .step-no { animation: pop .6s .2s var(--ease) both, pulseRing 1.6s .8s 2 ease-out; }
+.step::after {
+  content: ""; position: absolute; inset-block-start: 0; inset-inline: 0; height: 3px;
+  background: var(--metal); transform: scaleX(0); transform-origin: right; transition: transform .6s var(--ease) .1s;
+}
+.step:hover::after { transform: scaleX(1); }
+
+/* facts, team, faq */
+.facts { gap: 14px; border: 0; }
+.wrap .fact { padding: 26px 16px; text-align: center; }
+.fact b { background: var(--metal); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.team-list li { padding: 16px 20px; }
+.avatar { background: var(--metal); color: var(--on-accent); border: 0; }
+.team-list li:hover .avatar { animation: pulseRing 1.2s ease-out infinite; }
+.faq { display: grid; gap: 12px; }
+.wrap .faq details { padding-inline: 24px; }
+.wrap .faq details[open] { --sp: .6; border-color: var(--accent-lo); }
+.faq summary:hover { padding-inline-start: 0; }
+.about-grid h3 { border: 0; padding: 0; }
+
+/* hero: orbit, floating tech chips, dot grid */
+.hero {
+  background: linear-gradient(transparent 55%, var(--ink-0)),
+    radial-gradient(rgba(140,196,240,.17) 1px, transparent 1.3px) 0 0 / 26px 26px;
+}
+.stage { position: relative; isolation: isolate; justify-self: center; width: min(100%, 360px); }
+.stage .plate { width: 100%; }
+.stage::before {
+  content: ""; position: absolute; z-index: -1; inset: -8% -14%; border: 1px dashed rgba(140,196,240,.3);
+  border-radius: 50%; animation: orbit 46s linear infinite;
+}
+.chip {
+  position: absolute; z-index: 2; padding: 3px 14px; border: 1px solid var(--accent-lo); border-radius: 999px;
+  background: rgba(34,40,49,.82); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  font: 700 13px/1.9 var(--font-body); color: var(--accent-hi); box-shadow: 0 10px 28px rgba(0,0,0,.4);
+  animation: bob 5s ease-in-out infinite; unicode-bidi: isolate;
+}
+.c1 { inset-block-start: 6%; inset-inline-start: -12%; }
+.c2 { inset-block-start: 26%; inset-inline-end: -14%; animation-delay: -1.4s; animation-duration: 6s; }
+.c3 { inset-block-end: 24%; inset-inline-start: -16%; animation-delay: -2.6s; animation-duration: 5.5s; }
+.c4 { inset-block-end: 6%; inset-inline-end: -10%; animation-delay: -3.8s; animation-duration: 6.5s; }
+@media (max-width: 520px) { .c1, .c3 { inset-inline-start: -4%; } .c2, .c4 { inset-inline-end: -4%; } }
+
+/* alt sections: slow drifting light */
+.section.alt { position: relative; overflow: hidden; isolation: isolate; }
+.section.alt::before {
+  content: ""; position: absolute; z-index: -1; width: 560px; height: 560px; inset-block-start: -180px; inset-inline-end: -120px;
+  background: radial-gradient(closest-side, rgba(90,169,230,.16), transparent); animation: glowDrift 16s ease-in-out infinite alternate;
+}
+
+/* cursor light + magnetic buttons */
+#mxGlow {
+  position: fixed; z-index: 1; inset: 0 auto auto 0; width: 520px; height: 520px; margin: -260px 0 0 -260px;
+  border-radius: 50%; pointer-events: none; opacity: 0; mix-blend-mode: screen; transition: opacity .4s;
+  background: radial-gradient(closest-side, rgba(90,169,230,.13), transparent);
+}
+#mxGlow.on { opacity: 1; }
+.btn:hover { transform: translate(var(--bx, 0px), calc(var(--by, 0px) - 2px)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .stage::before, .chip, .section.alt::before, .plan:nth-child(2)::after, .team-list li:hover .avatar,
+  .js .step.show .step-no { animation: none !important; }
+  .js .fx.reveal { filter: none; transform: none !important; }
+  .js .fx.done:hover:not(details) { transform: none; }
+  #mxGlow { display: none; }
+}
