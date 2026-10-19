@@ -1,6 +1,7 @@
 (function () {
 'use strict';
 var D = document, W = window;
+D.documentElement.classList.add('js');
 function $(id) { return D.getElementById(id); }
 function qa(sel, root) { return Array.prototype.slice.call((root || D).querySelectorAll(sel)); }
 var CFG = W.MERTEKS_CONFIG || {};
@@ -381,7 +382,7 @@ if (W.MX.openAssistant) return Promise.resolve();
 if (aiLoading) return aiLoading;
 aiLoading = new Promise(function (resolve, reject) {
 var s = D.createElement('script');
-s.src = 'js/assistant.js?v=3';
+s.src = 'js/assistant.js?v=4';
 s.onload = resolve;
 s.onerror = function () { aiLoading = null; reject(new Error('load')); };
 D.head.appendChild(s);
@@ -396,7 +397,7 @@ loadAssistant().then(function () { W.MX.openAssistant(); }, function () { toast(
 var conn = navigator.connection || {};
 var slow = conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '');
 if (!slow && 'requestIdleCallback' in W) requestIdleCallback(function () {
-var l = D.createElement('link'); l.rel = 'prefetch'; l.href = 'js/assistant.js?v=3'; l.as = 'script'; D.head.appendChild(l);
+var l = D.createElement('link'); l.rel = 'prefetch'; l.href = 'js/assistant.js?v=4'; l.as = 'script'; D.head.appendChild(l);
 }, { timeout: 6000 });
 }
 (function () {
