@@ -133,7 +133,7 @@ D.body.insertAdjacentHTML('beforeend',
 '<div class="mx-ai-panel" role="dialog" aria-modal="true" aria-labelledby="mxAiTitle">' +
 '<div class="mx-ai-head">' +
 '<div class="mx-ai-avatars"><div class="mx-ai-dot" aria-hidden="true">م</div><div>' +
-'<div class="kicker">QUICK ANSWERS</div><h3 id="mxAiTitle">پرسش‌وپاسخ سریع مرتکس</h3>' +
+'<h3 id="mxAiTitle">پرسش‌وپاسخ سریع مرتکس</h3>' +
 '<p class="mx-ai-sub">پاسخ‌های آماده · ذخیره نمی‌شود</p></div></div>' +
 '<div class="mx-ai-avatars"><button class="merteks-close" type="button" id="mxAiClose" aria-label="بستن گفتگو">×</button></div>' +
 '</div>' +
@@ -157,13 +157,12 @@ suggest.innerHTML = SUGGEST.map(function (q) {
 
 function actionsHtml(list) {
   if (!list || !list.length) return '';
-  return '<div class="mx-ai-actions" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">' + list.map(function (x) {
-    var style = 'display:inline-flex;align-items:center;min-height:36px;padding:6px 14px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface-2);color:var(--text);font:inherit;font-size:13px;font-weight:700;text-decoration:none;cursor:pointer';
+  return '<div class="mx-ai-actions">' + list.map(function (x) {
     if (x.href) {
       var ext = /^https?:/.test(x.href);
-      return '<a style="' + style + '" href="' + esc(x.href) + '"' + (ext ? ' target="_blank" rel="noopener noreferrer"' : '') + '>' + esc(x.t) + '</a>';
+      return '<a class="mx-ai-act" href="' + esc(x.href) + '"' + (ext ? ' target="_blank" rel="noopener noreferrer"' : '') + '>' + esc(x.t) + '</a>';
     }
-    return '<button type="button" style="' + style + '" data-act="' + esc(x.act) + '">' + esc(x.t) + '</button>';
+    return '<button type="button" class="mx-ai-act" data-act="' + esc(x.act) + '">' + esc(x.t) + '</button>';
   }).join('') + '</div>';
 }
 function bubble(who, text, act) {

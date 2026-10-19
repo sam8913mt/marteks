@@ -1,7 +1,7 @@
 /* Merteks admin — صفحهٔ مستقل، بدون وابستگی به استایل سایت عمومی */
 :root{
-  --bg:#0b1220;--card:#111a2e;--card2:#16213a;--text:#eef2ff;--muted:#9aa6c3;--line:#223052;
-  --accent:#6f8cff;--accent-t:#0b1220;--ok:#16a34a;--warn:#d97706;--bad:#dc2626;--shadow:0 6px 24px rgba(0,0,0,.35);
+  --bg:#0e0c09;--card:#151210;--card2:#1d1914;--text:#f2ede2;--muted:#a69d8b;--line:#2c271f;
+  --accent:#c9a45c;--accent-t:#1c1409;--ok:#2f9e5f;--warn:#d9a441;--bad:#e0594c;--shadow:none;
   --font:"Vazirmatn",Tahoma,"Segoe UI",system-ui,sans-serif;
 }
 *{box-sizing:border-box}
@@ -13,11 +13,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 img{max-width:100%}
 
 .ad-muted{color:var(--muted);font-size:12.5px}
-.ad-kicker{font:700 10px/1.4 var(--font);letter-spacing:3px;color:var(--accent);direction:ltr;text-align:right}
+.ad-kicker{font:700 10px/1.4 var(--font);letter-spacing:0;color:var(--accent);direction:ltr;text-align:right}
 .ad-brand{display:flex;align-items:center;gap:12px}
 .ad-brand img{border-radius:12px}
 
-.ad-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+.ad-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
 .ad-card-head{display:flex;flex-direction:column;gap:2px;margin-bottom:10px}
 
 /* ورود */

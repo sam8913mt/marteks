@@ -243,7 +243,6 @@ if (e.isIntersecting) { e.target.classList.add('show', 'mx-in'); io.unobserve(e.
 });
 }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
 items.forEach(function (el) { io.observe(el); });
-if (!reduced) qa('.section-title').forEach(function (el) { el.classList.add('mx-title-sheen'); });
 if (!links) return;
 var navLinks = qa('a', links);
 var spy = new IntersectionObserver(function (entries) {
@@ -267,11 +266,6 @@ var id = a.getAttribute('href');
 if (!id || id === '#' || id === '#order') return;
 try { history.replaceState(null, '', id); } catch (err) {}
 });
-D.addEventListener('click', function (e) {
-var t = e.target.closest && e.target.closest('.btn,.social,.tool-btn');
-if (!t) return;
-t.classList.remove('tap-pop'); void t.offsetWidth; t.classList.add('tap-pop');
-});
 var orderBuilt = false;
 function buildOrder() {
 if (orderBuilt) return;
@@ -281,7 +275,7 @@ D.body.insertAdjacentHTML('beforeend',
 '<div class="merteks-panel" role="dialog" aria-modal="true" aria-labelledby="merteksOrderTitle">' +
 '<div class="merteks-order-page-inner">' +
 '<div class="merteks-panel-head"><div>' +
-'<div class="kicker">START A PROJECT</div><h3 id="merteksOrderTitle">شروع پروژه</h3>' +
+'<h3 id="merteksOrderTitle">شروع پروژه</h3>' +
 '<p>چند مورد ساده را وارد کنید تا درخواستتان برای تیم مرتکس ارسال شود.</p></div>' +
 '<button class="merteks-close" type="button" data-close-order aria-label="بازگشت به سایت">×</button></div>' +
 '<form class="merteks-form" id="merteksOrderForm" novalidate>' +
@@ -387,7 +381,7 @@ if (W.MX.openAssistant) return Promise.resolve();
 if (aiLoading) return aiLoading;
 aiLoading = new Promise(function (resolve, reject) {
 var s = D.createElement('script');
-s.src = 'js/assistant.js?v=2';
+s.src = 'js/assistant.js?v=3';
 s.onload = resolve;
 s.onerror = function () { aiLoading = null; reject(new Error('load')); };
 D.head.appendChild(s);
@@ -402,7 +396,7 @@ loadAssistant().then(function () { W.MX.openAssistant(); }, function () { toast(
 var conn = navigator.connection || {};
 var slow = conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '');
 if (!slow && 'requestIdleCallback' in W) requestIdleCallback(function () {
-var l = D.createElement('link'); l.rel = 'prefetch'; l.href = 'js/assistant.js?v=2'; l.as = 'script'; D.head.appendChild(l);
+var l = D.createElement('link'); l.rel = 'prefetch'; l.href = 'js/assistant.js?v=3'; l.as = 'script'; D.head.appendChild(l);
 }, { timeout: 6000 });
 }
 (function () {
@@ -477,8 +471,8 @@ return '<article class="mx-project-card">' +
 (p.description ? '<p class="mx-project-desc">' + esc(p.description) + '</p>' : '') +
 (url ? '<a class="mx-project-link" href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">مشاهدهٔ سایت ↗</a>' : '') +
 '<div class="mx-project-actions">' +
-'<button class="btn btn-ghost mx-project-view" type="button" data-i="' + i + '">مشاهده عکس‌ها <span>←</span></button>' +
-'<button class="btn btn-ghost mx-project-comments" type="button" data-c="' + i + '">💬 نظرات <span class="mx-ccount">' + (p.comments ? '(' + p.comments + ')' : '') + '</span></button>' +
+'<button class="btn btn-ghost mx-project-view" type="button" data-i="' + i + '">مشاهده عکس‌ها</button>' +
+'<button class="btn btn-ghost mx-project-comments" type="button" data-c="' + i + '">نظرات <span class="mx-ccount">' + (p.comments ? '(' + p.comments + ')' : '') + '</span></button>' +
 '</div></div></article>';
 }
 function showMoreProjects() {
@@ -671,7 +665,7 @@ cmEl.id = 'mxCommentsModal';
 cmEl.setAttribute('aria-hidden', 'true');
 cmEl.innerHTML =
 '<div class="merteks-panel mx-cm-panel" role="dialog" aria-modal="true" aria-labelledby="mxCmTitle">' +
-'<div class="merteks-panel-head"><div><div class="kicker">COMMENTS</div><h3 id="mxCmTitle">نظرات</h3><p id="mxCmSub"></p></div>' +
+'<div class="merteks-panel-head"><div><h3 id="mxCmTitle">نظرات</h3><p id="mxCmSub"></p></div>' +
 '<button class="merteks-close" type="button" id="mxCmClose" aria-label="بستن">×</button></div>' +
 '<section class="mx-cm-pager" id="mxCmPager" aria-roledescription="carousel" aria-label="نظرات بازدیدکنندگان" hidden>' +
 '<div class="mx-cm-stage" id="mxCmStage"><div class="mx-cm-page" id="mxCmPage" aria-live="polite" aria-atomic="true"></div></div>' +
