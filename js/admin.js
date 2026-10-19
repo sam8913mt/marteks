@@ -1,3 +1,4 @@
+try { if (window.top !== window.self) window.top.location = window.self.location; } catch (e) { document.documentElement.style.display = 'none'; }
 (function () {
 'use strict';
 var D = document, W = window;

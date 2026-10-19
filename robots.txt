@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /admin-projects.html
+
+# The "Sitemap:" line is added by set-domain.sh when the real domain exists.

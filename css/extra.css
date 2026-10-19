@@ -1,0 +1,103 @@
+/* ============================================================
+   Merteks — additions (team, plans, FAQ, privacy page, a11y)
+   Loaded after style.css
+   ============================================================ */
+:root { --mx-gold: #d2ad63; }
+
+/* keyboard focus: visible on every interactive element */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
+textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--mx-gold);
+  outline-offset: 3px;
+}
+#mxDeck:focus { outline: none; }
+
+/* contact boxes now use h3 (heading order) but keep the old look */
+.cbox h3 { font-size: 1.5rem; font-weight: 900; margin: .3em 0 .5em; line-height: 1.5; }
+
+.mx-hero-note { margin: 18px 0 0; font-size: 13px; line-height: 1.9; color: var(--muted); }
+.mx-hero-note a { color: var(--accent); font-weight: 700; text-underline-offset: 3px; }
+
+/* team */
+.mx-team h3 { margin-bottom: 14px; }
+.mx-team-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.mx-team-list li { display: flex; align-items: center; gap: 14px; }
+.mx-team-list b { display: block; font-size: 1rem; }
+.mx-team-list span:not(.mx-avatar) { display: block; font-size: 13px; color: var(--muted); }
+.mx-avatar {
+  flex: none; width: 46px; height: 46px; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 900; font-size: 1.1rem;
+  color: #1b1405; background: linear-gradient(140deg, #f0d79a, var(--mx-gold));
+}
+
+/* skills as grouped chips */
+.mx-skill-group + .mx-skill-group { margin-top: 18px; }
+.mx-skill-group h4 { margin: 0 0 10px; font-size: 14px; color: var(--muted); font-weight: 700; }
+
+/* plans */
+.mx-plans { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.mx-plan { display: flex; flex-direction: column; gap: 4px; }
+.mx-plan h3 { font-size: 1.15rem; margin: 0; }
+.mx-plan p { margin: 4px 0; font-size: 14px; line-height: 1.9; color: var(--text-2); }
+.mx-plan .mx-plan-time { color: var(--mx-gold); font-weight: 800; margin: 2px 0 6px; }
+.mx-plan ul { margin: 8px 0 18px; padding: 0; list-style: none; display: grid; gap: 6px; font-size: 13.5px; color: var(--text-2); }
+.mx-plan li::before { content: "✓"; color: var(--mx-gold); margin-inline-end: 8px; font-weight: 800; }
+.mx-plan .btn { margin-top: auto; justify-content: center; }
+.mx-plans-note { margin: 14px 0 0; text-align: center; font-size: 13px; color: var(--muted); }
+
+/* FAQ */
+.mx-faq { display: grid; gap: 10px; max-width: 860px; margin-inline: auto; }
+.mx-faq details {
+  border: 1px solid var(--line-2); border-radius: 16px; background: var(--surface);
+  padding: 0 18px;
+}
+.mx-faq summary {
+  cursor: pointer; list-style: none; padding: 16px 0; font-weight: 800; font-size: 15px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px;
+}
+.mx-faq summary::-webkit-details-marker { display: none; }
+.mx-faq summary::after { content: "+"; font-size: 22px; line-height: 1; color: var(--mx-gold); flex: none; }
+.mx-faq details[open] summary::after { content: "−"; }
+.mx-faq details p { margin: 0 0 16px; font-size: 14px; line-height: 2; color: var(--text-2); }
+
+/* empty / error box actions */
+.mx-empty-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+
+/* footer */
+.mx-foot-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; margin: 8px 0; }
+.mx-foot-links a { color: var(--text-2); font-size: 13px; text-underline-offset: 3px; padding: 6px 2px; }
+footer small { display: block; max-width: 640px; margin: 4px auto 0; padding-inline: 16px; font-size: 12px; }
+
+/* simple text pages (privacy, 404) */
+.mx-page { min-height: 100dvh; padding: 96px 0 56px; }
+.mx-doc { width: min(780px, 92%); margin-inline: auto; }
+.mx-doc h1 { font-size: 1.8rem; font-weight: 900; margin: 0 0 8px; line-height: 1.5; }
+.mx-doc h2 { font-size: 1.15rem; font-weight: 800; margin: 30px 0 8px; }
+.mx-doc p, .mx-doc li { font-size: 15px; line-height: 2.05; color: var(--text-2); }
+.mx-doc ul { padding-inline-start: 22px; }
+.mx-doc .mx-meta { color: var(--muted); font-size: 13px; }
+.mx-doc a { color: var(--accent); text-underline-offset: 3px; }
+.mx-doc .btn { margin-top: 18px; }
+
+/* small phones: keep the floating widgets from stacking on content */
+@media (max-width: 480px) {
+  .mx-hero-note { font-size: 12.5px; }
+  .mx-faq summary { font-size: 14px; }
+  .mx-plan .btn { width: 100%; }
+}
+
+/* nav icons follow the link (href), not its position */
+html body #links a.mx-final-menu-item[href="#home"]::before{content:""!important;background-repeat:no-repeat!important;background-position:center!important;background-size:18px 18px!important;background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23cdd6f4'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M3%2011l9-8%209%208'/%3E%3Cpath%20d='M5%2010v10h14V10'/%3E%3C/svg%3E")!important}
+html body #links a.mx-final-menu-item[href="#about"]::before{content:""!important;background-repeat:no-repeat!important;background-position:center!important;background-size:18px 18px!important;background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23cdd6f4'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Ccircle%20cx='12'%20cy='8'%20r='4'/%3E%3Cpath%20d='M4%2021c0-4%204-6%208-6s8%202%208%206'/%3E%3C/svg%3E")!important}
+html body #links a.mx-final-menu-item[href="#projects"]::before{content:""!important;background-repeat:no-repeat!important;background-position:center!important;background-size:18px 18px!important;background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23cdd6f4'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Crect%20x='3'%20y='4'%20width='18'%20height='16'%20rx='2'/%3E%3Ccircle%20cx='9'%20cy='10'%20r='1.5'/%3E%3Cpath%20d='M21%2016l-5-5-8%208'/%3E%3C/svg%3E")!important}
+html body #links a.mx-final-menu-item[href="#services"]::before{content:""!important;background-repeat:no-repeat!important;background-position:center!important;background-size:18px 18px!important;background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23cdd6f4'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Crect%20x='3'%20y='7'%20width='18'%20height='13'%20rx='2'/%3E%3Cpath%20d='M9%207V5a2%202%200%200%201%202-2h2a2%202%200%200%201%202%202v2'/%3E%3C/svg%3E")!important}
+html body #links a.mx-final-menu-item[href="#faq"]::before{content:""!important;background-repeat:no-repeat!important;background-position:center!important;background-size:18px 18px!important;background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23cdd6f4'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Ccircle%20cx='12'%20cy='12'%20r='9'/%3E%3Cpath%20d='M9.5%209.5a2.5%202.5%200%201%201%203.5%202.3c-.7.4-1%20.9-1%201.7'/%3E%3Cpath%20d='M12%2017h.01'/%3E%3C/svg%3E")!important}
+html body #links a.mx-final-menu-item[href="#contact"]::before{content:""!important;background-repeat:no-repeat!important;background-position:center!important;background-size:18px 18px!important;background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23cdd6f4'%20stroke-width='1.8'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M21%2012a8%208%200%200%201-11.5%207.2L4%2021l1.8-5.5A8%208%200%201%201%2021%2012z'/%3E%3C/svg%3E")!important}
+
+/* about section layout: team + tools side by side on wide screens */
+@media (min-width: 821px) {
+  .bento .mx-team { grid-column: span 5; }
+  .bento .cell-skills { grid-column: span 7; }
+}
+/* chat bubbles keep their natural width */
+.mx-ai-msg .mx-ai-bubble { width: max-content; max-width: 100%; }

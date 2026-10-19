@@ -252,7 +252,7 @@ if (!e.isIntersecting) return;
 navLinks.forEach(function (a) { a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id); });
 });
 }, { rootMargin: '-44% 0px -52% 0px' });
-['home', 'about', 'projects', 'services', 'contact'].forEach(function (id) { var s = $(id); if (s) spy.observe(s); });
+['home', 'about', 'projects', 'services', 'faq', 'contact'].forEach(function (id) { var s = $(id); if (s) spy.observe(s); });
 })();
 if ('IntersectionObserver' in W && !reduced) {
 var pauser = new IntersectionObserver(function (entries) {
@@ -267,44 +267,6 @@ var id = a.getAttribute('href');
 if (!id || id === '#' || id === '#order') return;
 try { history.replaceState(null, '', id); } catch (err) {}
 });
-if (canHover && !reduced) {
-qa('.bento .cell,.stat,.social').forEach(function (card) {
-card.classList.add('mx-tilt', 'mx-scan');
-var glare = D.createElement('span');
-glare.className = 'mx-glare';
-card.appendChild(glare);
-var rect = null, raf = 0, px = .5, py = .5;
-function paint() {
-raf = 0;
-card.style.transform = 'perspective(900px) rotateX(' + ((py - .5) * -9).toFixed(2) + 'deg) rotateY(' + ((px - .5) * 11).toFixed(2) + 'deg) translateZ(10px)';
-card.style.setProperty('--gx', (px * 100).toFixed(1) + '%');
-card.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
-}
-card.addEventListener('pointerenter', function () { rect = card.getBoundingClientRect(); card.classList.add('is-live'); });
-card.addEventListener('pointermove', function (e) {
-if (!rect) rect = card.getBoundingClientRect();
-px = (e.clientX - rect.left) / rect.width; py = (e.clientY - rect.top) / rect.height;
-if (!raf) raf = requestAnimationFrame(paint);
-}, { passive: true });
-card.addEventListener('pointerleave', function () {
-rect = null; card.classList.remove('is-live'); card.style.transform = '';
-if (raf) { cancelAnimationFrame(raf); raf = 0; }
-});
-});
-qa('.btn,.phone-order').forEach(function (el) {
-el.classList.add('mx-magnet');
-var rect = null, raf = 0, dx = 0, dy = 0;
-function paint() { raf = 0; el.style.transform = 'translate(' + (dx * 9).toFixed(1) + 'px,' + (dy * 7).toFixed(1) + 'px) scale(1.03)'; }
-el.addEventListener('pointerenter', function () { rect = el.getBoundingClientRect(); });
-el.addEventListener('pointermove', function (e) {
-if (!rect) rect = el.getBoundingClientRect();
-dx = (e.clientX - (rect.left + rect.width / 2)) / rect.width;
-dy = (e.clientY - (rect.top + rect.height / 2)) / rect.height;
-if (!raf) raf = requestAnimationFrame(paint);
-}, { passive: true });
-el.addEventListener('pointerleave', function () { rect = null; el.style.transform = ''; });
-});
-}
 D.addEventListener('click', function (e) {
 var t = e.target.closest && e.target.closest('.btn,.social,.tool-btn');
 if (!t) return;
@@ -341,11 +303,11 @@ D.body.insertAdjacentHTML('beforeend',
 '</div>' +
 '</div>' +
 '</div>' +
-'<div id="merteksOrderSuccess" aria-live="polite"><div class="merteks-success-card"><div class="merteks-success-icon">✓</div>' +
-'<h3>درخواست شما ثبت شد</h3><p>به‌زودی با شما تماس می‌گیریم. کد پیگیری را نگه دارید:</p>' +
-'<p><b id="merteksOrderCode" dir="ltr" style="font-size:18px;letter-spacing:1px"></b></p>' +
-'<div class="merteks-actions" style="justify-content:center"><button class="merteks-btn" type="button" id="merteksSuccessClose">بستن</button></div>' +
-'<div class="merteks-countdown" id="merteksCountdown">10</div></div></div>');
+'<div id="merteksOrderSuccess" aria-live="polite"><div class="merteks-success-card" role="dialog" aria-modal="true" aria-labelledby="merteksSuccessTitle"><div class="merteks-success-icon" aria-hidden="true">✓</div>' +
+'<h3 id="merteksSuccessTitle">درخواست شما ثبت شد</h3><p id="merteksSuccessText">با شما تماس می‌گیریم. اگر زودتر نیاز شد، هنگام پیام دادن این کد را بگویید:</p>' +
+'<p><b id="merteksOrderCode" dir="ltr" style="font-size:18px;letter-spacing:1px;user-select:all"></b></p>' +
+'<div class="merteks-actions" style="justify-content:center"><a class="merteks-btn" href="https://t.me/merteks_m" target="_blank" rel="noopener noreferrer">پیام در تلگرام</a><button class="merteks-btn primary" type="button" id="merteksSuccessClose">بستن</button></div>' +
+'</div></div>');
 var modal = $('merteksOrderModal');
 qa('[data-close-order]', modal).forEach(function (b) { b.addEventListener('click', function () { closeOverlay('merteksOrderModal'); }); });
 modal.addEventListener('click', function (e) { if (e.target === modal) closeOverlay('merteksOrderModal'); });
@@ -379,29 +341,31 @@ submitting = true; btn.disabled = true; btn.textContent = 'در حال ارسا�
 cloudPost(order).then(function (j) {
 submitting = false; btn.disabled = false; btn.textContent = 'ثبت درخواست';
 if (!j.success && j.status >= 400 && j.status < 500 && j.status !== 429) {
-toast('ثبت درخواست انجام نشد: ' + (j.error || 'خطا')); return;
+toast('ثبت درخواست انجام نشد: ' + (j.error || 'خطا') + ' — می‌توانید در تلگرام پیام بدهید.'); return;
 }
-if (!j.success) toast('اتصال برقرار نشد؛ درخواست ذخیره شد و خودکار دوباره ارسال می‌شود');
 form.reset();
 custom.style.display = 'none'; custom.required = false;
 closeOverlay('merteksOrderModal');
-showSuccess(j.id || order.id);
+showSuccess(j.id || order.id, !j.success);
 });
 });
 }
-function showSuccess(code) {
-var box = $('merteksOrderSuccess'), cd = $('merteksCountdown'), s = 10, t;
+function showSuccess(code, queued) {
+var box = $('merteksOrderSuccess'), btn = $('merteksSuccessClose');
 $('merteksOrderCode').textContent = code || '';
-cd.textContent = s;
+$('merteksSuccessTitle').textContent = queued ? 'درخواست در صف ارسال است' : 'درخواست شما ثبت شد';
+$('merteksSuccessText').textContent = queued
+? 'اینترنت وصل نبود. این صفحه را باز نگه دارید تا خودکار ارسال شود؛ یا همین حالا در تلگرام پیام بدهید و این کد را بگویید:'
+: 'با شما تماس می‌گیریم. اگر زودتر نیاز شد، هنگام پیام دادن این کد را بگویید:';
 box.classList.add('open');
 function done() {
-clearInterval(t);
 box.classList.remove('open');
 try { history.replaceState(null, '', location.href.split('#')[0] + '#home'); } catch (err) {}
 W.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
 }
-$('merteksSuccessClose').onclick = done;
-t = setInterval(function () { s--; cd.textContent = s; if (s <= 0) done(); }, 1000);
+btn.onclick = done;
+box.onkeydown = function (e) { if (e.key === 'Escape') done(); };
+setTimeout(function () { try { btn.focus(); } catch (e) {} }, 60);
 }
 function openOrder() {
 buildOrder();
@@ -423,7 +387,7 @@ if (W.MX.openAssistant) return Promise.resolve();
 if (aiLoading) return aiLoading;
 aiLoading = new Promise(function (resolve, reject) {
 var s = D.createElement('script');
-s.src = 'js/assistant.js';
+s.src = 'js/assistant.js?v=2';
 s.onload = resolve;
 s.onerror = function () { aiLoading = null; reject(new Error('load')); };
 D.head.appendChild(s);
@@ -433,12 +397,12 @@ return aiLoading;
 if (aiFab) {
 ['pointerenter', 'touchstart', 'focus'].forEach(function (ev) { aiFab.addEventListener(ev, loadAssistant, { once: true, passive: true }); });
 aiFab.addEventListener('click', function () {
-loadAssistant().then(function () { W.MX.openAssistant(); }, function () { toast('بارگذاری دستیار انجام نشد؛ دوباره تلاش کنید'); });
+loadAssistant().then(function () { W.MX.openAssistant(); }, function () { toast('بارگذاری پرسش‌وپاسخ انجام نشد؛ دوباره تلاش کنید'); });
 });
 var conn = navigator.connection || {};
 var slow = conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '');
 if (!slow && 'requestIdleCallback' in W) requestIdleCallback(function () {
-var l = D.createElement('link'); l.rel = 'prefetch'; l.href = 'js/assistant.js'; l.as = 'script'; D.head.appendChild(l);
+var l = D.createElement('link'); l.rel = 'prefetch'; l.href = 'js/assistant.js?v=2'; l.as = 'script'; D.head.appendChild(l);
 }, { timeout: 6000 });
 }
 (function () {
@@ -450,9 +414,9 @@ var hello = D.createElement('div');
 hello.className = 'mx-hello';
 hello.setAttribute('role', 'status');
 hello.innerHTML =
-'<button class="mx-hello-body" type="button" aria-label="باز کردن گفتگو با دستیار مرتکس">' +
-'<span class="mx-hello-name">🤖 دستیار مرتکس</span>' +
-'<span class="mx-hello-text">سلام 👋 به مرتکس خوش آمدید! دربارهٔ طراحی سایت، هزینه، زمان تحویل یا نمونه‌کارها سؤالی دارید؟ همین‌جا بپرسید.</span>' +
+'<button class="mx-hello-body" type="button" aria-label="باز کردن پرسش‌وپاسخ سریع">' +
+'<span class="mx-hello-name">پرسش‌وپاسخ سریع</span>' +
+'<span class="mx-hello-text">سؤالی دربارهٔ خدمات، هزینه یا زمان تحویل دارید؟ همین‌جا بپرسید.</span>' +
 '</button>' +
 '<button class="mx-hello-close" type="button" aria-label="بستن پیام">×</button>';
 function hide(remember) {
@@ -463,7 +427,7 @@ setTimeout(function () { if (hello.parentNode) hello.parentNode.removeChild(hell
 hello.querySelector('.mx-hello-close').addEventListener('click', function () { hide(true); });
 hello.querySelector('.mx-hello-body').addEventListener('click', function () {
 hide(true);
-loadAssistant().then(function () { W.MX.openAssistant(); }, function () { toast('بارگذاری دستیار انجام نشد؛ دوباره تلاش کنید'); });
+loadAssistant().then(function () { W.MX.openAssistant(); }, function () { toast('بارگذاری پرسش‌وپاسخ انجام نشد؛ دوباره تلاش کنید'); });
 });
 aiFab.addEventListener('click', function () { hide(true); });
 setTimeout(function () {
@@ -472,8 +436,8 @@ D.body.appendChild(hello);
 void hello.offsetWidth;
 hello.classList.add('show');
 try { sessionStorage.setItem('mxHello', '1'); } catch (e) {}
-setTimeout(function () { if (hello.parentNode) hide(false); }, 16000);
-}, 3500);
+setTimeout(function () { if (hello.parentNode) hide(false); }, 9000);
+}, 12000);
 })();
 var grid = $('mxProjectsGrid'), emptyBox = $('mxProjectsEmpty'), projects = null, galleryEl = null;
 var CACHE_KEY = 'mx_projects_v4', CACHE_MS = 5 * 60 * 1000;
@@ -507,7 +471,7 @@ function cardHtml(p, i) {
 var cover = p.keys[0], name = esc(p.name), url = safeUrl(p.url);
 return '<article class="mx-project-card">' +
 '<button class="mx-project-media" type="button" data-i="' + i + '" aria-label="مشاهده عکس‌های «' + name + '»">' +
-'<img class="mx-project-cover" src="' + esc(publicUrl(thumbKey(cover))) + '" data-full="' + esc(publicUrl(cover)) + '" alt="" width="640" height="400" loading="lazy" decoding="async">' +
+'<img class="mx-project-cover" src="' + esc(publicUrl(thumbKey(cover))) + '" data-full="' + esc(publicUrl(cover)) + '" alt="نمونه‌کار ' + name + '" width="640" height="400" loading="lazy" decoding="async">' +
 '<span class="mx-project-badge">' + p.keys.length.toLocaleString('fa-IR') + ' عکس</span></button>' +
 '<div class="mx-project-info"><h3 class="mx-project-name">' + name + '</h3>' +
 (p.description ? '<p class="mx-project-desc">' + esc(p.description) + '</p>' : '') +
