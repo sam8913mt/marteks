@@ -201,6 +201,45 @@ setTimeout(finish, 850);
 intro.addEventListener('click', finish);
 D.addEventListener('keydown', finish, { once: true });
 })();
+(function () {
+var h = D.querySelector('.hero-title');
+if (h && !reduced) {
+var txt = h.textContent.trim().replace(/\s+/g, ' ');
+h.setAttribute('aria-label', txt);
+h.classList.add('is-split');
+h.innerHTML = txt.split(' ').map(function (w, i) { return '<span class="w" aria-hidden="true" style="--i:' + i + '"><span>' + esc(w) + '</span></span>'; }).join(' ');
+}
+var facts = qa('.fact b');
+if (facts.length && 'IntersectionObserver' in W && !reduced) {
+var fio = new IntersectionObserver(function (en) {
+en.forEach(function (e) {
+if (!e.isIntersecting) return;
+fio.unobserve(e.target);
+var b = e.target, final = b.getAttribute('data-to') || '';
+if (!/^\d+$/.test(final)) return;
+var to = +final, t0 = performance.now(), dur = 1100;
+(function step(t) {
+var k = Math.min(1, (t - t0) / dur), v = Math.round(to * (1 - Math.pow(1 - k, 3)));
+b.textContent = v.toLocaleString('fa-IR');
+if (k < 1) requestAnimationFrame(step);
+})(t0);
+});
+}, { threshold: .6 });
+facts.forEach(function (b) { var v = enDigits(b.textContent.trim()); if (/^\d+$/.test(v)) { b.setAttribute('data-to', v); b.textContent = (0).toLocaleString('fa-IR'); fio.observe(b); } });
+}
+var plate = D.querySelector('.plate');
+if (plate && canHover && !reduced) {
+plate.classList.add('tilt');
+var hero = D.getElementById('home');
+hero.addEventListener('pointermove', function (e) {
+var r = plate.getBoundingClientRect();
+var x = (e.clientX - (r.left + r.width / 2)) / W.innerWidth, y = (e.clientY - (r.top + r.height / 2)) / W.innerHeight;
+plate.style.setProperty('--ry', (x * 18).toFixed(2) + 'deg');
+plate.style.setProperty('--rx', (-y * 18).toFixed(2) + 'deg');
+});
+hero.addEventListener('pointerleave', function () { plate.style.setProperty('--rx', '0deg'); plate.style.setProperty('--ry', '0deg'); });
+}
+})();
 var links = $('links'), menuBtn = $('menuBtn');
 function closeMenu() {
 if (!links) return;
@@ -382,7 +421,7 @@ if (W.MX.openAssistant) return Promise.resolve();
 if (aiLoading) return aiLoading;
 aiLoading = new Promise(function (resolve, reject) {
 var s = D.createElement('script');
-s.src = 'js/assistant.js?v=4';
+s.src = 'js/assistant.js?v=5';
 s.onload = resolve;
 s.onerror = function () { aiLoading = null; reject(new Error('load')); };
 D.head.appendChild(s);
@@ -397,7 +436,7 @@ loadAssistant().then(function () { W.MX.openAssistant(); }, function () { toast(
 var conn = navigator.connection || {};
 var slow = conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '');
 if (!slow && 'requestIdleCallback' in W) requestIdleCallback(function () {
-var l = D.createElement('link'); l.rel = 'prefetch'; l.href = 'js/assistant.js?v=4'; l.as = 'script'; D.head.appendChild(l);
+var l = D.createElement('link'); l.rel = 'prefetch'; l.href = 'js/assistant.js?v=5'; l.as = 'script'; D.head.appendChild(l);
 }, { timeout: 6000 });
 }
 (function () {

@@ -6,6 +6,28 @@
    type over a clean sans body, ruled lists instead of card grids.
    ========================================================================== */
 
+/* Self-hosted fonts (see fonts/README.txt). Local files are tried first, so the site
+   looks right even where Google Fonts is blocked. Missing files fall through to the
+   Google-hosted copies and then to system fonts. */
+@font-face {
+  font-family: "Vazirmatn Local";
+  src: url("../fonts/vazirmatn-arabic-wght-normal.woff2") format("woff2");
+  font-weight: 100 900; font-style: normal; font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FEFC;
+}
+@font-face {
+  font-family: "Vazirmatn Local";
+  src: url("../fonts/vazirmatn-latin-wght-normal.woff2") format("woff2");
+  font-weight: 100 900; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Naskh Local";
+  src: url("../fonts/noto-naskh-arabic-arabic-wght-normal.woff2") format("woff2");
+  font-weight: 400 700; font-style: normal; font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FEFC;
+}
+
 :root {
   /* palette: navy #101827 · blue #5AA9E6 · ice #EAF4F4 · charcoal #222831 */
   --ink-0: #101827;
@@ -23,8 +45,8 @@
   --on-accent: #101827;
   --metal: linear-gradient(135deg, #8cc4f0 0%, #5AA9E6 52%, #6db4ea 100%);
 
-  --font-body: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
-  --font-display: "Noto Naskh Arabic", "Vazirmatn", "Traditional Arabic", serif;
+  --font-body: "Vazirmatn Local", "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
+  --font-display: "Naskh Local", "Noto Naskh Arabic", "Vazirmatn Local", "Vazirmatn", "Traditional Arabic", serif;
 
   --gutter: clamp(18px, 4.5vw, 44px);
   --maxw: 1180px;
@@ -182,7 +204,7 @@ img { height: auto; }
   height: 40px;
   flex: none;
   object-fit: contain;
-  filter: hue-rotate(165deg) saturate(1.1);
+  filter: hue-rotate(165deg) saturate(1.15) brightness(1.35) contrast(1.05);
   mix-blend-mode: lighten;
   -webkit-mask-image: radial-gradient(closest-side, #000 68%, transparent 100%);
   mask-image: radial-gradient(closest-side, #000 68%, transparent 100%);
@@ -313,7 +335,7 @@ img { height: auto; }
   display: block;
   width: min(100%, 256px);
   margin: 0 auto;
-  filter: hue-rotate(165deg) saturate(1.1);
+  filter: hue-rotate(165deg) saturate(1.15) brightness(1.35) contrast(1.05);
   mix-blend-mode: lighten;
   -webkit-mask-image: radial-gradient(closest-side, #000 66%, transparent 100%);
   mask-image: radial-gradient(closest-side, #000 66%, transparent 100%);
@@ -1239,12 +1261,6 @@ a.merteks-btn:hover, .merteks-btn:hover { border-color: var(--accent); color: va
 /* ==========================================================================
    Reduced motion
    ========================================================================== */
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation: none !important; transition: none !important; }
-  .js .reveal { opacity: 1 !important; transform: none !important; }
-  .back-top, .mx-hello, .merteks-toast { transform: none; }
-}
 
 /* ==========================================================================
    Motion
@@ -1362,3 +1378,69 @@ a.merteks-btn:hover, .merteks-btn:hover { border-color: var(--accent); color: va
   pointer-events: none; animation: fabRing 2.6s 3s ease-out 4;
 }
 .back-top:hover { transform: translateY(-3px); }
+
+/* ==========================================================================
+   Motion, round 2: stronger, still purposeful
+   ========================================================================== */
+@property --ang { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@keyframes spinAng { to { --ang: 360deg; } }
+@keyframes wordUp { from { opacity: 0; transform: translateY(70%) rotate(3deg); } }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes underline { from { transform: scaleX(0); } }
+
+/* bigger reveal travel */
+.js .reveal { transform: translateY(44px) scale(.985); }
+.js .reveal.show { transform: none; }
+.js .hero .reveal { transform: none; }
+
+/* hero headline: word by word */
+.hero-title .w { display: inline-block; }
+.hero-title .w > span { display: inline-block; animation: wordUp .9s var(--ease) backwards; animation-delay: calc(var(--i) * 90ms + 150ms); }
+.js .hero .hero-title.is-split { animation: none; }
+
+/* a light that travels around the logo plate */
+.plate::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; padding: 2px; pointer-events: none;
+  background: conic-gradient(from var(--ang), transparent 0 62%, var(--accent) 82%, var(--accent-hi) 90%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: spinAng 4.5s linear infinite;
+}
+.js .hero .plate.tilt { transition: transform .25s ease-out; transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); }
+
+/* services ticker */
+.ticker { border-block: 1px solid var(--line); background: var(--ink-1); overflow: hidden; direction: ltr; }
+.ticker-track { display: flex; width: max-content; animation: marquee 22s linear infinite; }
+.ticker:hover .ticker-track { animation-play-state: paused; }
+.ticker span {
+  direction: rtl; display: inline-flex; align-items: center; gap: 28px; padding: 20px 0 20px 28px;
+  font-family: var(--font-display); font-weight: 700; font-size: clamp(1.25rem, 2.4vw, 1.7rem); line-height: 1.5;
+  color: var(--bone-2); white-space: nowrap;
+}
+.ticker span::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); flex: none; }
+
+/* nav links: underline sweeps in from the start side */
+.links a::after { transform-origin: right center; }
+
+/* counters and stats */
+.fact b { font-variant-numeric: tabular-nums; }
+
+/* heading rule + card hover glow */
+.mx-project-card:hover { box-shadow: 0 18px 50px rgba(90, 169, 230, .16); }
+.plan { transition: opacity .8s var(--ease) var(--d, 0ms), transform .8s var(--ease) var(--d, 0ms), background-color .3s; }
+.plan:hover { background-color: rgba(90, 169, 230, .07); }
+.svc { transition: opacity .8s var(--ease) var(--d, 0ms), transform .8s var(--ease) var(--d, 0ms), background-color .3s; }
+.svc:hover { background-color: rgba(90, 169, 230, .05); }
+.faq summary { transition: color .2s, padding .3s var(--ease); }
+.faq summary:hover { padding-inline-start: 10px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  /* movement and endless loops off; short fades stay so the page still feels alive */
+  .hero::before, .hero::after, .plate img, .plate::before, .plate::after, .ticker-track,
+  .hero .btn-primary, #mxAiFab::after, .nav { animation: none !important; }
+  .js .reveal { transform: none !important; }
+  .js .hero .reveal, .mx-project-card, .hero-title .w > span { animation-name: fadeOnly !important; }
+  .mx-project-card:hover, .btn-primary:hover, .btn-ghost:hover, .social:hover { transform: none; }
+}
+@keyframes fadeOnly { from { opacity: 0; } }
