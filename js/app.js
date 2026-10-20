@@ -180,28 +180,6 @@ D.documentElement.classList.add('mx-css-background');
 var fonts = $('mxFonts');
 if (fonts) fonts.media = 'all';
 (function () {
-var intro = $('introScreen');
-if (!intro) return;
-var seen = false;
-try { seen = sessionStorage.getItem('mxIntro') === '1'; } catch (e) {}
-function remove() { if (intro.parentNode) intro.parentNode.removeChild(intro); }
-if (seen || reduced) { remove(); return; }
-var done = false;
-function finish() {
-if (done) return;
-done = true;
-try { sessionStorage.setItem('mxIntro', '1'); } catch (e) {}
-intro.classList.add('is-leaving');
-D.documentElement.classList.remove('intro-active');
-setTimeout(remove, 420);
-}
-intro.setAttribute('aria-hidden', 'false');
-D.documentElement.classList.add('intro-active');
-setTimeout(finish, 850);
-intro.addEventListener('click', finish);
-D.addEventListener('keydown', finish, { once: true });
-})();
-(function () {
 var h = D.querySelector('.hero-title');
 if (h && !reduced) {
 var txt = h.textContent.trim().replace(/\s+/g, ' ');
@@ -320,6 +298,10 @@ D.body.insertAdjacentHTML('beforeend',
 '<input id="moCustomService" name="customService" maxlength="120" placeholder="نوع پروژه را بنویسید" style="display:none;margin-top:8px"></div>' +
 '<div class="merteks-field"><label for="moBudget">بودجهٔ تقریبی (اختیاری)</label><select id="moBudget" name="budget"><option value="">فعلاً مشخص نیست</option><option>تا ۵ میلیون تومان</option><option>۵ تا ۲۰ میلیون تومان</option><option>۲۰ تا ۵۰ میلیون تومان</option><option>بیش از ۵۰ میلیون تومان</option></select></div>' +
 '</div>' +
+'<div class="merteks-grid">' +
+'<div class="merteks-field"><label for="moSite">آدرس سایت فعلی (اختیاری)</label><input id="moSite" name="currentSite" maxlength="200" inputmode="url" dir="ltr" placeholder="https://"></div>' +
+'<div class="merteks-field"><label for="moDeadline">مهلت موردنظر (اختیاری)</label><input id="moDeadline" name="deadline" maxlength="80" placeholder="مثلاً تا پایان ماه"></div>' +
+'</div>' +
 '<div class="merteks-field"><label for="moDescription">توضیحات پروژه *</label><textarea id="moDescription" name="description" required maxlength="2000" placeholder="چه چیزی نیاز دارید؟ هدف سایت، مخاطب، نمونه‌های موردعلاقه…"></textarea></div>' +
 '<div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>' +
 '<div class="merteks-actions"><button class="merteks-btn primary" type="submit" id="moSubmit">ثبت درخواست</button><button class="merteks-btn" type="button" data-close-order>انصراف</button></div>' +
@@ -356,7 +338,10 @@ name: String(fd.get('name') || '').trim(),
 phone: normalizeDigits(String(fd.get('phone') || '').trim()),
 service: svc === '__custom__' ? String(fd.get('customService') || '').trim() : svc,
 budget: String(fd.get('budget') || ''),
-description: String(fd.get('description') || '').trim(),
+description: (function () {
+var d = String(fd.get('description') || '').trim(), site = String(fd.get('currentSite') || '').trim(), dl = String(fd.get('deadline') || '').trim();
+return d + (site ? '\n\nسایت فعلی: ' + site : '') + (dl ? '\nمهلت موردنظر: ' + dl : '');
+})(),
 website: String(fd.get('website') || '')
 };
 if (!order.name || !order.phone || !order.service || !order.description) { toast('لطفاً فیلدهای ستاره‌دار را کامل کنید'); return; }
@@ -698,7 +683,7 @@ cmEl.innerHTML =
 '<div class="merteks-field"><label for="mxCmName">نام شما *</label><input id="mxCmName" name="name" maxlength="60" autocomplete="name"></div>' +
 '<div class="merteks-field"><label for="mxCmBody">نظر شما *</label><textarea id="mxCmBody" name="body" maxlength="' + CM_MAX + '" rows="3" placeholder="نظر یا پرسش خود دربارهٔ این پروژه را بنویسید…"></textarea></div>' +
 '<div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>' +
-'<p class="mx-cm-note">نظر شما پس از تأیید مدیر در سایت نمایش داده می‌شود.</p>' +
+'<p class="mx-cm-note">نظر شما پس از تأیید مدیر نمایش داده می‌شود. نظرات را بازدیدکنندگان می‌نویسند و هویت نویسنده تأیید نمی‌شود.</p>' +
 '<div class="merteks-actions"><button class="merteks-btn primary" type="submit" id="mxCmSubmit">ثبت نظر</button><span class="mx-cm-left" id="mxCmLeft">' + CM_LEFT + '</span></div>' +
 '</form>' +
 '</div>';
@@ -925,4 +910,23 @@ b.style.setProperty('--by', ((e.clientY - q.top - q.height / 2) * .22).toFixed(1
 }
 }, { passive: true });
 D.documentElement.addEventListener('pointerleave', function () { glow.classList.remove('on'); clearCard(curCard); clearBtn(curBtn); });
+
+(function () {
+var ul = $('teamList');
+if (!ul || !API || !KEY) return;
+sbFetch('GET', '/rest/v1/team_members?select=id,name,role,bio,photo_key,link&order=pos.asc,created_at.asc&limit=100', { cache: 'default' }).then(function (res) {
+if (!res.ok || !Array.isArray(res.data) || !res.data.length) return;
+ul.innerHTML = res.data.map(function (m) {
+var pic = m.photo_key
+? '<span class="avatar"><img src="' + esc(publicUrl(m.photo_key)) + '" alt="' + esc(m.name) + '" width="48" height="48" loading="lazy" decoding="async"></span>'
+: '<span class="avatar" aria-hidden="true">' + esc(String(m.name).charAt(0)) + '</span>';
+var link = safeUrl(m.link);
+return '<li>' + pic + '<div><b>' + esc(m.name) + '</b>' + (m.role ? '<span>' + esc(m.role) + '</span>' : '') +
+(m.bio ? '<span class="team-bio">' + esc(m.bio) + '</span>' : '') +
+(link ? '<a class="team-link" href="' + esc(link) + '" target="_blank" rel="noopener noreferrer">مشاهدهٔ پروفایل ↗</a>' : '') + '</div></li>';
+}).join('');
+var n = res.data.length, c = $('teamCount');
+if (c) { c.setAttribute('data-to', String(n)); if (enDigits(c.textContent.trim()) !== '0') c.textContent = n.toLocaleString('fa-IR'); }
+}, function () {});
+})();
 })();

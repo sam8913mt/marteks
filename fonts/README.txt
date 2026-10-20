@@ -1,19 +1,7 @@
-فونت‌های سایت (برای نمایش درست در ایران و هر شبکه‌ای)
-=====================================================
+فونت‌های سایت
+=============
 
-سایت اول فونت‌های همین پوشه را می‌خواند و اگر نبودند از Google Fonts می‌گیرد.
-چون Google Fonts در بعضی شبکه‌ها بسته است، بهتر است این سه فایل کنار سایت باشند:
-
-  vazirmatn-arabic-wght-normal.woff2
-  vazirmatn-latin-wght-normal.woff2
-  noto-naskh-arabic-arabic-wght-normal.woff2
-
-راه ساده:  روی کامپیوتر خودتان (Node.js نصب باشد) اجرا کنید
-  sh fonts/get-fonts.sh
-
-راه دستی: همین پکیج‌ها را از npm بگیرید و فایل‌ها را در همین پوشه بگذارید
-  @fontsource-variable/vazirmatn
-  @fontsource-variable/noto-naskh-arabic
-(فایل‌ها در پوشهٔ files داخل هر پکیج‌اند.)
-
-بعد از گذاشتن فایل‌ها هیچ تغییر دیگری لازم نیست.
+فعلاً فونت‌ها از Google Fonts بارگذاری می‌شوند (تگ link در head).
+برای میزبانی روی سرور خودتان: «sh fonts/get-fonts.sh» را روی کامپیوتر خودتان اجرا کنید،
+سه فایل woff2 در همین پوشه قرار می‌گیرد؛ سپس @font-face مربوطه را به css/style.css اضافه کنید
+و لینک Google Fonts را از head صفحه‌ها بردارید.

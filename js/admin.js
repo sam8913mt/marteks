@@ -226,10 +226,10 @@ if (!w) { toast('اجازهٔ باز شدن پنجرهٔ جدید را فعال 
 w.document.open(); w.document.write(html); w.document.close();
 w.focus(); setTimeout(function () { w.print(); }, 500);
 }
-var state = { orders: [], chatRows: null, comments: null, projects: null, tab: 'orders' };
+var state = { orders: [], chatRows: null, comments: null, projects: null, team: null, tab: 'orders' };
 function onLogout() {
-state.orders = []; state.chatRows = null; state.comments = null; state.projects = null;
-['orderList', 'chatList', 'commentList', 'projList'].forEach(function (id) { $(id).innerHTML = ''; });
+state.orders = []; state.chatRows = null; state.comments = null; state.projects = null; state.team = null;
+['orderList', 'chatList', 'commentList', 'projList', 'teamList'].forEach(function (id) { $(id).innerHTML = ''; });
 clearPreview(); setBadge('chats', 0); setBadge('comments', 0);
 }
 function switchTab(name) {
@@ -240,8 +240,8 @@ if (STATE_KEY[name] && (!state[STATE_KEY[name]] || badgeN[name] > 0)) LOAD[name]
 if (name === 'chats' || name === 'comments') setBadge(name, 0);
 try { history.replaceState(null, '', '#' + name); } catch (e) {}
 }
-var LOAD = { orders: loadOrders, chats: loadChats, comments: loadComments, projects: loadProjects };
-var STATE_KEY = { chats: 'chatRows', comments: 'comments', projects: 'projects' };
+var LOAD = { orders: loadOrders, chats: loadChats, comments: loadComments, projects: loadProjects, team: loadTeam };
+var STATE_KEY = { chats: 'chatRows', comments: 'comments', projects: 'projects', team: 'team' };
 qa('button.ad-tab').forEach(function (t) { t.addEventListener('click', function () { switchTab(t.getAttribute('data-tab')); }); });
 $('adRefresh').addEventListener('click', function () { LOAD[state.tab](); });
 W.addEventListener('hashchange', function () { var h = location.hash.slice(1); if (getTok() && LOAD[h] && h !== state.tab) switchTab(h); });
@@ -655,6 +655,131 @@ $('projProgress').hidden = true;
 toast(err && err.message ? err.message : 'ذخیرهٔ پروژه انجام نشد؛ دوباره امتحان کنید');
 }).then(function () { btn.disabled = false; });
 });
-W.addEventListener('pagehide', function () { clearPreview(); });
+
+/* ---------------- تیم ---------------- */
+var TEAM_URL = '/rest/v1/team_members?select=id,name,role,bio,photo_key,link,pos,created_at&order=pos.asc,created_at.asc&limit=100';
+var teamEditId = null, teamFile = null, teamPrevUrl = '';
+function loadTeam() {
+setEmpty('teamList', 'در حال بارگذاری…');
+sb('GET', TEAM_URL).then(function (res) {
+if (!getTok()) return;
+if (res.status === 404) { setEmpty('teamList', 'جدول تیم ساخته نشده؛ فایل migration-team.sql را در Supabase اجرا کنید.'); return; }
+if (!res.ok || !Array.isArray(res.data)) { setEmpty('teamList', 'بارگذاری تیم انجام نشد: ' + esc(errText(res))); return; }
+state.team = res.data; renderTeam();
+}, function () { setEmpty('teamList', 'اتصال به سرور برقرار نشد.'); });
+}
+function renderTeam() {
+var list = state.team || [];
+if (!list.length) { setEmpty('teamList', 'هنوز عضوی ثبت نشده است.'); return; }
+$('teamList').innerHTML = list.map(function (m, i) {
+var pic = m.photo_key
+? '<img src="' + esc(publicUrl(m.photo_key)) + '" alt="' + esc(m.name) + '" loading="lazy" decoding="async">'
+: '<span class="ad-avatar" aria-hidden="true">' + esc(String(m.name).charAt(0)) + '</span>';
+return '<article class="ad-item ad-proj ad-team">' + pic +
+'<div><strong>' + esc(m.name) + '</strong>' + (m.role ? '<span class="ad-muted">' + esc(m.role) + '</span>' : '') +
+(m.bio ? '<div class="ad-muted">' + esc(m.bio) + '</div>' : '') + (m.link ? '<div class="ad-id">' + esc(m.link) + '</div>' : '') + '</div>' +
+'<div class="ad-actions">' +
+'<button class="ad-btn" type="button" data-tup="' + esc(m.id) + '"' + (i === 0 ? ' disabled' : '') + ' aria-label="بالاتر">↑</button>' +
+'<button class="ad-btn" type="button" data-tdown="' + esc(m.id) + '"' + (i === list.length - 1 ? ' disabled' : '') + ' aria-label="پایین‌تر">↓</button>' +
+'<button class="ad-btn" type="button" data-tedit="' + esc(m.id) + '">ویرایش</button>' +
+'<button class="ad-btn ad-danger" type="button" data-tdel="' + esc(m.id) + '">حذف</button></div></article>';
+}).join('');
+}
+function teamPrevClear() { if (teamPrevUrl) { URL.revokeObjectURL(teamPrevUrl); teamPrevUrl = ''; } $('teamPhotoPrev').innerHTML = ''; }
+function teamReset() {
+teamEditId = null; teamFile = null; teamPrevClear();
+['teamName', 'teamRole', 'teamBio', 'teamLink', 'teamPhoto'].forEach(function (id) { $(id).value = ''; });
+$('teamRemovePhoto').checked = false; $('teamRemoveWrap').hidden = true;
+$('teamFormTitle').textContent = 'افزودن عضو جدید'; $('teamSave').textContent = '➕ افزودن عضو';
+}
+$('teamReset').addEventListener('click', teamReset);
+$('teamPhoto').addEventListener('change', function () {
+teamPrevClear();
+var f = this.files && this.files[0];
+if (!f || !/^image\//.test(f.type)) { teamFile = null; return; }
+teamFile = f; teamPrevUrl = URL.createObjectURL(f);
+var im = D.createElement('img'); im.src = teamPrevUrl; im.alt = 'پیش‌نمایش'; $('teamPhotoPrev').appendChild(im);
+});
+function teamFind(id) { return (state.team || []).filter(function (x) { return x.id === id; })[0]; }
+function teamPatchPos(order) {
+return order.reduce(function (chain, m, i) {
+return chain.then(function () {
+if (m.pos === i) return;
+return sb('PATCH', '/rest/v1/team_members?id=eq.' + encodeURIComponent(m.id), { json: { pos: i }, prefer: 'return=minimal' }).then(function (r) {
+if (!r.ok) throw new Error(errText(r));
+m.pos = i;
+});
+});
+}, Promise.resolve());
+}
+$('teamList').addEventListener('click', function (e) {
+var b;
+if ((b = e.target.closest('[data-tedit]'))) {
+var m = teamFind(b.getAttribute('data-tedit')); if (!m) return;
+teamReset(); teamEditId = m.id;
+$('teamName').value = m.name; $('teamRole').value = m.role || ''; $('teamBio').value = m.bio || ''; $('teamLink').value = m.link || '';
+$('teamRemoveWrap').hidden = !m.photo_key;
+$('teamFormTitle').textContent = 'ویرایش «' + m.name + '»'; $('teamSave').textContent = '💾 ذخیرهٔ تغییرات';
+$('teamForm').scrollIntoView({ behavior: 'smooth', block: 'start' }); $('teamName').focus({ preventScroll: true });
+return;
+}
+if ((b = e.target.closest('[data-tup],[data-tdown]'))) {
+var up = b.hasAttribute('data-tup'), id = b.getAttribute(up ? 'data-tup' : 'data-tdown');
+var arr = state.team.slice(), i = arr.findIndex(function (x) { return x.id === id; }), k = up ? i - 1 : i + 1;
+if (i < 0 || k < 0 || k >= arr.length) return;
+var t = arr[i]; arr[i] = arr[k]; arr[k] = t;
+b.disabled = true;
+teamPatchPos(arr).then(function () { state.team = arr; renderTeam(); toast('ترتیب ذخیره شد'); }, function (err) { toast('تغییر ترتیب انجام نشد: ' + (err && err.message || 'خطا')); loadTeam(); });
+return;
+}
+if ((b = e.target.closest('[data-tdel]'))) {
+var mm = teamFind(b.getAttribute('data-tdel')); if (!mm) return;
+if (!W.confirm('«' + mm.name + '» از تیم حذف شود؟')) return;
+b.disabled = true;
+var p = mm.photo_key ? sb('DELETE', '/storage/v1/object/' + BUCKET, { json: { prefixes: [mm.photo_key] } }) : Promise.resolve({ ok: true });
+p.then(function () { return sb('DELETE', '/rest/v1/team_members?id=eq.' + encodeURIComponent(mm.id), { prefer: 'return=representation' }); }).then(function (r) {
+if (!r.ok || !Array.isArray(r.data) || !r.data.length) throw new Error(r.ok ? 'عضو پیدا نشد' : errText(r));
+state.team = state.team.filter(function (x) { return x.id !== mm.id; });
+if (teamEditId === mm.id) teamReset();
+renderTeam(); toast('عضو حذف شد');
+}).catch(function (err) { b.disabled = false; toast('حذف انجام نشد: ' + (err && err.message || 'خطا')); });
+}
+});
+$('teamForm').addEventListener('submit', function (e) {
+e.preventDefault();
+var name = $('teamName').value.trim(), link = $('teamLink').value.trim();
+if (!name) { toast('نام را وارد کنید'); return; }
+if (link && !/^https?:\/\//i.test(link)) { toast('لینک باید با http:// یا https:// شروع شود'); return; }
+var btn = $('teamSave'); btn.disabled = true;
+var editing = teamEditId ? teamFind(teamEditId) : null, oldKey = editing ? editing.photo_key : null, newKey = null;
+var body = { name: name, role: $('teamRole').value.trim(), bio: $('teamBio').value.trim(), link: link || null };
+var photoP = teamFile
+? loadImg(teamFile).then(function (img) { return encode(img, 480, 0.85); }).then(function (blob) {
+var key = 'team/' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8) + '.' + (blob.type === 'image/webp' ? 'webp' : 'jpg');
+return sb('POST', '/storage/v1/object/' + BUCKET + '/' + key, { raw: blob, type: blob.type, timeout: 60000 }).then(function (r) {
+if (!r.ok) throw new Error('آپلود عکس ناموفق بود: ' + errText(r));
+newKey = key; return key;
+});
+})
+: Promise.resolve(null);
+photoP.then(function (key) {
+if (key) body.photo_key = key;
+else if (editing && $('teamRemovePhoto').checked) body.photo_key = null;
+if (editing) return sb('PATCH', '/rest/v1/team_members?id=eq.' + encodeURIComponent(editing.id), { json: body, prefer: 'return=representation' });
+var max = (state.team || []).reduce(function (a, x) { return Math.max(a, x.pos); }, -1);
+body.pos = max + 1;
+return sb('POST', '/rest/v1/team_members', { json: body, prefer: 'return=representation' });
+}).then(function (r) {
+if (!r.ok || !Array.isArray(r.data) || !r.data.length) throw new Error('ذخیره انجام نشد: ' + (r.ok ? 'دسترسی یا رکورد پیدا نشد' : errText(r)));
+var gone = editing && oldKey && (newKey || body.photo_key === null) ? oldKey : null;
+if (gone) sb('DELETE', '/storage/v1/object/' + BUCKET, { json: { prefixes: [gone] } }).catch(function () {});
+toast(editing ? 'تغییرات ذخیره شد' : 'عضو جدید اضافه شد');
+teamReset(); state.team = null; loadTeam();
+}).catch(function (err) {
+if (newKey) sb('DELETE', '/storage/v1/object/' + BUCKET, { json: { prefixes: [newKey] } }).catch(function () {});
+toast(err && err.message ? err.message : 'ذخیره انجام نشد؛ دوباره امتحان کنید');
+}).then(function () { btn.disabled = false; });
+});
+W.addEventListener('pagehide', function () { clearPreview(); teamPrevClear(); });
 startSession();
 })();

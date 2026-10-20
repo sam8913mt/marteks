@@ -2,31 +2,12 @@
    Merteks — site stylesheet
    One file, no override layers. Order: tokens, base, components, sections,
    overlays (order form, comments, gallery, assistant), utility pages.
-   Design: warm ink + brushed bronze (taken from the logo), Naskh display
+   Design: navy ink + sky-blue accent, Naskh display
    type over a clean sans body, ruled lists instead of card grids.
    ========================================================================== */
 
-/* Self-hosted fonts (see fonts/README.txt). Local files are tried first, so the site
-   looks right even where Google Fonts is blocked. Missing files fall through to the
-   Google-hosted copies and then to system fonts. */
-@font-face {
-  font-family: "Vazirmatn Local";
-  src: url("../fonts/vazirmatn-arabic-wght-normal.woff2") format("woff2");
-  font-weight: 100 900; font-style: normal; font-display: swap;
-  unicode-range: U+0600-06FF, U+0750-077F, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FEFC;
-}
-@font-face {
-  font-family: "Vazirmatn Local";
-  src: url("../fonts/vazirmatn-latin-wght-normal.woff2") format("woff2");
-  font-weight: 100 900; font-style: normal; font-display: swap;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: "Naskh Local";
-  src: url("../fonts/noto-naskh-arabic-arabic-wght-normal.woff2") format("woff2");
-  font-weight: 400 700; font-style: normal; font-display: swap;
-  unicode-range: U+0600-06FF, U+0750-077F, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FEFC;
-}
+/* Fonts: loaded from Google Fonts (see <head>). To self-host, run fonts/get-fonts.sh and
+   follow fonts/README.txt, then add matching @font-face rules here. */
 
 :root {
   /* palette: navy #101827 · blue #5AA9E6 · ice #EAF4F4 · charcoal #222831 */
@@ -45,8 +26,8 @@
   --on-accent: #101827;
   --metal: linear-gradient(135deg, #8cc4f0 0%, #5AA9E6 52%, #6db4ea 100%);
 
-  --font-body: "Vazirmatn Local", "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
-  --font-display: "Naskh Local", "Noto Naskh Arabic", "Vazirmatn Local", "Vazirmatn", "Traditional Arabic", serif;
+  --font-body: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
+  --font-display: "Noto Naskh Arabic", "Vazirmatn", "Traditional Arabic", serif;
 
   --gutter: clamp(18px, 4.5vw, 44px);
   --maxw: 1180px;
@@ -1629,3 +1610,12 @@ a.merteks-btn:hover, .merteks-btn:hover { border-color: var(--accent); color: va
   #mxChatMount .mx-ai-panel { height: calc(100dvh - var(--nav-h) - 28px); }
 }
 @media (max-width: 600px) { #mxChatMount .mx-ai-head .btn { display: none; } }
+
+/* visually hidden, still read by screen readers */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* team photo + extra fields */
+.avatar { overflow: hidden; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+.team-list .team-bio { margin-top: 4px; line-height: 1.9; }
+.team-link { display: inline-block; margin-top: 4px; font-size: 13.5px; color: var(--accent-hi); text-underline-offset: 4px; }

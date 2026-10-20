@@ -12,8 +12,8 @@
 <link rel="preconnect" href="https://xpkckkosnnixshbarieo.supabase.co" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&amp;display=swap">
 <link rel="stylesheet" href="css/admin.css">
-<script src="js/config.js?v=2" defer></script>
-<script src="js/admin.js?v=2" defer></script>
+<script src="js/config.js?v=13" defer></script>
+<script src="js/admin.js?v=13" defer></script>
 </head>
 <body>
 
@@ -48,6 +48,7 @@
     <button class="ad-tab is-on" role="tab" type="button" data-tab="orders">📦 سفارش‌ها</button>
     <button class="ad-tab" role="tab" type="button" data-tab="chats">💬 گفتگوها<span class="ad-count" id="badgeChats" hidden></span></button>
     <button class="ad-tab" role="tab" type="button" data-tab="projects">🖼️ پروژه‌ها</button>
+    <button class="ad-tab" role="tab" type="button" data-tab="team">👥 تیم</button>
     <button class="ad-tab" role="tab" type="button" data-tab="comments">💭 نظرات<span class="ad-count" id="badgeComments" hidden></span></button>
   </nav>
 
@@ -93,6 +94,22 @@
       <button class="ad-btn" data-export="chats-word" type="button">Word</button>
     </div>
     <div class="ad-list" id="chatList"></div>
+  </section>
+
+  <!-- تیم -->
+  <section id="paneTeam" class="ad-pane" hidden>
+    <form class="ad-card" id="teamForm" autocomplete="off">
+      <div class="ad-card-head"><strong id="teamFormTitle">افزودن عضو جدید</strong><span class="ad-muted">این اطلاعات در صفحهٔ «درباره ما» نمایش داده می‌شود</span></div>
+      <label class="ad-field"><span>نام *</span><input id="teamName" type="text" maxlength="80" required placeholder="مثلاً محمدسام"></label>
+      <label class="ad-field"><span>نقش یا عنوان (اختیاری)</span><input id="teamRole" type="text" maxlength="80" placeholder="مثلاً طراح رابط کاربری و فرانت‌اند"></label>
+      <label class="ad-field"><span>معرفی کوتاه (اختیاری، حداکثر ۴۰۰ حرف)</span><textarea id="teamBio" maxlength="400" rows="3" placeholder="چند جمله دربارهٔ تخصص و سابقه"></textarea></label>
+      <label class="ad-field"><span>لینک پروفایل یا نمونه‌کار شخصی (اختیاری)</span><input id="teamLink" type="url" dir="ltr" maxlength="300" placeholder="https://"></label>
+      <label class="ad-field"><span>عکس (اختیاری؛ خودکار کوچک و فشرده می‌شود)</span><input id="teamPhoto" type="file" accept="image/*"></label>
+      <div class="ad-previews" id="teamPhotoPrev"></div>
+      <label class="ad-field ad-check" id="teamRemoveWrap" hidden><span><input id="teamRemovePhoto" type="checkbox"> حذف عکس فعلی</span></label>
+      <div class="ad-actions"><button class="ad-btn ad-primary" id="teamSave" type="submit">➕ افزودن عضو</button><button class="ad-btn" id="teamReset" type="button">پاک کردن / انصراف</button></div>
+    </form>
+    <div class="ad-list" id="teamList"></div>
   </section>
 
   <!-- نظرات نمونه‌کارها -->

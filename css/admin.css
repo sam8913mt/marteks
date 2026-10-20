@@ -129,3 +129,9 @@ select option{background:var(--card);color:var(--text)}
 .ad-count{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;margin-inline-start:7px;border-radius:999px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;line-height:1;vertical-align:middle;box-shadow:0 0 0 2px rgba(239,68,68,.25);animation:adPop .35s ease}
 .ad-count[hidden]{display:none}
 @keyframes adPop{0%{transform:scale(.4)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+
+/* team tab */
+.ad-avatar{width:96px;height:72px;display:grid;place-items:center;border-radius:12px;background:var(--card2);border:1px solid var(--line);font-size:28px;font-weight:700}
+.ad-team .ad-actions{display:flex;gap:6px;flex-wrap:wrap}
+.ad-check span{display:flex;align-items:center;gap:8px}
+@media(max-width:600px){.ad-avatar{width:72px;height:56px;font-size:22px}.ad-team .ad-actions{grid-column:1/-1}}

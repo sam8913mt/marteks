@@ -15,9 +15,12 @@
   <meta http-equiv="Content-Security-Policy"
     content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://xpkckkosnnixshbarieo.supabase.co; connect-src 'self' https://xpkckkosnnixshbarieo.supabase.co https://*.workers.dev; object-src 'none'; base-uri 'self'; form-action 'self'">
 
-  <!-- DOMAIN-TAGS-START -->
-  <!-- canonical / og:url / og:image / sitemap are added by set-domain.sh once the real domain exists -->
-  <!-- DOMAIN-TAGS-END -->
+  <link rel="canonical" href="https://sam8913mt.github.io/marteks/">
+  <meta property="og:url" content="https://sam8913mt.github.io/marteks/">
+  <meta property="og:image" content="https://sam8913mt.github.io/marteks/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://sam8913mt.github.io/marteks/assets/og-image.png">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="مرتکس">
   <meta property="og:locale" content="fa_IR">
@@ -42,12 +45,12 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&amp;family=Vazirmatn:wght@400;500;700;800&amp;display=swap">
   </noscript>
   <link rel="preload" as="image" href="assets/ms-logo-256.webp" type="image/webp">
-  <link rel="stylesheet" href="css/style.css?v=12">
-  <script src="js/config.js?v=3" defer></script>
-  <script src="js/app.js?v=9" defer></script>
+  <link rel="stylesheet" href="css/style.css?v=13">
+  <script src="js/config.js?v=13" defer></script>
+  <script src="js/app.js?v=13" defer></script>
 
   <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"ProfessionalService","name":"مرتکس","alternateName":"Merteks","description":"تیم دو نفرهٔ طراحی وب‌سایت، برنامه‌نویسی و تولید محتوا","telephone":"+989197029213","areaServed":"IR","availableLanguage":"fa","sameAs":["https://www.instagram.com/merteks.m/","https://t.me/merteks_m","https://eitaa.com/mmd2010s"],"makesOffer":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"طراحی وب‌سایت"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"توسعه فرانت‌اند"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"بازطراحی و بهبود سایت"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"تولید محتوا و تدوین ویدیو"}}]}
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"مرتکس","alternateName":"Merteks","description":"تیم دو نفرهٔ طراحی وب‌سایت، برنامه‌نویسی و تولید محتوا","url":"https://sam8913mt.github.io/marteks/","logo":"https://sam8913mt.github.io/marteks/assets/icon-512.png","image":"https://sam8913mt.github.io/marteks/assets/og-image.png","telephone":"+989197029213","areaServed":"IR","availableLanguage":"fa","sameAs":["https://www.instagram.com/merteks.m/","https://t.me/merteks_m","https://eitaa.com/mmd2010s"],"makesOffer":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"طراحی وب‌سایت"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"توسعه فرانت‌اند"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"بازطراحی و بهبود سایت"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"تولید محتوا و تدوین ویدیو"}}]}
 </script>
 </head>
 
@@ -68,7 +71,7 @@
         <a href="projects.html">نمونه‌کارها</a>
         <a href="services.html">خدمات</a>
         <a href="faq.html">سؤالات متداول</a>
-        <a href="chat.html">پرسش‌وپاسخ</a>
+        <a href="chat.html">دستیار سریع</a>
         <a href="contact.html">ارتباط با ما</a>
       </div>
       <div class="nav-tools">
@@ -138,16 +141,18 @@
       </div>
     </section>
 
-    <section class="section alt home-cta" aria-label="شروع پروژه">
+    <section class="section alt" aria-label="مراحل کار">
       <div class="wrap">
-        <div class="home-cta-in reveal">
-          <h2 class="section-title">پروژه‌ای در ذهن دارید؟</h2>
-          <p class="section-desc">مشاورهٔ اولیه و برآورد رایگان است و پاسخ را مستقیم از خود تیم می‌گیرید.</p>
-          <div class="actions">
-            <a class="btn btn-primary" href="#order" data-open-order>شروع پروژه</a>
-            <a class="btn btn-ghost" href="contact.html">راه‌های ارتباطی</a>
-          </div>
-        </div>
+        <header class="head-row reveal">
+          <h2 class="section-title">مسیر کار در چهار قدم</h2>
+          <p class="section-desc">از اولین پیام تا تحویل پروژه؛ جزئیات بیشتر در <a href="services.html">صفحهٔ خدمات</a>.</p>
+        </header>
+        <ol class="steps">
+          <li class="step reveal"><span class="step-no" aria-hidden="true">۱</span><h3>گفتگو و نیازسنجی</h3><p>هدف سایت و مخاطب را می‌شنویم و زمان و هزینه را هماهنگ می‌کنیم.</p></li>
+          <li class="step reveal"><span class="step-no" aria-hidden="true">۲</span><h3>طراحی</h3><p>ظاهر و چیدمان پیش از کدنویسی مشخص و با شما بازبینی می‌شود.</p></li>
+          <li class="step reveal"><span class="step-no" aria-hidden="true">۳</span><h3>توسعه و آزمایش</h3><p>ساخت صفحه‌ها و بررسی آن‌ها در موبایل و کامپیوتر.</p></li>
+          <li class="step reveal"><span class="step-no" aria-hidden="true">۴</span><h3>تحویل</h3><p>تحویل پروژه، اصلاحات نهایی و رفع اشکال‌های همان کار.</p></li>
+        </ol>
       </div>
     </section>
 
@@ -232,7 +237,7 @@
   <footer class="foot">
     <div class="wrap foot-in">
       <p>طراحی و توسعه توسط مرتکس. © ۲۰۲۶</p>
-      <nav class="mx-foot-links" aria-label="پیوندهای پایین صفحه"><a href="privacy.html">حریم خصوصی</a><a
+      <nav class="mx-foot-links" aria-label="پیوندهای پایین صفحه"><a href="contact.html">ارتباط با ما</a><a href="privacy.html">حریم خصوصی</a><a
           href="https://t.me/merteks_m" target="_blank" rel="noopener noreferrer">تلگرام</a><a
           href="https://www.instagram.com/merteks.m/" target="_blank" rel="noopener noreferrer">اینستاگرام</a></nav>
       <small>اطلاعاتی که در فرم «شروع پروژه» می‌نویسید فقط برای پاسخ به شما نگه‌داری می‌شود. پرسش‌ها و پاسخ‌های گفتگو
