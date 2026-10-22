@@ -1,0 +1,146 @@
+/* ==========================================================================
+   Merteks — additions (v14): CTA band, testimonials, terminal card, project
+   sharing, language switch, English (LTR) tweaks and a few polish effects.
+   Loaded after style.css. Every animation respects prefers-reduced-motion.
+   ========================================================================== */
+
+/* ---------- polish ---------- */
+@view-transition { navigation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .32s; }
+::selection { background: rgba(90, 169, 230, .38); color: #fff; }
+html { scrollbar-width: thin; scrollbar-color: var(--accent-lo) var(--ink-1); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--ink-1); }
+::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 10px; border: 2px solid var(--ink-1); }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-lo); }
+
+/* hero: faint dot grid that fades out toward the bottom */
+.hero {
+  background-image:
+    linear-gradient(to bottom, rgba(16, 24, 39, 0) 45%, var(--ink-0) 100%),
+    radial-gradient(rgba(140, 196, 240, .16) 1px, transparent 1.7px);
+  background-size: 100% 100%, 28px 28px;
+}
+
+/* numbers: slow metallic shimmer */
+@keyframes mxShimmer { to { background-position: -200% 0; } }
+.fact b {
+  background: linear-gradient(100deg, #8cc4f0 20%, #EAF4F4 40%, #5AA9E6 60%, #8cc4f0 80%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  animation: mxShimmer 6s linear infinite;
+}
+
+/* ---------- language switch ---------- */
+.lang-switch {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 44px; height: 36px; padding: 0 10px;
+  border: 1px solid var(--line-2); border-radius: var(--r-ctl); color: var(--bone-2);
+  font: 700 13px/1 var(--font-body); letter-spacing: .04em; text-decoration: none;
+  transition: border-color .25s, color .25s, background-color .25s;
+}
+.lang-switch:hover { border-color: var(--accent); color: var(--accent-hi); background: rgba(90, 169, 230, .08); }
+
+/* ---------- call-to-action band ---------- */
+@property --mx-ang { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@keyframes mxSpinAng { to { --mx-ang: 360deg; } }
+.mx-cta { padding-block: clamp(48px, 7vw, 88px); border-top: 1px solid var(--line); }
+.mx-cta-card {
+  position: relative; isolation: isolate; display: grid; gap: 22px; align-items: center;
+  padding: clamp(26px, 4.4vw, 48px); border-radius: var(--r-lg);
+  background: radial-gradient(520px circle at 0% 0%, rgba(90, 169, 230, .16), transparent 60%), linear-gradient(165deg, var(--ink-2), var(--ink-1));
+}
+.mx-cta-card::before {
+  content: ""; position: absolute; inset: 0; padding: 1.5px; border-radius: inherit; pointer-events: none; z-index: -1;
+  background: conic-gradient(from var(--mx-ang), var(--line) 0 50%, var(--accent) 72%, var(--accent-hi) 82%, var(--line) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: mxSpinAng 7s linear infinite;
+}
+.mx-cta-card h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); line-height: 1.6; }
+.mx-cta-card p { margin: 6px 0 0; color: var(--bone-2); max-width: 34em; }
+.mx-cta-card .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+@media (min-width: 820px) { .mx-cta-card { grid-template-columns: minmax(0, 1fr) auto; } }
+
+/* ---------- testimonials ---------- */
+.mx-testi-grid { display: grid; gap: 16px; margin-top: 28px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.mx-quote {
+  position: relative; margin: 0; padding: 30px 24px 22px; border: 1px solid var(--line); border-radius: var(--r-lg);
+  background: linear-gradient(165deg, var(--ink-2), var(--ink-1));
+  animation: rise .8s var(--ease) backwards; transition: transform .35s var(--ease), border-color .3s, box-shadow .35s;
+}
+.mx-quote:hover { transform: translateY(-4px); border-color: var(--accent-lo); box-shadow: 0 18px 44px rgba(90, 169, 230, .14); }
+.mx-quote::before {
+  content: "\201C"; position: absolute; inset-block-start: 8px; inset-inline-start: 18px;
+  font: 700 4.2rem/1 var(--font-display); color: var(--accent-lo); opacity: .55; pointer-events: none;
+}
+.mx-quote blockquote { margin: 0; }
+.mx-quote p { margin: 14px 0 18px; font-size: 15.5px; line-height: 2.05; color: var(--bone-2); }
+.mx-quote figcaption { display: flex; align-items: center; gap: 12px; }
+.mx-quote .av {
+  flex: none; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center;
+  font-weight: 900; color: var(--on-accent); background: var(--metal);
+}
+.mx-quote b { display: block; font-size: 15px; }
+.mx-quote .r { display: block; font-size: 13px; color: var(--muted); }
+
+/* ---------- terminal card ---------- */
+@keyframes mxBlink { 50% { opacity: 0; } }
+.mx-term {
+  max-width: 620px; margin: 34px 0 6px; border: 1px solid var(--line-2); border-radius: var(--r-lg); overflow: hidden;
+  direction: ltr; text-align: left; background: #0b1220; box-shadow: 0 26px 60px rgba(0, 0, 0, .38);
+  font: 500 14px/1.95 ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+.mx-term-bar { display: flex; align-items: center; gap: 7px; padding: 11px 14px; background: var(--ink-2); border-bottom: 1px solid var(--line); }
+.mx-term-bar i { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; }
+.mx-term-bar i:nth-child(2) { background: #febc2e; }
+.mx-term-bar i:nth-child(3) { background: #28c840; }
+.mx-term-bar span { margin-inline-start: 10px; font-size: 12px; color: var(--muted); }
+.mx-term-body { padding: 16px 18px 20px; min-height: 10.6em; color: var(--bone-2); overflow-x: auto; }
+.mx-term-body .l { white-space: pre; }
+.mx-term-body .p { color: var(--accent-hi); }
+.mx-term-body .ok { color: #6ee7a8; }
+.mx-term-body .cur { display: inline-block; width: 8px; height: 1.15em; margin-inline-start: 2px; vertical-align: -3px; background: var(--accent-hi); animation: mxBlink 1s steps(2) infinite; }
+
+/* ---------- project sharing + deep link highlight ---------- */
+.mx-project-share { font-size: 13px; }
+@keyframes mxPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(90, 169, 230, 0); } 40% { box-shadow: 0 0 0 6px rgba(90, 169, 230, .38); } }
+.mx-project-card.mx-pulse { animation: mxPulse 1.4s ease-in-out 2; border-color: var(--accent); }
+
+/* ---------- English (LTR) pages ---------- */
+html[dir="ltr"] { --font-display: "Vazirmatn", "Segoe UI", system-ui, sans-serif; }
+html[dir="ltr"] body { line-height: 1.8; }
+html[dir="ltr"] .links a::after { transform-origin: left center; }
+html[dir="ltr"] .ticker span { direction: ltr; }
+html[dir="ltr"] .hero-title, html[dir="ltr"] .section-title, html[dir="ltr"] .lead { letter-spacing: -.01em; line-height: 1.3; }
+html[dir="ltr"] .mx-project-comments { display: none; }
+html[dir="ltr"] .mx-project-desc, html[dir="ltr"] .mx-project-name { direction: auto; text-align: start; unicode-bidi: plaintext; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fact b, .mx-cta-card::before, .mx-term-body .cur, .mx-project-card.mx-pulse { animation: none !important; }
+  .mx-quote { animation-name: fadeOnly !important; }
+  .mx-quote:hover { transform: none; }
+}
+
+/* keep the terminal card from widening its grid column on small screens */
+.split-body, .split-head { min-width: 0; }
+.mx-term { width: 100%; min-width: 0; }
+@media (max-width: 480px) { .mx-term { font-size: 12px; } .mx-term-body { padding: 14px 14px 16px; } }
+
+/* facts: the optional 4th card ("projects delivered") no longer wraps alone */
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+/* testimonial text follows the language it was written in */
+.mx-quote blockquote p { unicode-bidi: plaintext; text-align: start; }
+
+/* nav shortcut */
+.nav-auth {
+  display: inline-grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--line-2); border-radius: var(--r-ctl);
+  color: var(--bone-2); transition: border-color .25s, color .25s, background-color .25s;
+}
+.nav-auth:hover, .nav-auth.on { border-color: var(--accent); color: var(--accent-hi); background: rgba(90, 169, 230, .08); }
+.nav-auth svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+
+/* nav: on very small screens the login shortcut moves into the menu */
+.links-auth { display: none; }
+@media (max-width: 520px) { .nav-auth { display: none; } .links-auth { display: block; } }

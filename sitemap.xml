@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://sam8913mt.github.io/marteks/</loc><lastmod>2026-10-20</lastmod></url>
-  <url><loc>https://sam8913mt.github.io/marteks/about.html</loc><lastmod>2026-10-20</lastmod></url>
-  <url><loc>https://sam8913mt.github.io/marteks/projects.html</loc><lastmod>2026-10-20</lastmod></url>
-  <url><loc>https://sam8913mt.github.io/marteks/services.html</loc><lastmod>2026-10-20</lastmod></url>
-  <url><loc>https://sam8913mt.github.io/marteks/faq.html</loc><lastmod>2026-10-20</lastmod></url>
-  <url><loc>https://sam8913mt.github.io/marteks/contact.html</loc><lastmod>2026-10-20</lastmod></url>
-  <url><loc>https://sam8913mt.github.io/marteks/chat.html</loc><lastmod>2026-10-20</lastmod></url>
-  <url><loc>https://sam8913mt.github.io/marteks/privacy.html</loc><lastmod>2026-10-20</lastmod></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://sam8913mt.github.io/marteks/</loc><lastmod>2026-10-22</lastmod><xhtml:link rel="alternate" hreflang="fa" href="https://sam8913mt.github.io/marteks/"/><xhtml:link rel="alternate" hreflang="en" href="https://sam8913mt.github.io/marteks/en/index.html"/></url>
+  <url><loc>https://sam8913mt.github.io/marteks/en/index.html</loc><lastmod>2026-10-22</lastmod><xhtml:link rel="alternate" hreflang="fa" href="https://sam8913mt.github.io/marteks/"/><xhtml:link rel="alternate" hreflang="en" href="https://sam8913mt.github.io/marteks/en/index.html"/></url>
+  <url><loc>https://sam8913mt.github.io/marteks/about.html</loc><lastmod>2026-10-22</lastmod><xhtml:link rel="alternate" hreflang="fa" href="https://sam8913mt.github.io/marteks/about.html"/><xhtml:link rel="alternate" hreflang="en" href="https://sam8913mt.github.io/marteks/en/about.html"/></url>
+  <url><loc>https://sam8913mt.github.io/marteks/en/about.html</loc><lastmod>2026-10-22</lastmod><xhtml:link rel="alternate" hreflang="fa" href="https://sam8913mt.github.io/marteks/about.html"/><xhtml:link rel="alternate" hreflang="en" href="https://sam8913mt.github.io/marteks/en/about.html"/></url>
+  <url><loc>https://sam8913mt.github.io/marteks/projects.html</loc><lastmod>2026-10-22</lastmod><xhtml:link rel="alternate" hreflang="fa" href="https://sam8913mt.github.io/marteks/projects.html"/><xhtml:link rel="alternate" hreflang="en" href="https://sam8913mt.github.io/marteks/en/projects.html"/></url>
+  <url><loc>https://sam8913mt.github.io/marteks/en/projects.html</loc><lastmod>2026-10-22</lastmod><xhtml:link rel="alternate" hreflang="fa" href="https://sam8913mt.github.io/marteks/projects.html"/><xhtml:link rel="alternate" hreflang="en" href="https://sam8913mt.github.io/marteks/en/projects.html"/></url>
+  <url><loc>https://sam8913mt.github.io/marteks/services.html</loc><lastmod>2026-10-22</lastmod><xhtml:link rel="alternate" hreflang="fa" href="https://sam8913mt.github.io/marteks/services.html"/><xhtml:link rel="alternate" hreflang="en" href="https://sam8913mt.github.io/marteks/en/services.html"/></url>
+  <url><loc>https://sam8913mt.github.io/marteks/en/services.html</loc><lastmod>2026-10-22</lastmod><xhtml:link rel="alternate" hreflang="fa" href="https://sam8913mt.github.io/marteks/services.html"/><xhtml:link rel="alternate" hreflang="en" href="https://sam8913mt.github.io/marteks/en/services.html"/></url>
+  <url><loc>https://sam8913mt.github.io/marteks/faq.html</loc><lastmod>2026-10-22</lastmod></url>
+  <url><loc>https://sam8913mt.github.io/marteks/contact.html</loc><lastmod>2026-10-22</lastmod></url>
+  <url><loc>https://sam8913mt.github.io/marteks/chat.html</loc><lastmod>2026-10-22</lastmod></url>
+  <url><loc>https://sam8913mt.github.io/marteks/privacy.html</loc><lastmod>2026-10-22</lastmod></url>
 </urlset>

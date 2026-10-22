@@ -226,10 +226,17 @@ if (!w) { toast('اجازهٔ باز شدن پنجرهٔ جدید را فعال 
 w.document.open(); w.document.write(html); w.document.close();
 w.focus(); setTimeout(function () { w.print(); }, 500);
 }
-var state = { orders: [], chatRows: null, comments: null, projects: null, team: null, tab: 'orders' };
+var state = { orders: [], chatRows: null, comments: null, projects: null, team: null, testimonials: null, users: null, tab: 'orders' };
+/* رابط کوچک برای بخش «کاربران» (js/admin-users.js) تا از همان نشست و ابزارهای پنل استفاده کند */
+W.MX_ADMIN = Object.freeze({
+sb: sb, esc: esc, fa: fa, norm: norm, errText: errText, csv: csv, download: download, toast: toast, getTok: getTok,
+activeTab: function () { return state.tab; },
+markLoaded: function (ok) { state.users = ok ? true : null; }
+});
 function onLogout() {
-state.orders = []; state.chatRows = null; state.comments = null; state.projects = null; state.team = null;
-['orderList', 'chatList', 'commentList', 'projList', 'teamList'].forEach(function (id) { $(id).innerHTML = ''; });
+state.orders = []; state.chatRows = null; state.comments = null; state.projects = null; state.team = null; state.testimonials = null; state.users = null;
+if (W.MX_ADMIN_USERS) W.MX_ADMIN_USERS.reset();
+['orderList', 'chatList', 'commentList', 'projList', 'teamList', 'testiList'].forEach(function (id) { $(id).innerHTML = ''; });
 clearPreview(); setBadge('chats', 0); setBadge('comments', 0);
 }
 function switchTab(name) {
@@ -240,8 +247,9 @@ if (STATE_KEY[name] && (!state[STATE_KEY[name]] || badgeN[name] > 0)) LOAD[name]
 if (name === 'chats' || name === 'comments') setBadge(name, 0);
 try { history.replaceState(null, '', '#' + name); } catch (e) {}
 }
-var LOAD = { orders: loadOrders, chats: loadChats, comments: loadComments, projects: loadProjects, team: loadTeam };
-var STATE_KEY = { chats: 'chatRows', comments: 'comments', projects: 'projects', team: 'team' };
+function loadUsersTab() { state.users = null; if (W.MX_ADMIN_USERS) W.MX_ADMIN_USERS.load(true); }
+var LOAD = { orders: loadOrders, chats: loadChats, comments: loadComments, projects: loadProjects, team: loadTeam, testimonials: loadTesti, users: loadUsersTab };
+var STATE_KEY = { chats: 'chatRows', comments: 'comments', projects: 'projects', team: 'team', testimonials: 'testimonials', users: 'users' };
 qa('button.ad-tab').forEach(function (t) { t.addEventListener('click', function () { switchTab(t.getAttribute('data-tab')); }); });
 $('adRefresh').addEventListener('click', function () { LOAD[state.tab](); });
 W.addEventListener('hashchange', function () { var h = location.hash.slice(1); if (getTok() && LOAD[h] && h !== state.tab) switchTab(h); });
@@ -781,5 +789,76 @@ toast(err && err.message ? err.message : 'ذخیره انجام نشد؛ دوب�
 }).then(function () { btn.disabled = false; });
 });
 W.addEventListener('pagehide', function () { clearPreview(); teamPrevClear(); });
+
+/* ---------- نظرات مشتریان ---------- */
+var TESTI_URL = '/rest/v1/testimonials?select=id,name,role,body,pos,created_at&order=pos.asc,created_at.desc&limit=100';
+var testiEditId = null;
+function loadTesti() {
+setEmpty('testiList', 'در حال بارگذاری…');
+return sb('GET', TESTI_URL).then(function (res) {
+if (res.status === 404) { setEmpty('testiList', 'جدول نظرها ساخته نشده؛ فایل migration-testimonials.sql را در Supabase اجرا کنید.'); return; }
+if (!res.ok || !Array.isArray(res.data)) { setEmpty('testiList', 'بارگذاری انجام نشد: ' + esc(errText(res))); return; }
+state.testimonials = res.data; renderTesti();
+}, function () { setEmpty('testiList', 'اتصال به سرور برقرار نشد.'); });
+}
+function renderTesti() {
+var list = state.testimonials || [];
+if (!list.length) { setEmpty('testiList', 'هنوز نظری ثبت نشده است.'); return; }
+$('testiList').innerHTML = list.map(function (t) {
+return '<article class="ad-item ad-proj ad-team"><span class="ad-avatar" aria-hidden="true">' + esc(String(t.name).charAt(0)) + '</span>' +
+'<div><strong>' + esc(t.name) + '</strong>' + (t.role ? '<span class="ad-muted">' + esc(t.role) + '</span>' : '') +
+'<div class="ad-muted">' + esc(t.body) + '</div></div>' +
+'<div class="ad-actions"><button class="ad-btn" type="button" data-sedit="' + esc(t.id) + '">ویرایش</button>' +
+'<button class="ad-btn ad-danger" type="button" data-sdel="' + esc(t.id) + '">حذف</button></div></article>';
+}).join('');
+}
+function testiFind(id) { return (state.testimonials || []).filter(function (x) { return x.id === id; })[0]; }
+function testiReset() {
+testiEditId = null;
+['testiName', 'testiRole', 'testiBody'].forEach(function (id) { $(id).value = ''; });
+$('testiFormTitle').textContent = 'افزودن نظر مشتری'; $('testiSave').textContent = '➕ افزودن نظر';
+}
+$('testiReset').addEventListener('click', testiReset);
+$('testiList').addEventListener('click', function (e) {
+var b = e.target.closest('[data-sedit]');
+if (b) {
+var t = testiFind(b.getAttribute('data-sedit')); if (!t) return;
+testiReset(); testiEditId = t.id;
+$('testiName').value = t.name; $('testiRole').value = t.role || ''; $('testiBody').value = t.body;
+$('testiFormTitle').textContent = 'ویرایش نظر «' + t.name + '»'; $('testiSave').textContent = '💾 ذخیرهٔ تغییرات';
+$('testiForm').scrollIntoView({ behavior: 'smooth', block: 'start' }); $('testiName').focus({ preventScroll: true });
+return;
+}
+b = e.target.closest('[data-sdel]');
+if (!b) return;
+var d = testiFind(b.getAttribute('data-sdel')); if (!d) return;
+if (!W.confirm('نظر «' + d.name + '» حذف شود؟')) return;
+b.disabled = true;
+sb('DELETE', '/rest/v1/testimonials?id=eq.' + encodeURIComponent(d.id), { prefer: 'return=representation' }).then(function (r) {
+if (!r.ok || !Array.isArray(r.data) || !r.data.length) throw new Error(r.ok ? 'نظر پیدا نشد' : errText(r));
+state.testimonials = state.testimonials.filter(function (x) { return x.id !== d.id; });
+if (testiEditId === d.id) testiReset();
+renderTesti(); toast('نظر حذف شد');
+}).catch(function (err) { b.disabled = false; toast('حذف انجام نشد: ' + (err && err.message || 'خطا')); });
+});
+$('testiForm').addEventListener('submit', function (e) {
+e.preventDefault();
+var name = $('testiName').value.trim(), body = $('testiBody').value.trim();
+if (!name || body.length < 2) { toast('نام و متن نظر را بنویسید'); return; }
+var btn = $('testiSave'); btn.disabled = true;
+var payload = { name: name, role: $('testiRole').value.trim(), body: body };
+var req;
+if (testiEditId) req = sb('PATCH', '/rest/v1/testimonials?id=eq.' + encodeURIComponent(testiEditId), { json: payload, prefer: 'return=representation' });
+else {
+payload.pos = (state.testimonials || []).reduce(function (a, x) { return Math.max(a, x.pos); }, -1) + 1;
+req = sb('POST', '/rest/v1/testimonials', { json: payload, prefer: 'return=representation' });
+}
+req.then(function (r) {
+if (!r.ok || !Array.isArray(r.data) || !r.data.length) throw new Error('ذخیره انجام نشد: ' + (r.ok ? 'دسترسی یا رکورد پیدا نشد' : errText(r)));
+toast(testiEditId ? 'تغییرات ذخیره شد' : 'نظر اضافه شد');
+testiReset(); state.testimonials = null; loadTesti();
+}).catch(function (err) { toast(err && err.message ? err.message : 'ذخیره انجام نشد؛ دوباره امتحان کنید'); }).then(function () { btn.disabled = false; });
+});
+
 startSession();
 })();

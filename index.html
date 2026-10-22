@@ -30,6 +30,9 @@
   <meta name="twitter:title" content="مرتکس | طراحی سایت و برنامه‌نویسی">
   <meta name="twitter:description" content="مرتکس؛ تیم دو نفرهٔ طراحی و ساخت وب‌سایت. سایت معرفی، شرکتی و لندینگ، بازطراحی، سازگاری با موبایل و ویدیو. مشاورهٔ اولیه رایگان.">
 
+  <link rel="alternate" hreflang="fa" href="https://sam8913mt.github.io/marteks/">
+  <link rel="alternate" hreflang="en" href="https://sam8913mt.github.io/marteks/en/index.html">
+  <link rel="alternate" hreflang="x-default" href="https://sam8913mt.github.io/marteks/">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -45,9 +48,11 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&amp;family=Vazirmatn:wght@400;500;700;800&amp;display=swap">
   </noscript>
   <link rel="preload" as="image" href="assets/ms-logo-256.webp" type="image/webp">
-  <link rel="stylesheet" href="css/style.css?v=13">
-  <script src="js/config.js?v=13" defer></script>
-  <script src="js/app.js?v=13" defer></script>
+  <link rel="stylesheet" href="css/style.css?v=16">
+  <link rel="stylesheet" href="css/more.css?v=16">
+  <script src="js/config.js?v=16" defer></script>
+  <script src="js/app.js?v=16" defer></script>
+  <script src="js/extras.js?v=16" defer></script>
 
   <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","name":"مرتکس","alternateName":"Merteks","description":"تیم دو نفرهٔ طراحی وب‌سایت، برنامه‌نویسی و تولید محتوا","url":"https://sam8913mt.github.io/marteks/","logo":"https://sam8913mt.github.io/marteks/assets/icon-512.png","image":"https://sam8913mt.github.io/marteks/assets/og-image.png","telephone":"+989197029213","areaServed":"IR","availableLanguage":"fa","sameAs":["https://www.instagram.com/merteks.m/","https://t.me/merteks_m","https://eitaa.com/mmd2010s"],"makesOffer":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"طراحی وب‌سایت"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"توسعه فرانت‌اند"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"بازطراحی و بهبود سایت"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"تولید محتوا و تدوین ویدیو"}}]}
@@ -73,8 +78,11 @@
         <a href="faq.html">سؤالات متداول</a>
         <a href="chat.html">دستیار سریع</a>
         <a href="contact.html">ارتباط با ما</a>
+        <a class="links-auth" href="login.html">ورود / ثبت‌نام</a>
       </div>
       <div class="nav-tools">
+        <a class="lang-switch" href="en/index.html" hreflang="en" lang="en" title="English version" aria-label="English version">EN</a>
+        <a class="nav-auth" id="navAuth" href="login.html" title="ورود / ثبت‌نام" aria-label="ورود یا ثبت‌نام"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></a>
         <button class="btn btn-primary btn-sm order-nav-btn" id="merteksOrderOpen" type="button">شروع پروژه</button>
         <button class="menu-btn" id="menuBtn" type="button" aria-label="باز کردن منو" aria-expanded="false"
           aria-controls="links"><span class="menu-icon" aria-hidden="true"></span></button>
@@ -119,7 +127,7 @@
         <div class="pagecards">
           <a class="pagecard reveal" href="projects.html">
             <h3>نمونه‌کارها</h3>
-            <p>کارهایی که تا امروز انجام داده‌ایم، با عکس و نظرات.</p>
+            <p>کارهایی که تا امروز انجام داده‌ایم، همراه با توضیح و تصویر هر پروژه.</p>
             <span class="pagecard-go">دیدن نمونه‌کارها ←</span>
           </a>
           <a class="pagecard reveal" href="services.html">
@@ -141,6 +149,33 @@
       </div>
     </section>
 
+    <section class="section" id="why" aria-label="چرا مرتکس">
+      <div class="wrap">
+        <header class="head-row reveal">
+          <h2 class="section-title">چرا مرتکس؟</h2>
+          <p class="section-desc">تیم کوچک بودن یعنی کمتر واسطه، پاسخ سریع‌تر و مسئولیت روشن‌تر.</p>
+        </header>
+        <ul class="idea-list">
+          <li class="idea reveal">
+            <h4>مستقیم با تیم اجرایی</h4>
+            <p>هر پروژه را همان دو نفری طراحی و کدنویسی می‌کنند که با شما در ارتباط‌اند؛ واسطه‌ای در کار نیست.</p>
+          </li>
+          <li class="idea reveal">
+            <h4>طراحی پیش از کدنویسی</h4>
+            <p>ظاهر و چیدمان قبل از شروع توسعه مشخص و با شما بازبینی می‌شود تا غافلگیری کمتر باشد.</p>
+          </li>
+          <li class="idea reveal">
+            <h4>زمان و هزینهٔ روشن</h4>
+            <p>مشاوره و برآورد اولیه رایگان است و زمان و هزینه پیش از شروع کار هماهنگ می‌شود.</p>
+          </li>
+          <li class="idea reveal">
+            <h4>آزمایش روی موبایل و کامپیوتر</h4>
+            <p>هر صفحه پیش از تحویل روی صفحه‌های مختلف بررسی می‌شود تا همه‌جا مرتب و سریع باشد.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
     <section class="section alt" aria-label="مراحل کار">
       <div class="wrap">
         <header class="head-row reveal">
@@ -153,6 +188,16 @@
           <li class="step reveal"><span class="step-no" aria-hidden="true">۳</span><h3>توسعه و آزمایش</h3><p>ساخت صفحه‌ها و بررسی آن‌ها در موبایل و کامپیوتر.</p></li>
           <li class="step reveal"><span class="step-no" aria-hidden="true">۴</span><h3>تحویل</h3><p>تحویل پروژه، اصلاحات نهایی و رفع اشکال‌های همان کار.</p></li>
         </ol>
+      </div>
+    </section>
+
+    <section class="section" id="testimonials" data-testi hidden aria-label="نظر مشتریان">
+      <div class="wrap">
+        <header class="head-row reveal">
+          <h2 class="section-title">مشتریان چه می‌گویند</h2>
+          <p class="section-desc">تجربهٔ کسانی که با ما کار کرده‌اند.</p>
+        </header>
+        <div class="mx-testi-grid"></div>
       </div>
     </section>
 
@@ -239,7 +284,7 @@
       <p>طراحی و توسعه توسط مرتکس. © ۲۰۲۶</p>
       <nav class="mx-foot-links" aria-label="پیوندهای پایین صفحه"><a href="contact.html">ارتباط با ما</a><a href="privacy.html">حریم خصوصی</a><a
           href="https://t.me/merteks_m" target="_blank" rel="noopener noreferrer">تلگرام</a><a
-          href="https://www.instagram.com/merteks.m/" target="_blank" rel="noopener noreferrer">اینستاگرام</a></nav>
+          href="https://www.instagram.com/merteks.m/" target="_blank" rel="noopener noreferrer">اینستاگرام</a><a href="https://eitaa.com/mmd2010s" target="_blank" rel="noopener noreferrer">ایتا</a><a href="https://ble.ir/mmd2010s" target="_blank" rel="noopener noreferrer">بله</a><a href="en/index.html" hreflang="en" lang="en">English</a><a href="login.html">ورود / ثبت‌نام</a></nav>
       <small>اطلاعاتی که در فرم «شروع پروژه» می‌نویسید فقط برای پاسخ به شما نگه‌داری می‌شود. پرسش‌ها و پاسخ‌های گفتگو
         با دستیار برای بهبود پاسخ‌گویی ذخیره می‌شود؛ شمارهٔ تماس یا اطلاعات شخصی در آن ننویسید.</small>
     </div>

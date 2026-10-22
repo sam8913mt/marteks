@@ -8,6 +8,7 @@ var CFG = W.MERTEKS_CONFIG || {};
 var API = String(CFG.supabaseUrl || '').replace(/\/+$/, '');
 var KEY = CFG.supabaseKey || '';
 var BUCKET = 'projects';
+var NUMLOC = String(D.documentElement.lang || 'fa').toLowerCase().indexOf('en') === 0 ? 'en-US' : 'fa-IR';
 var ESC_MAP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
 function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return ESC_MAP[c]; }); }
 function enDigits(v) {
@@ -198,12 +199,12 @@ if (!/^\d+$/.test(final)) return;
 var to = +final, t0 = performance.now(), dur = 1100;
 (function step(t) {
 var k = Math.min(1, (t - t0) / dur), v = Math.round(to * (1 - Math.pow(1 - k, 3)));
-b.textContent = v.toLocaleString('fa-IR');
+b.textContent = v.toLocaleString(NUMLOC);
 if (k < 1) requestAnimationFrame(step);
 })(t0);
 });
 }, { threshold: .6 });
-facts.forEach(function (b) { var v = enDigits(b.textContent.trim()); if (/^\d+$/.test(v)) { b.setAttribute('data-to', v); b.textContent = (0).toLocaleString('fa-IR'); fio.observe(b); } });
+facts.forEach(function (b) { var v = enDigits(b.textContent.trim()); if (/^\d+$/.test(v)) { b.setAttribute('data-to', v); b.textContent = (0).toLocaleString(NUMLOC); fio.observe(b); } });
 }
 var plate = D.querySelector('.plate');
 if (plate && canHover && !reduced) {
@@ -910,23 +911,4 @@ b.style.setProperty('--by', ((e.clientY - q.top - q.height / 2) * .22).toFixed(1
 }
 }, { passive: true });
 D.documentElement.addEventListener('pointerleave', function () { glow.classList.remove('on'); clearCard(curCard); clearBtn(curBtn); });
-
-(function () {
-var ul = $('teamList');
-if (!ul || !API || !KEY) return;
-sbFetch('GET', '/rest/v1/team_members?select=id,name,role,bio,photo_key,link&order=pos.asc,created_at.asc&limit=100', { cache: 'default' }).then(function (res) {
-if (!res.ok || !Array.isArray(res.data) || !res.data.length) return;
-ul.innerHTML = res.data.map(function (m) {
-var pic = m.photo_key
-? '<span class="avatar"><img src="' + esc(publicUrl(m.photo_key)) + '" alt="' + esc(m.name) + '" width="48" height="48" loading="lazy" decoding="async"></span>'
-: '<span class="avatar" aria-hidden="true">' + esc(String(m.name).charAt(0)) + '</span>';
-var link = safeUrl(m.link);
-return '<li>' + pic + '<div><b>' + esc(m.name) + '</b>' + (m.role ? '<span>' + esc(m.role) + '</span>' : '') +
-(m.bio ? '<span class="team-bio">' + esc(m.bio) + '</span>' : '') +
-(link ? '<a class="team-link" href="' + esc(link) + '" target="_blank" rel="noopener noreferrer">مشاهدهٔ پروفایل ↗</a>' : '') + '</div></li>';
-}).join('');
-var n = res.data.length, c = $('teamCount');
-if (c) { c.setAttribute('data-to', String(n)); if (enDigits(c.textContent.trim()) !== '0') c.textContent = n.toLocaleString('fa-IR'); }
-}, function () {});
-})();
 })();

@@ -30,6 +30,9 @@
   <meta name="twitter:title" content="خدمات و مراحل کار | مرتکس">
   <meta name="twitter:description" content="خدمات مرتکس: طراحی وب‌سایت، توسعه فرانت‌اند، بازطراحی، سازگاری با موبایل و ویدیو؛ همراه با زمان تقریبی و مراحل کار.">
 
+  <link rel="alternate" hreflang="fa" href="https://sam8913mt.github.io/marteks/services.html">
+  <link rel="alternate" hreflang="en" href="https://sam8913mt.github.io/marteks/en/services.html">
+  <link rel="alternate" hreflang="x-default" href="https://sam8913mt.github.io/marteks/services.html">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -45,10 +48,13 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&amp;family=Vazirmatn:wght@400;500;700;800&amp;display=swap">
   </noscript>
   <link rel="preload" as="image" href="assets/ms-logo-256.webp" type="image/webp">
-  <link rel="stylesheet" href="css/style.css?v=13">
-  <script src="js/config.js?v=13" defer></script>
-  <script src="js/app.js?v=13" defer></script>
+  <link rel="stylesheet" href="css/style.css?v=16">
+  <link rel="stylesheet" href="css/more.css?v=16">
+  <script src="js/config.js?v=16" defer></script>
+  <script src="js/app.js?v=16" defer></script>
+  <script src="js/extras.js?v=16" defer></script>
 
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"ProfessionalService","@id":"https://sam8913mt.github.io/marteks/#org","name":"مرتکس","alternateName":"Merteks","url":"https://sam8913mt.github.io/marteks/","logo":"https://sam8913mt.github.io/marteks/assets/icon-512.png","image":"https://sam8913mt.github.io/marteks/assets/og-image.png","description":"تیم دو نفرهٔ طراحی و برنامه‌نویسی وب‌سایت؛ طراحی رابط، توسعه فرانت‌اند و ساخت سایت‌های سریع و سازگار با موبایل.","telephone":"+989197029213","areaServed":"IR","knowsLanguage":["fa","en"],"serviceType":["طراحی وب‌سایت","توسعه فرانت‌اند","بهبود ظاهر سایت","بهینه‌سازی موبایل و سرعت","تولید محتوا و ویدیو"],"sameAs":["https://t.me/merteks_m","https://www.instagram.com/merteks.m/","https://eitaa.com/mmd2010s","https://ble.ir/mmd2010s"]},{"@type":"ItemList","name":"خدمات مرتکس","itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"Service","name":"طراحی وب‌سایت","description":"صفحات مدرن، مرتب و واکنش‌گرا برای نمایش حرفه‌ای در موبایل، تبلت و کامپیوتر.","provider":{"@id":"https://sam8913mt.github.io/marteks/#org"},"areaServed":"IR"}},{"@type":"ListItem","position":2,"item":{"@type":"Service","name":"توسعه فرانت‌اند","description":"ساخت صفحات تعاملی با HTML، CSS و JavaScript و ایجاد تجربه‌ای روان و کاربردی.","provider":{"@id":"https://sam8913mt.github.io/marteks/#org"},"areaServed":"IR"}},{"@type":"ListItem","position":3,"item":{"@type":"Service","name":"بهبود ظاهر سایت","description":"بازطراحی رنگ، فاصله‌ها، تایپوگرافی و جزئیات بصری برای حرفه‌ای‌تر شدن سایت.","provider":{"@id":"https://sam8913mt.github.io/marteks/#org"},"areaServed":"IR"}},{"@type":"ListItem","position":4,"item":{"@type":"Service","name":"سازگاری با موبایل و سرعت","description":"بهینه‌سازی چیدمان و سرعت تا سایت در همه صفحه‌ها مرتب، سریع و قابل استفاده باشد.","provider":{"@id":"https://sam8913mt.github.io/marteks/#org"},"areaServed":"IR"}},{"@type":"ListItem","position":5,"item":{"@type":"Service","name":"تولید محتوا و ویدیو","description":"ساخت و تدوین ویدیو و محتوای بصری برای سایت و شبکه‌های اجتماعی.","provider":{"@id":"https://sam8913mt.github.io/marteks/#org"},"areaServed":"IR"}}]}]}</script>
 </head>
 
 <body>
@@ -70,8 +76,11 @@
         <a href="faq.html">سؤالات متداول</a>
         <a href="chat.html">دستیار سریع</a>
         <a href="contact.html">ارتباط با ما</a>
+        <a class="links-auth" href="login.html">ورود / ثبت‌نام</a>
       </div>
       <div class="nav-tools">
+        <a class="lang-switch" href="en/services.html" hreflang="en" lang="en" title="English version" aria-label="English version">EN</a>
+        <a class="nav-auth" id="navAuth" href="login.html" title="ورود / ثبت‌نام" aria-label="ورود یا ثبت‌نام"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></a>
         <button class="btn btn-primary btn-sm order-nav-btn" id="merteksOrderOpen" type="button">شروع پروژه</button>
         <button class="menu-btn" id="menuBtn" type="button" aria-label="باز کردن منو" aria-expanded="false"
           aria-controls="links"><span class="menu-icon" aria-hidden="true"></span></button>
@@ -188,6 +197,21 @@
       </div>
     </section>
 
+    <section class="mx-cta" aria-label="شروع پروژه">
+      <div class="wrap">
+        <div class="mx-cta-card reveal">
+          <div>
+            <h2>پروژه‌تان را شروع کنیم؟</h2>
+            <p>مشاوره و برآورد اولیه رایگان است و پاسخ را مستقیم از خود تیم می‌گیرید.</p>
+          </div>
+          <div class="actions">
+            <a class="btn btn-primary" href="#order" data-open-order>شروع پروژه</a>
+            <a class="btn btn-ghost" href="https://t.me/merteks_m" target="_blank" rel="noopener noreferrer">پیام در تلگرام</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="foot">
@@ -195,7 +219,7 @@
       <p>طراحی و توسعه توسط مرتکس. © ۲۰۲۶</p>
       <nav class="mx-foot-links" aria-label="پیوندهای پایین صفحه"><a href="contact.html">ارتباط با ما</a><a href="privacy.html">حریم خصوصی</a><a
           href="https://t.me/merteks_m" target="_blank" rel="noopener noreferrer">تلگرام</a><a
-          href="https://www.instagram.com/merteks.m/" target="_blank" rel="noopener noreferrer">اینستاگرام</a></nav>
+          href="https://www.instagram.com/merteks.m/" target="_blank" rel="noopener noreferrer">اینستاگرام</a><a href="https://eitaa.com/mmd2010s" target="_blank" rel="noopener noreferrer">ایتا</a><a href="https://ble.ir/mmd2010s" target="_blank" rel="noopener noreferrer">بله</a><a href="en/index.html" hreflang="en" lang="en">English</a><a href="login.html">ورود / ثبت‌نام</a></nav>
       <small>اطلاعاتی که در فرم «شروع پروژه» می‌نویسید فقط برای پاسخ به شما نگه‌داری می‌شود. پرسش‌ها و پاسخ‌های گفتگو
         با دستیار برای بهبود پاسخ‌گویی ذخیره می‌شود؛ شمارهٔ تماس یا اطلاعات شخصی در آن ننویسید.</small>
     </div>

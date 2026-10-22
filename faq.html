@@ -45,9 +45,11 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&amp;family=Vazirmatn:wght@400;500;700;800&amp;display=swap">
   </noscript>
   <link rel="preload" as="image" href="assets/ms-logo-256.webp" type="image/webp">
-  <link rel="stylesheet" href="css/style.css?v=13">
-  <script src="js/config.js?v=13" defer></script>
-  <script src="js/app.js?v=13" defer></script>
+  <link rel="stylesheet" href="css/style.css?v=16">
+  <link rel="stylesheet" href="css/more.css?v=16">
+  <script src="js/config.js?v=16" defer></script>
+  <script src="js/app.js?v=16" defer></script>
+  <script src="js/extras.js?v=16" defer></script>
 
   <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "هزینهٔ طراحی سایت چقدر است؟", "acceptedAnswer": {"@type": "Answer", "text": "هزینه به نوع و حجم کار بستگی دارد و بدون شنیدن نیاز شما عدد دقیقی نمی‌دهیم. مشاورهٔ اولیه و برآورد رایگان است؛ بعد از آن قیمت شفاف اعلام می‌شود. در فرم «شروع پروژه» می‌توانید بودجهٔ تقریبی را هم بنویسید."}}, {"@type": "Question", "name": "ساخت سایت چقدر زمان می‌برد؟", "acceptedAnswer": {"@type": "Answer", "text": "لندینگ‌پیج حدود ۳ تا ۷ روز و سایت چندصفحه‌ای حدود ۲ تا ۴ هفته. پروژه‌های اختصاصی بعد از نیازسنجی زمان‌بندی می‌شوند. زمان نهایی قبل از شروع کار با شما هماهنگ می‌شود."}}, {"@type": "Question", "name": "چطور شروع کنیم؟", "acceptedAnswer": {"@type": "Answer", "text": "روی «شروع پروژه» بزنید و نام، شمارهٔ تماس، نوع پروژه و توضیح کوتاه را بنویسید. بعد با شما تماس می‌گیریم. اگر ترجیح می‌دهید، مستقیم در تلگرام، ایتا یا بله پیام بدهید."}}, {"@type": "Question", "name": "پرداخت چطور است؟", "acceptedAnswer": {"@type": "Answer", "text": "پرداخت معمولاً مرحله‌ای است؛ بخشی در شروع کار و باقی هنگام تحویل. جزئیات دقیق قبل از شروع با شما هماهنگ و توافق می‌شود."}}, {"@type": "Question", "name": "بعد از تحویل پشتیبانی دارید؟", "acceptedAnswer": {"@type": "Answer", "text": "بله، رفع اشکال‌های مربوط به کار انجام‌شده را پوشش می‌دهیم. مدت و دامنهٔ دقیق پشتیبانی قبل از شروع، در توافق نوشته می‌شود. بعد از تسویهٔ نهایی، فایل‌های پروژه به شما تحویل داده می‌شود."}}, {"@type": "Question", "name": "فروشگاه آنلاین یا اپلیکیشن هم می‌سازید؟", "acceptedAnswer": {"@type": "Answer", "text": "تمرکز ما روی سایت‌های معرفی، شرکتی، لندینگ و پرتفولیو و بخش ظاهری و تعاملی (فرانت‌اند) است. برای فروشگاه یا اپلیکیشن، نیازتان را بنویسید تا بعد از بررسی صادقانه بگوییم از عهده‌اش برمی‌آییم یا نه."}}, {"@type": "Question", "name": "دامنه و هاست هم لازم است؟", "acceptedAnswer": {"@type": "Answer", "text": "اگر دامنه یا هاست دارید همان را استفاده می‌کنیم؛ اگر ندارید، در زمان توافق راهنمایی‌تان می‌کنیم."}}]}
@@ -73,8 +75,11 @@
         <a href="faq.html" class="active" aria-current="page">سؤالات متداول</a>
         <a href="chat.html">دستیار سریع</a>
         <a href="contact.html">ارتباط با ما</a>
+        <a class="links-auth" href="login.html">ورود / ثبت‌نام</a>
       </div>
       <div class="nav-tools">
+        <a class="lang-switch" href="en/index.html" hreflang="en" lang="en" title="English version" aria-label="English version">EN</a>
+        <a class="nav-auth" id="navAuth" href="login.html" title="ورود / ثبت‌نام" aria-label="ورود یا ثبت‌نام"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></a>
         <button class="btn btn-primary btn-sm order-nav-btn" id="merteksOrderOpen" type="button">شروع پروژه</button>
         <button class="menu-btn" id="menuBtn" type="button" aria-label="باز کردن منو" aria-expanded="false"
           aria-controls="links"><span class="menu-icon" aria-hidden="true"></span></button>
@@ -129,6 +134,21 @@
       </div>
     </section>
 
+    <section class="mx-cta" aria-label="شروع پروژه">
+      <div class="wrap">
+        <div class="mx-cta-card reveal">
+          <div>
+            <h2>پروژه‌تان را شروع کنیم؟</h2>
+            <p>مشاوره و برآورد اولیه رایگان است و پاسخ را مستقیم از خود تیم می‌گیرید.</p>
+          </div>
+          <div class="actions">
+            <a class="btn btn-primary" href="#order" data-open-order>شروع پروژه</a>
+            <a class="btn btn-ghost" href="https://t.me/merteks_m" target="_blank" rel="noopener noreferrer">پیام در تلگرام</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="foot">
@@ -136,7 +156,7 @@
       <p>طراحی و توسعه توسط مرتکس. © ۲۰۲۶</p>
       <nav class="mx-foot-links" aria-label="پیوندهای پایین صفحه"><a href="contact.html">ارتباط با ما</a><a href="privacy.html">حریم خصوصی</a><a
           href="https://t.me/merteks_m" target="_blank" rel="noopener noreferrer">تلگرام</a><a
-          href="https://www.instagram.com/merteks.m/" target="_blank" rel="noopener noreferrer">اینستاگرام</a></nav>
+          href="https://www.instagram.com/merteks.m/" target="_blank" rel="noopener noreferrer">اینستاگرام</a><a href="https://eitaa.com/mmd2010s" target="_blank" rel="noopener noreferrer">ایتا</a><a href="https://ble.ir/mmd2010s" target="_blank" rel="noopener noreferrer">بله</a><a href="en/index.html" hreflang="en" lang="en">English</a><a href="login.html">ورود / ثبت‌نام</a></nav>
       <small>اطلاعاتی که در فرم «شروع پروژه» می‌نویسید فقط برای پاسخ به شما نگه‌داری می‌شود. پرسش‌ها و پاسخ‌های گفتگو
         با دستیار برای بهبود پاسخ‌گویی ذخیره می‌شود؛ شمارهٔ تماس یا اطلاعات شخصی در آن ننویسید.</small>
     </div>

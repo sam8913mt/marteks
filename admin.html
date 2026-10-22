@@ -11,9 +11,10 @@
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="preconnect" href="https://xpkckkosnnixshbarieo.supabase.co" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&amp;display=swap">
-<link rel="stylesheet" href="css/admin.css">
-<script src="js/config.js?v=13" defer></script>
-<script src="js/admin.js?v=13" defer></script>
+<link rel="stylesheet" href="css/admin.css?v=17">
+<script src="js/config.js?v=16" defer></script>
+<script src="js/admin.js?v=17" defer></script>
+<script src="js/admin-users.js?v=17" defer></script>
 </head>
 <body>
 
@@ -49,6 +50,8 @@
     <button class="ad-tab" role="tab" type="button" data-tab="chats">💬 گفتگوها<span class="ad-count" id="badgeChats" hidden></span></button>
     <button class="ad-tab" role="tab" type="button" data-tab="projects">🖼️ پروژه‌ها</button>
     <button class="ad-tab" role="tab" type="button" data-tab="team">👥 تیم</button>
+    <button class="ad-tab" role="tab" type="button" data-tab="testimonials">⭐ مشتریان</button>
+    <button class="ad-tab" role="tab" type="button" data-tab="users">🧑‍💻 کاربران</button>
     <button class="ad-tab" role="tab" type="button" data-tab="comments">💭 نظرات<span class="ad-count" id="badgeComments" hidden></span></button>
   </nav>
 
@@ -112,6 +115,45 @@
     <div class="ad-list" id="teamList"></div>
   </section>
 
+  <!-- نظرات مشتریان (نمایش در صفحهٔ اصلی و نمونه‌کارها) -->
+  <section id="paneTestimonials" class="ad-pane" hidden>
+    <form class="ad-card" id="testiForm" autocomplete="off">
+      <div class="ad-card-head"><strong id="testiFormTitle">افزودن نظر مشتری</strong><span class="ad-muted">فقط نظرهای واقعی و با اجازهٔ مشتری؛ تا نظری ثبت نشود این بخش در سایت دیده نمی‌شود</span></div>
+      <label class="ad-field"><span>نام مشتری *</span><input id="testiName" type="text" maxlength="80" required placeholder="مثلاً علی رضایی"></label>
+      <label class="ad-field"><span>عنوان یا کسب‌وکار (اختیاری)</span><input id="testiRole" type="text" maxlength="80" placeholder="مثلاً مدیر فروشگاه آنلاین ..."></label>
+      <label class="ad-field"><span>متن نظر * (حداکثر ۴۰۰ حرف)</span><textarea id="testiBody" maxlength="400" rows="3" required placeholder="متن نظر مشتری"></textarea></label>
+      <div class="ad-actions"><button class="ad-btn ad-primary" id="testiSave" type="submit">➕ افزودن نظر</button><button class="ad-btn" id="testiReset" type="button">پاک کردن / انصراف</button></div>
+    </form>
+    <div class="ad-list" id="testiList"></div>
+  </section>
+
+  <!-- مدیریت کاربران ثبت‌نام‌شده (داده از Edge Function امن؛ فقط مدیر) -->
+  <section id="paneUsers" class="ad-pane" hidden>
+    <div class="ad-stats" id="userStats"></div>
+    <div class="ad-toolbar">
+      <input class="ad-search" id="userSearch" type="search" placeholder="جستجو: نام، نام خانوادگی، ایمیل یا شماره تماس…" aria-label="جستجوی کاربران" autocomplete="off">
+      <select class="ad-select" id="userVerified" aria-label="فیلتر تأیید ایمیل">
+        <option value="all">همهٔ ایمیل‌ها</option><option value="verified">ایمیل تأییدشده</option><option value="unverified">ایمیل تأییدنشده</option>
+      </select>
+      <select class="ad-select" id="userStatus" aria-label="فیلتر وضعیت حساب">
+        <option value="all">همهٔ حساب‌ها</option><option value="active">فعال</option><option value="disabled">غیرفعال</option>
+      </select>
+      <select class="ad-select" id="userSort" aria-label="مرتب‌سازی">
+        <option value="newest">جدیدترین ثبت‌نام</option><option value="oldest">قدیمی‌ترین ثبت‌نام</option><option value="name">نام کاربر</option><option value="last_login">آخرین ورود</option>
+      </select>
+      <select class="ad-select" id="userPageSize" aria-label="تعداد در هر صفحه">
+        <option value="10">۱۰ در صفحه</option><option value="25" selected>۲۵ در صفحه</option><option value="50">۵۰ در صفحه</option><option value="100">۱۰۰ در صفحه</option>
+      </select>
+      <span class="ad-spacer"></span>
+      <button class="ad-btn" id="userRefresh" type="button">↻ تازه‌سازی</button>
+      <button class="ad-btn" id="userExport" type="button">CSV</button>
+      <button class="ad-btn" id="userAuditBtn" type="button">📜 تاریخچهٔ مدیریتی</button>
+    </div>
+    <div class="ad-muted ad-users-note" id="userNote" role="status" aria-live="polite"></div>
+    <div id="userBox"></div>
+    <nav class="ad-pager" id="userPager" aria-label="صفحه‌بندی کاربران" hidden></nav>
+  </section>
+
   <!-- نظرات نمونه‌کارها -->
   <section id="paneComments" class="ad-pane" hidden>
     <div class="ad-stats" id="commentStats"></div>
@@ -127,6 +169,13 @@
     <div class="ad-list" id="commentList"></div>
   </section>
 </div>
+
+<dialog class="ad-dialog" id="userDialog" aria-labelledby="userDialogTitle">
+  <div class="ad-dialog-box">
+    <div class="ad-dialog-head"><strong id="userDialogTitle">—</strong><button class="ad-ghost" id="userDialogClose" type="button" aria-label="بستن">✕</button></div>
+    <div class="ad-dialog-body" id="userDialogBody"></div>
+  </div>
+</dialog>
 
 <div class="ad-toast" id="adToast" role="status" aria-live="polite"></div>
 </body>
