@@ -314,7 +314,7 @@ D.body.insertAdjacentHTML('beforeend',
 '<div id="merteksOrderSuccess" aria-live="polite"><div class="merteks-success-card" role="dialog" aria-modal="true" aria-labelledby="merteksSuccessTitle"><div class="merteks-success-icon" aria-hidden="true">✓</div>' +
 '<h3 id="merteksSuccessTitle">درخواست شما ثبت شد</h3><p id="merteksSuccessText">با شما تماس می‌گیریم. اگر زودتر نیاز شد، هنگام پیام دادن این کد را بگویید:</p>' +
 '<p><b id="merteksOrderCode" dir="ltr" style="font-size:18px;letter-spacing:1px;user-select:all"></b></p>' +
-'<div class="merteks-actions" style="justify-content:center"><a class="merteks-btn" href="https://t.me/merteks_m" target="_blank" rel="noopener noreferrer">پیام در تلگرام</a><button class="merteks-btn primary" type="button" id="merteksSuccessClose">بستن</button></div>' +
+'<div class="merteks-actions" style="justify-content:center"><a class="merteks-btn" href="https://t.me/mmd2010s" target="_blank" rel="noopener noreferrer">پیام در تلگرام</a><button class="merteks-btn primary" type="button" id="merteksSuccessClose">بستن</button></div>' +
 '</div></div>');
 var modal = $('merteksOrderModal');
 qa('[data-close-order]', modal).forEach(function (b) { b.addEventListener('click', function () { closeOverlay('merteksOrderModal'); }); });
