@@ -15,6 +15,7 @@
 <script src="js/config.js?v=16" defer></script>
 <script src="js/admin.js?v=17" defer></script>
 <script src="js/admin-users.js?v=17" defer></script>
+<script src="js/admin-ai.js?v=3" defer></script>
 </head>
 <body>
 
@@ -51,6 +52,7 @@
     <button class="ad-tab" role="tab" type="button" data-tab="projects">🖼️ پروژه‌ها</button>
     <button class="ad-tab" role="tab" type="button" data-tab="team">👥 تیم</button>
     <button class="ad-tab" role="tab" type="button" data-tab="testimonials">⭐ مشتریان</button>
+    <button class="ad-tab" role="tab" type="button" data-tab="ai">🤖 هوش مصنوعی</button>
     <button class="ad-tab" role="tab" type="button" data-tab="users">🧑‍💻 کاربران</button>
     <button class="ad-tab" role="tab" type="button" data-tab="comments">💭 نظرات<span class="ad-count" id="badgeComments" hidden></span></button>
   </nav>
@@ -153,6 +155,91 @@
     <div id="userBox"></div>
     <nav class="ad-pager" id="userPager" aria-label="صفحه‌بندی کاربران" hidden></nav>
   </section>
+
+  <!-- حساب‌های اپ Merteks AI: مصرف توکن و مسدودسازی (migration-ai-accounts.sql) -->
+  <section id="paneAi" class="ad-pane" hidden>
+    <div class="ad-card ad-ai-service" id="aiService">
+      <div class="ad-ai-svc-state">
+        <span class="ad-ai-dot" id="aiSvcDot" aria-hidden="true"></span>
+        <div><strong id="aiSvcTitle">وضعیت هوش مصنوعی اپ</strong><div class="ad-muted" id="aiSvcText">در حال خواندن…</div></div>
+      </div>
+      <div class="ad-ai-svc-actions">
+        <label class="ad-ai-limit">سهم روزانهٔ هر نفر
+          <input id="aiSvcLimit" type="number" min="1" max="1000" inputmode="numeric" dir="ltr"></label>
+        <button class="ad-btn" id="aiSvcSave" type="button">ذخیرهٔ سهم</button>
+        <button class="ad-btn ad-danger-solid" id="aiSvcToggle" type="button" disabled>بستن کل هوش مصنوعی</button>
+      </div>
+    </div>
+    <div class="ad-card ad-ai-service" id="bsService">
+      <div class="ad-ai-svc-state">
+        <span class="ad-ai-dot" id="bsSvcDot" aria-hidden="true"></span>
+        <div><strong id="bsSvcTitle">بخش «تحلیل بازار و بورس»</strong><div class="ad-muted" id="bsSvcText">در حال خواندن…</div></div>
+      </div>
+      <div class="ad-ai-svc-actions">
+        <button class="ad-btn ad-danger-solid" id="bsSvcToggle" type="button" disabled>بستن بخش تحلیل بازار</button>
+      </div>
+    </div>
+    <div class="ad-stats" id="aiStats"></div>
+    <div class="ad-toolbar">
+      <input class="ad-search" id="aiSearch" type="search" placeholder="جستجو: نام یا شمارهٔ موبایل…" aria-label="جستجوی حساب‌ها" autocomplete="off">
+      <select class="ad-select" id="aiFilter" aria-label="فیلتر حساب‌ها">
+        <option value="all">همهٔ حساب‌ها</option><option value="active">فعال در ۲۴ ساعت</option><option value="heavy">مصرف امروز دارند</option><option value="banned">مسدودشده</option>
+      </select>
+      <select class="ad-select" id="aiSort" aria-label="مرتب‌سازی">
+        <option value="seen">آخرین فعالیت</option><option value="today">بیشترین مصرف امروز</option><option value="week">بیشترین مصرف ۷ روز</option><option value="month">بیشترین مصرف ۳۰ روز</option><option value="new">جدیدترین ثبت‌نام</option>
+      </select>
+      <span class="ad-spacer"></span>
+      <button class="ad-btn" id="aiRefresh" type="button">↻ تازه‌سازی</button>
+      <button class="ad-btn" id="aiExport" type="button">CSV</button>
+    </div>
+    <div class="ad-muted ad-users-note" id="aiNote" role="status" aria-live="polite"></div>
+    <div id="aiBox"></div>
+  </section>
+
+  <dialog class="ad-dialog" id="aiBanDlg" aria-labelledby="aiBanTitle">
+    <form class="ad-dialog-box" id="aiBanForm" method="dialog">
+      <div class="ad-dialog-head"><strong id="aiBanTitle">مسدود کردن حساب</strong><button class="ad-ghost" type="button" id="aiBanCancel" aria-label="بستن">✕</button></div>
+      <div class="ad-dialog-body">
+        <div class="ad-safe" id="aiBanWho"></div>
+        <label class="ad-field">مدت مسدودی
+          <select class="ad-select" id="aiBanDays">
+            <option value="1">۱ روز</option><option value="3">۳ روز</option><option value="7">۷ روز</option><option value="30">۳۰ روز</option><option value="0">دائمی</option>
+          </select></label>
+        <label class="ad-field">دلیل (اختیاری؛ به کاربر نشان داده می‌شود)
+          <input id="aiBanReason" maxlength="200" placeholder="مثلاً استفادهٔ نامناسب"></label>
+        <p class="ad-muted">کاربر مسدودشده تا پایان این مدت نمی‌تواند از هوش مصنوعی اپ استفاده کند.</p>
+        <div class="ad-actions"><button class="ad-btn ad-primary ad-danger-solid" type="submit" id="aiBanGo">مسدود کن</button></div>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="ad-dialog" id="aiWalDlg" aria-labelledby="aiWalTitle">
+    <div class="ad-dialog-box">
+      <div class="ad-dialog-head"><div><strong id="aiWalTitle">توکن و اشتراک PRO</strong><div class="ad-muted" id="aiWalWho"></div></div><button class="ad-ghost" type="button" id="aiWalClose" aria-label="بستن">✕</button></div>
+      <div class="ad-dialog-body">
+        <div class="ad-safe" id="aiWalNow"></div>
+        <label class="ad-field">توکن هدیه (برای کم کردن، عدد منفی بنویسید)
+          <input id="aiWalTokens" type="number" min="-100000" max="100000" step="1" inputmode="numeric" dir="ltr" placeholder="مثلاً 20"></label>
+        <div class="ad-actions"><button class="ad-btn ad-primary" type="button" id="aiWalGrant">افزودن توکن</button></div>
+        <label class="ad-field">اشتراک PRO — مدت (روز)
+          <input id="aiWalDays" type="number" min="1" max="3650" step="1" inputmode="numeric" dir="ltr" value="30"></label>
+        <label class="ad-field">توکن‌های PRO (تا پایان اشتراک)
+          <input id="aiWalProTokens" type="number" min="0" max="1000000" step="1" inputmode="numeric" dir="ltr" value="200"></label>
+        <p class="ad-muted">دادن PRO اشتراک قبلی این حساب را جایگزین می‌کند. در بخش تحلیل بازار اول توکن‌های PRO مصرف می‌شود، بعد توکن‌های هدیه.</p>
+        <div class="ad-actions">
+          <button class="ad-btn ad-primary" type="button" id="aiWalPro">دادن اشتراک PRO</button>
+          <button class="ad-btn ad-danger" type="button" id="aiWalUnpro">حذف اشتراک PRO</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="ad-dialog" id="aiUseDlg" aria-labelledby="aiUseTitle">
+    <div class="ad-dialog-box">
+      <div class="ad-dialog-head"><div><strong id="aiUseTitle">مصرف روزانه (۳۰ روز گذشته)</strong><div class="ad-muted" id="aiUseWho"></div></div><button class="ad-ghost" type="button" id="aiUseClose" aria-label="بستن">✕</button></div>
+      <div class="ad-dialog-body" id="aiUseBody"></div>
+    </div>
+  </dialog>
 
   <!-- نظرات نمونه‌کارها -->
   <section id="paneComments" class="ad-pane" hidden>

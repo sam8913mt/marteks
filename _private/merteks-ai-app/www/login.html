@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ورود | مرتکس</title>
+  <meta name="description" content="ورود و ثبت‌نام در حساب گروه مرتکس با شمارهٔ موبایل و رمز عبور.">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#101827">
+  <meta name="color-scheme" content="dark">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://xpkckkosnnixshbarieo.supabase.co; connect-src 'self' https://xpkckkosnnixshbarieo.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
+
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://xpkckkosnnixshbarieo.supabase.co" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&amp;display=swap">
+  <link rel="preload" as="image" href="assets/ms-logo-256.webp" type="image/webp">
+  <link rel="stylesheet" href="css/style.css?v=16">
+  <link rel="stylesheet" href="css/auth.css?v=17">
+  <script src="js/config.js?v=16" defer></script>
+  <script src="js/auth.js?v=19" defer></script>
+</head>
+
+<body class="ob-page" data-auth-page="login">
+  <main class="ob-in" id="mxDeck">
+    <a class="ob-back" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>بازگشت به سایت</a>
+    <img class="ob-logo" src="assets/ms-logo-256.webp" width="96" height="96" alt="">
+    <h1>به <span>گروه مرتکس</span> خوش آمدید</h1>
+    <p class="ob-lead">با شمارهٔ موبایل و رمز عبورتان وارد شوید یا حساب تازه بسازید.</p>
+    <div class="ob-alert" id="authAlert" role="alert" hidden></div>
+
+    <div class="ob-tabs" role="tablist" aria-label="ورود یا ثبت‌نام">
+      <button type="button" role="tab" id="tabLogin" aria-selected="true" aria-controls="vLogin">ورود</button>
+      <button type="button" role="tab" id="tabSignup" aria-selected="false" aria-controls="vSignup">ثبت‌نام</button>
+    </div>
+
+    <form class="ob-form" id="vLogin" role="tabpanel" aria-labelledby="tabLogin" novalidate>
+      <label for="liPhone">شمارهٔ موبایل</label>
+      <div class="ob-field">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18h2"/></svg>
+        <input id="liPhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" dir="ltr" maxlength="14" placeholder="09xxxxxxxxx" aria-describedby="liErr">
+      </div>
+      <label for="liPass">رمز عبور</label>
+      <div class="ob-field pw">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+        <input id="liPass" name="password" type="password" autocomplete="current-password" dir="ltr" maxlength="72" aria-describedby="liErr">
+        <button class="ob-eye" type="button" aria-label="نمایش رمز عبور" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+      </div>
+      <label class="ob-check"><input type="checkbox" id="liRemember" checked> مرا به خاطر بسپار</label>
+      <p class="ob-err" id="liErr" role="alert"></p>
+      <button class="ob-btn" type="submit">ورود</button>
+      <p class="ob-forgot">رمز را فراموش کرده‌اید؟ به پشتیبانی پیام بدهید:
+        <a href="https://t.me/mmd2010s" target="_blank" rel="noopener noreferrer">تلگرام</a> یا
+        <a href="https://eitaa.com/mmd2010s" target="_blank" rel="noopener noreferrer">ایتا</a></p>
+    </form>
+
+    <form class="ob-form" id="vSignup" role="tabpanel" aria-labelledby="tabSignup" novalidate hidden>
+      <label for="suName">نام کاربری</label>
+      <div class="ob-field">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <input id="suName" name="name" autocomplete="nickname" maxlength="30" placeholder="مثلاً سارا" aria-describedby="suErr">
+      </div>
+      <label for="suPhone">شمارهٔ موبایل</label>
+      <div class="ob-field">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18h2"/></svg>
+        <input id="suPhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" dir="ltr" maxlength="14" placeholder="09xxxxxxxxx" aria-describedby="suErr">
+      </div>
+      <label for="suPass">رمز عبور</label>
+      <div class="ob-field pw">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+        <input id="suPass" name="new-password" type="password" autocomplete="new-password" dir="ltr" maxlength="72" aria-describedby="suHint suErr">
+        <button class="ob-eye" type="button" aria-label="نمایش رمز عبور" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+      </div>
+      <label for="suPass2">تکرار رمز عبور</label>
+      <div class="ob-field pw">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+        <input id="suPass2" name="new-password-2" type="password" autocomplete="new-password" dir="ltr" maxlength="72" aria-describedby="suErr">
+        <button class="ob-eye" type="button" aria-label="نمایش رمز عبور" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+      </div>
+      <p class="ob-hint" id="suHint">رمز: دست‌کم ۸ نویسه، شامل حرف و عدد.</p>
+      <p class="ob-err" id="suErr" role="alert"></p>
+      <button class="ob-btn" type="submit">ثبت‌نام</button>
+    </form>
+
+    <ul class="ob-perks">
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>یک حساب برای سایت گروه مرتکس و اپ Merteks AI</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>ورود سریع فقط با شمارهٔ موبایل و رمز</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>مشاوره و برآورد اولیهٔ رایگان برای پروژهٔ شما</li>
+    </ul>
+    <p class="ob-note">با همین شماره و رمز در اپ Merteks AI هم وارد می‌شوید. شماره فقط برای ارتباط تیم مرتکس با شما ذخیره می‌شود و جایی نمایش داده نمی‌شود.</p>
+  </main>
+</body>
+
+</html>

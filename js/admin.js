@@ -226,16 +226,18 @@ if (!w) { toast('اجازهٔ باز شدن پنجرهٔ جدید را فعال 
 w.document.open(); w.document.write(html); w.document.close();
 w.focus(); setTimeout(function () { w.print(); }, 500);
 }
-var state = { orders: [], chatRows: null, comments: null, projects: null, team: null, testimonials: null, users: null, tab: 'orders' };
+var state = { orders: [], chatRows: null, comments: null, projects: null, team: null, testimonials: null, users: null, ai: null, tab: 'orders' };
 /* رابط کوچک برای بخش «کاربران» (js/admin-users.js) تا از همان نشست و ابزارهای پنل استفاده کند */
 W.MX_ADMIN = Object.freeze({
 sb: sb, esc: esc, fa: fa, norm: norm, errText: errText, csv: csv, download: download, toast: toast, getTok: getTok,
 activeTab: function () { return state.tab; },
-markLoaded: function (ok) { state.users = ok ? true : null; }
+markLoaded: function (ok) { state.users = ok ? true : null; },
+markAiLoaded: function (ok) { state.ai = ok ? true : null; }
 });
 function onLogout() {
-state.orders = []; state.chatRows = null; state.comments = null; state.projects = null; state.team = null; state.testimonials = null; state.users = null;
+state.orders = []; state.chatRows = null; state.comments = null; state.projects = null; state.team = null; state.testimonials = null; state.users = null; state.ai = null;
 if (W.MX_ADMIN_USERS) W.MX_ADMIN_USERS.reset();
+if (W.MX_ADMIN_AI) W.MX_ADMIN_AI.reset();
 ['orderList', 'chatList', 'commentList', 'projList', 'teamList', 'testiList'].forEach(function (id) { $(id).innerHTML = ''; });
 clearPreview(); setBadge('chats', 0); setBadge('comments', 0);
 }
@@ -248,8 +250,9 @@ if (name === 'chats' || name === 'comments') setBadge(name, 0);
 try { history.replaceState(null, '', '#' + name); } catch (e) {}
 }
 function loadUsersTab() { state.users = null; if (W.MX_ADMIN_USERS) W.MX_ADMIN_USERS.load(true); }
-var LOAD = { orders: loadOrders, chats: loadChats, comments: loadComments, projects: loadProjects, team: loadTeam, testimonials: loadTesti, users: loadUsersTab };
-var STATE_KEY = { chats: 'chatRows', comments: 'comments', projects: 'projects', team: 'team', testimonials: 'testimonials', users: 'users' };
+function loadAiTab() { state.ai = null; if (W.MX_ADMIN_AI) W.MX_ADMIN_AI.load(true); }
+var LOAD = { orders: loadOrders, chats: loadChats, comments: loadComments, projects: loadProjects, team: loadTeam, testimonials: loadTesti, users: loadUsersTab, ai: loadAiTab };
+var STATE_KEY = { chats: 'chatRows', comments: 'comments', projects: 'projects', team: 'team', testimonials: 'testimonials', users: 'users', ai: 'ai' };
 qa('button.ad-tab').forEach(function (t) { t.addEventListener('click', function () { switchTab(t.getAttribute('data-tab')); }); });
 $('adRefresh').addEventListener('click', function () { LOAD[state.tab](); });
 W.addEventListener('hashchange', function () { var h = location.hash.slice(1); if (getTok() && LOAD[h] && h !== state.tab) switchTab(h); });

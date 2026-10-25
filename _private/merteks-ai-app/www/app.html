@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Merteks AI</title>
+  <meta name="theme-color" content="#0b1220">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; connect-src 'self' https://xpkckkosnnixshbarieo.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <link rel="icon" type="image/png" href="assets/merteks-ai-128.png">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/Vazirmatn.woff2" crossorigin>
+  <link rel="stylesheet" href="css/mxai.css?v=10">
+  <script src="js/config.js?v=16" defer></script>
+  <script src="js/mx-store.js?v=8" defer></script>
+  <script src="js/gate.js?v=9" defer></script>
+</head>
+
+<body class="gate-page">
+  <div class="mx-bg aurora" aria-hidden="true">
+    <i class="mx-orb o1"></i><i class="mx-orb o2"></i><i class="mx-orb o3"></i>
+    <canvas id="stars"></canvas>
+  </div>
+
+  <main class="gate">
+    <header class="g-top rise" style="--d:0ms">
+      <button class="acct-chip" id="acctChip" type="button">
+        <span class="acct-av" id="acctAv" aria-hidden="true">
+          <svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </span>
+        <span class="acct-txt"><b id="acctName">ورود / ثبت‌نام</b><small id="acctSub">حساب Merteks AI</small></span>
+      </button>
+      <span class="net-pill" id="netPill"><i aria-hidden="true"></i><span>آنلاین</span></span>
+    </header>
+
+    <section class="g-hero">
+      <div class="orb-stage rise" style="--d:60ms" aria-hidden="true">
+        <span class="orb-glow"></span>
+        <span class="orb-ring r1"><i></i></span>
+        <span class="orb-ring r2"><i></i></span>
+        <span class="orb-ring r3"></span>
+        <span class="logo-tile"><img src="assets/merteks-ai-512.png" width="188" height="188" alt=""></span>
+      </div>
+      <h1 class="g-title rise" style="--d:140ms" dir="ltr"><span class="w1">Merteks</span> <span class="w2">AI</span></h1>
+      <p class="g-sub rise" style="--d:200ms">هوش مصنوعی شخصی شما، ساختهٔ تیم مرتکس</p>
+      <div class="type-pill rise" style="--d:260ms" aria-hidden="true">
+        <svg class="i" viewBox="0 0 24 24"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/></svg>
+        <span id="typeLine"></span><i class="caret-bar"></i>
+      </div>
+    </section>
+
+    <nav class="g-cards" aria-label="بخش‌های برنامه">
+      <a class="g-card g-ai rise" style="--d:320ms" href="ai.html">
+        <span class="g-shine" aria-hidden="true"></span>
+        <span class="gc-top">
+          <span class="gc-ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M18.5 14.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/><path d="M5.5 15.5l.5 1.3 1.3.5-1.3.5-.5 1.3-.5-1.3-1.3-.5 1.3-.5z"/></svg></span>
+          <span class="badge-free">رایگان</span>
+        </span>
+        <span class="gc-title">گفتگو با هوش مصنوعی</span>
+        <span class="gc-desc">بپرسید، بنویسید، ترجمه کنید؛ عکس و فایل بفرستید تا بررسی کند.</span>
+        <span class="gc-stats">
+          <span id="statQuota" hidden></span>
+          <span>عکس و فایل</span>
+          <span id="statOffline" hidden>دارای حالت آفلاین و آنلاین</span>
+        </span>
+        <span class="gc-cta">شروع گفتگو <svg class="i" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg></span>
+      </a>
+
+      <div class="g-row">
+        <a class="g-card g-team rise" style="--d:400ms" href="index.html">
+          <span class="gc-ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 4.6a3 3 0 0 1 0 5.8"/><path d="M18 14.4c1.8.8 3 2.6 3 4.6"/></svg></span>
+          <span class="gc-title">گروه مرتکس</span>
+          <span class="gc-desc">سایت، نمونه‌کارها و شروع پروژه</span>
+          <span class="gc-go" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg></span>
+        </a>
+        <button class="g-card g-pro rise" style="--d:460ms" id="proCard" type="button" aria-disabled="true">
+          <span class="gc-ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span>
+          <span class="gc-title">تهیه اشتراک <b dir="ltr">PRO</b></span>
+          <span class="gc-desc">Claude، GPT و مدل‌های قوی‌تر</span>
+          <span class="gc-go" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg></span>
+        </button>
+      </div>
+    </nav>
+
+    <footer class="gate-foot rise" style="--d:520ms">ساختهٔ تیم مرتکس · <b>محمدسام و مهدی</b></footer>
+  </main>
+
+  <div class="scrim" id="scrim" hidden></div>
+
+  <div class="sheet" id="acctSheet" role="dialog" aria-modal="true" aria-labelledby="acctTitle" hidden>
+    <div class="sheet-grab" aria-hidden="true"></div>
+    <div class="acct-head">
+      <span class="acct-av big" id="sheetAv"></span>
+      <div><h3 id="acctTitle"></h3><small id="sheetPhone" dir="ltr"></small></div>
+    </div>
+    <p class="acct-note">این گوشی حساب شما را به خاطر می‌سپارد؛ دفعهٔ بعد بدون واردکردن اطلاعات وارد می‌شوید.</p>
+    <div class="usage" id="sheetUsage">
+      <div class="usage-top"><span>استفادهٔ امروز</span><b id="sheetUsageTxt"></b></div>
+      <div class="usage-bar"><i id="sheetUsageBar"></i></div>
+    </div>
+    <div class="sheet-actions">
+      <a class="btn primary block" href="ai.html">ادامهٔ گفتگو</a>
+      <button class="btn block ghost-bad" id="logoutBtn" type="button">خروج از حساب</button>
+    </div>
+  </div>
+
+  <div class="sheet exit-sheet" id="exitSheet" role="alertdialog" aria-modal="true" aria-labelledby="exitTitle" hidden>
+    <div class="sheet-grab" aria-hidden="true"></div>
+    <div class="exit-ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l-5-5 5-5"/><path d="M5 12h11"/></svg></div>
+    <h3 id="exitTitle">خروج از Merteks AI؟</h3>
+    <p>حساب و گفتگوهایتان روی همین گوشی می‌ماند.</p>
+    <div class="sheet-actions two">
+      <button class="btn primary" id="stayBtn" type="button">ماندن</button>
+      <button class="btn ghost-bad" id="exitBtn" type="button">خروج</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+
+</html>

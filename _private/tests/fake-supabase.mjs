@@ -23,8 +23,9 @@ export function mkWorld() {
     audit: [],
     revoked: [],
     tokens: { 'admin-token': { id: ADMIN_ID, email: 'admin@x.ir', admin: true }, 'user-token': { id: USER_ID, email: 'ali@x.ir', admin: false } },
-    calls: { listUsers: 0 },
+    calls: { listUsers: 0, aiAccounts: 0 },
     failAudit: false,
+    aiAccounts: null,   // null = migration-ai-accounts.sql اجرا نشده (تابع admin_ai_accounts وجود ندارد)
   };
   return w;
 }
@@ -78,7 +79,18 @@ export function mkDeps(w, envOver = {}) {
       }
       if (key === 'anon') {
         const t = hdr.replace('Bearer ', '');
-        return { async rpc(name) { return { data: !!(w.tokens[t] && w.tokens[t].admin), error: null }; } };
+        const isAdmin = !!(w.tokens[t] && w.tokens[t].admin);
+        return { async rpc(name) {
+          if (name === 'is_admin') return { data: isAdmin, error: null };
+          if (name === 'admin_ai_accounts') {
+            // مثل تابع واقعی: فقط با توکن مدیر؛ اگر migration اجرا نشده باشد تابع وجود ندارد
+            if (!w.aiAccounts) return { data: null, error: { code: 'PGRST202', message: 'Could not find the function public.admin_ai_accounts' } };
+            if (!isAdmin) return { data: null, error: { code: '42501', message: 'forbidden' } };
+            w.calls.aiAccounts++;
+            return { data: w.aiAccounts.map((a) => ({ ...a })), error: null };
+          }
+          return { data: null, error: { message: 'nf' } };
+        } };
       }
       assert.equal(key, 'service');
       return {

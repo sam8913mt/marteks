@@ -49,7 +49,7 @@ test('فهرست: ادغام Auth و profiles، آمار، وضعیت تأیید
   const r = await call(h, { action: 'list', pageSize: 100 });
   assert.equal(r.status, 200);
   assert.equal(r.json.users.length, 4);
-  assert.deepEqual(r.json.stats, { total: 4, verified: 3, unverified: 1, today: 1, today_verified: 1, disabled: 1 });
+  assert.deepEqual(r.json.stats, { total: 4, verified: 3, unverified: 1, no_email: 0, app_accounts: 0, today: 1, today_verified: 1, disabled: 1 });
   const sara = r.json.users.find((u) => u.email === 'sara@x.ir');
   assert.equal(sara.email_confirmed, false); assert.equal(sara.has_profile, false);
   assert.equal(sara.first_name, 'سارا'); assert.equal(sara.phone, '09123456789');
@@ -159,4 +159,115 @@ test('پاسخ‌ها هیچ‌وقت کلید محرمانه را نشان نم
     const r = await call(h, b);
     assert.ok(!JSON.stringify(r.json).includes('"service"'));
   }
+});
+
+/* ---------------- کاربران ثبت‌نام‌شده با شمارهٔ موبایل (اپ Merteks AI و Auth بدون ایمیل) ---------------- */
+const PHONE_AUTH_ID = '00000000-0000-4000-8000-000000000005';
+function mkPhoneWorld() {
+  const w = mkWorld();
+  // کاربری که در خود Supabase Auth فقط با شماره ثبت شده (بدون ایمیل و بدون پروفایل)
+  w.authUsers.push({ id: PHONE_AUTH_ID, email: '', phone: '989301112233', created_at: '2026-10-15T05:00:00Z', email_confirmed_at: null, last_sign_in_at: '2026-10-20T05:00:00Z', banned_until: null, user_metadata: {}, app_metadata: { providers: ['phone'] } });
+  w.aiAccounts = [
+    { name: 'رضا', phone: '09351234567', created_at: '2026-10-22T07:00:00Z', last_seen: '2026-10-22T09:00:00Z', device: 'اپ اندروید 412x915', banned_until: null, ban_reason: null, tokens_today: 10 },
+    { name: 'علی اپ', phone: '09121111111', created_at: '2026-10-21T07:00:00Z', last_seen: '2026-10-22T08:00:00Z', device: 'وب', banned_until: null, ban_reason: null },
+    { name: '', phone: '۰۹۳۹۹۹۹۹۹۹۹', created_at: '2026-10-01T07:00:00Z', last_seen: null, device: null, banned_until: 'infinity', ban_reason: 'استفادهٔ نامناسب' },
+    { name: 'رضا تکراری', phone: '09351234567', created_at: '2026-10-22T07:00:00Z', last_seen: null, banned_until: null },
+  ];
+  return w;
+}
+
+test('موبایل: کاربران اپ و Auth بدون ایمیل در فهرست می‌آیند، بدون تکرار', async () => {
+  const w = mkPhoneWorld(), h = createHandler(mkDeps(w));
+  const r = await call(h, { action: 'list', pageSize: 100 });
+  assert.equal(r.status, 200);
+  assert.equal(r.json.app_accounts, 'ok');
+  assert.equal(r.json.users.length, 7);                       // ۵ کاربر Auth + ۲ حساب فقط-اپ (علی ادغام شد، رضای تکراری حذف شد)
+  assert.deepEqual(r.json.stats, { total: 7, verified: 3, unverified: 1, no_email: 3, app_accounts: 3, today: 2, today_verified: 1, disabled: 2 });
+  const ids = r.json.users.map((u) => u.id);
+  assert.equal(new Set(ids).size, ids.length);
+  assert.equal(r.json.users.filter((u) => u.phone === '09121111111').length, 1);
+  assert.equal(r.json.users.filter((u) => u.phone === '09351234567').length, 1);
+
+  const ali = r.json.users.find((u) => u.email === 'ali@x.ir');
+  assert.equal(ali.source, 'auth+app'); assert.equal(ali.first_name, 'علی'); assert.equal(ali.app.device, 'وب');
+  const reza = r.json.users.find((u) => u.phone === '09351234567');
+  assert.equal(reza.id, 'app:09351234567'); assert.equal(reza.source, 'app'); assert.equal(reza.email, '');
+  assert.equal(reza.first_name, 'رضا'); assert.equal(reza.created_at, '2026-10-22T07:00:00Z'); assert.equal(reza.disabled, false);
+  const noName = r.json.users.find((u) => u.phone === '09399999999');   // ارقام فارسی نرمال شد
+  assert.equal(noName.first_name, ''); assert.equal(noName.disabled, true); assert.equal(noName.app.ban_reason, 'استفادهٔ نامناسب');
+  const authPhone = r.json.users.find((u) => u.id === PHONE_AUTH_ID);
+  assert.equal(authPhone.email, ''); assert.equal(authPhone.phone, '09301112233'); assert.equal(authPhone.email_confirmed, false);
+  // کاربران ایمیلی دقیقاً مثل قبل
+  assert.equal(r.json.users.find((u) => u.email === 'sara@x.ir').phone, '09123456789');
+  assert.equal(r.json.users.find((u) => u.email === 'admin@x.ir').source, 'auth');
+});
+
+test('موبایل: جست‌وجو، فیلتر «بدون ایمیل»، وضعیت و صفحه‌بندی', async () => {
+  const w = mkPhoneWorld(), h = createHandler(mkDeps(w));
+  assert.equal((await call(h, { action: 'list', q: '۰۹۳۵۱۲' })).json.users[0].id, 'app:09351234567');
+  assert.equal((await call(h, { action: 'list', q: '09301112233' })).json.users[0].id, PHONE_AUTH_ID);
+  const ne = await call(h, { action: 'list', verified: 'no_email', pageSize: 100 });
+  assert.equal(ne.json.total_filtered, 3); assert.ok(ne.json.users.every((u) => !u.email));
+  const un = await call(h, { action: 'list', verified: 'unverified' });
+  assert.equal(un.json.total_filtered, 1); assert.equal(un.json.users[0].email, 'sara@x.ir');
+  assert.equal((await call(h, { action: 'list', status: 'disabled' })).json.total_filtered, 2);
+  assert.equal((await call(h, { action: 'list', sort: 'name', pageSize: 100 })).json.users.length, 7);
+  const p = await call(h, { action: 'list', pageSize: 10, page: 1 });
+  assert.equal(p.json.users.length, 7); assert.equal(p.json.pages, 1);
+});
+
+test('موبایل: جزئیات کاربر اپ و اتصال حساب اپ به کاربر ایمیلی', async () => {
+  const w = mkPhoneWorld(), h = createHandler(mkDeps(w));
+  const a = await call(h, { action: 'get', id: 'app:09351234567' });
+  assert.equal(a.status, 200); assert.equal(a.json.user.source, 'app'); assert.equal(a.json.user.app.device, 'اپ اندروید 412x915');
+  assert.equal((await call(h, { action: 'get', id: 'app:09000000001' })).status, 404);
+  const ali = await call(h, { action: 'get', id: USER_ID });
+  assert.equal(ali.json.user.source, 'auth+app'); assert.equal(ali.json.user.app.name, 'علی اپ');
+});
+
+test('موبایل: حساب فقط-اپ از این بخش ویرایش/غیرفعال/حذف نمی‌شود', async () => {
+  const w = mkPhoneWorld(), h = createHandler(mkDeps(w));
+  for (const body of [
+    { action: 'update_profile', id: 'app:09351234567', first_name: 'رضا', last_name: 'محمدی', phone: '' },
+    { action: 'set_disabled', id: 'app:09351234567', disabled: true },
+    { action: 'delete', id: 'app:09351234567', confirm_email: '09351234567' },
+  ]) {
+    const r = await call(h, body);
+    assert.equal(r.status, 400); assert.equal(r.json.code, 'app_account');
+  }
+  assert.equal(w.aiAccounts.length, 4); assert.equal(w.authUsers.length, 5); assert.equal(w.audit.length, 0);
+});
+
+test('موبایل: حذف کاربر Auth بدون ایمیل با تأیید شماره', async () => {
+  const w = mkPhoneWorld(), h = createHandler(mkDeps(w));
+  assert.equal((await call(h, { action: 'delete', id: PHONE_AUTH_ID, confirm_email: '' })).status, 400);
+  assert.equal((await call(h, { action: 'delete', id: PHONE_AUTH_ID, confirm_email: '09300000000' })).status, 400);
+  assert.equal(w.authUsers.length, 5);
+  const r = await call(h, { action: 'delete', id: PHONE_AUTH_ID, confirm_email: '۰۹۳۰۱۱۱۲۲۳۳' });
+  assert.equal(r.status, 200); assert.equal(w.authUsers.length, 4);
+  assert.equal(w.audit.at(-1).action, 'delete_user');
+});
+
+test('موبایل: خروجی CSV شامل کاربران اپ و منبع ثبت‌نام', async () => {
+  const w = mkPhoneWorld(), h = createHandler(mkDeps(w));
+  const r = await call(h, { action: 'export' });
+  assert.equal(r.status, 200); assert.equal(r.json.users.length, 7);
+  assert.ok(!('id' in r.json.users[0]));
+  assert.equal(r.json.users.filter((u) => u.source === 'app').length, 2);
+});
+
+test('موبایل: اگر تابع حساب‌های اپ نباشد، کاربران ایمیلی مثل قبل نمایش داده می‌شوند', async () => {
+  const w = mkWorld(), h = createHandler(mkDeps(w));      // aiAccounts = null
+  const r = await call(h, { action: 'list', pageSize: 100 });
+  assert.equal(r.status, 200); assert.equal(r.json.users.length, 4); assert.equal(r.json.app_accounts, 'unavailable');
+  assert.ok(r.json.users.every((u) => u.source === 'auth' && u.app === null));
+});
+
+test('موبایل: کاربر عادی حساب‌های اپ را نمی‌بیند و پاسخ‌ها کلید محرمانه ندارند', async () => {
+  const w = mkPhoneWorld(), h = createHandler(mkDeps(w));
+  assert.equal((await call(h, { action: 'list' }, { token: 'user-token' })).status, 403);
+  assert.equal((await call(h, { action: 'get', id: 'app:09351234567' }, { token: 'user-token' })).status, 403);
+  assert.equal(w.calls.aiAccounts, 0);
+  const r = await call(h, { action: 'list', pageSize: 100 });
+  assert.ok(!/"service"|tokens_today|password/.test(JSON.stringify(r.json)));
 });

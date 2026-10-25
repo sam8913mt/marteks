@@ -312,7 +312,7 @@ D.body.insertAdjacentHTML('beforeend',
 '</div>' +
 '</div>' +
 '<div id="merteksOrderSuccess" aria-live="polite"><div class="merteks-success-card" role="dialog" aria-modal="true" aria-labelledby="merteksSuccessTitle"><div class="merteks-success-icon" aria-hidden="true">✓</div>' +
-'<h3 id="merteksSuccessTitle">درخواست شما ثبت شد</h3><p id="merteksSuccessText">با شما تماس می‌گیریم. اگر زودتر نیاز شد، هنگام پیام دادن این کد را بگویید:</p>' +
+'<h3 id="merteksSuccessTitle">با موفقیت ثبت شد</h3><p id="merteksSuccessText">با شما تماس می‌گیریم. اگر زودتر نیاز شد، هنگام پیام دادن این کد را بگویید:</p>' +
 '<p><b id="merteksOrderCode" dir="ltr" style="font-size:18px;letter-spacing:1px;user-select:all"></b></p>' +
 '<div class="merteks-actions" style="justify-content:center"><a class="merteks-btn" href="https://t.me/mmd2010s" target="_blank" rel="noopener noreferrer">پیام در تلگرام</a><button class="merteks-btn primary" type="button" id="merteksSuccessClose">بستن</button></div>' +
 '</div></div>');
@@ -364,10 +364,10 @@ showSuccess(j.id || order.id, !j.success);
 function showSuccess(code, queued) {
 var box = $('merteksOrderSuccess'), btn = $('merteksSuccessClose');
 $('merteksOrderCode').textContent = code || '';
-$('merteksSuccessTitle').textContent = queued ? 'درخواست در صف ارسال است' : 'درخواست شما ثبت شد';
+$('merteksSuccessTitle').textContent = queued ? 'درخواست در صف ارسال است' : 'با موفقیت ثبت شد';
 $('merteksSuccessText').textContent = queued
 ? 'اینترنت وصل نبود. این صفحه را باز نگه دارید تا خودکار ارسال شود؛ یا همین حالا در تلگرام پیام بدهید و این کد را بگویید:'
-: 'با شما تماس می‌گیریم. اگر زودتر نیاز شد، هنگام پیام دادن این کد را بگویید:';
+: 'درخواست شما با موفقیت ثبت شد و به‌زودی با شما تماس می‌گیریم. اگر زودتر نیاز شد، هنگام پیام دادن این کد را بگویید:';
 box.classList.add('open');
 function done() {
 box.classList.remove('open');
@@ -405,9 +405,9 @@ var hello = D.createElement('div');
 hello.className = 'mx-hello';
 hello.setAttribute('role', 'status');
 hello.innerHTML =
-'<button class="mx-hello-body" type="button" aria-label="باز کردن پرسش‌وپاسخ سریع">' +
-'<span class="mx-hello-name">پرسش‌وپاسخ سریع</span>' +
-'<span class="mx-hello-text">سؤالی دربارهٔ خدمات، هزینه یا زمان تحویل دارید؟ همین‌جا بپرسید.</span>' +
+'<button class="mx-hello-body" type="button" aria-label="باز کردن دستیار هوشمند مرتکس">' +
+'<span class="mx-hello-name">دستیار هوشمند مرتکس</span>' +
+'<span class="mx-hello-text">هر سؤالی دارید بپرسید؛ رایگان امتحانش کنید.</span>' +
 '</button>' +
 '<button class="mx-hello-close" type="button" aria-label="بستن پیام">×</button>';
 function hide(remember) {

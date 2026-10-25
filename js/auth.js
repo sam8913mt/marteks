@@ -312,6 +312,7 @@ function initLogin() {
     return http('POST', '/auth/v1/token?grant_type=password', { json: { email: email, password: pw.value } }).then(function (res) {
       if (res.ok && res.data && res.data.access_token) {
         saveSession(res.data, $('lpRemember').checked);
+        form.reset();
         showAlert('ok', 'ورود با موفقیت انجام شد. در حال انتقال…');
         setTimeout(function () { go(safeNext()); }, 700);
         return;
@@ -396,12 +397,14 @@ function initSignup() {
         var s = saveSession(res.data, false);
         return profileExists(s).then(function (ok) {
           if (!ok) { showAlert('err', 'ثبت‌نام انجام شد، اما پروفایل ساخته نشد. لطفاً به پشتیبانی اطلاع دهید.'); return; }
-          showAlert('ok', 'ثبت‌نام با موفقیت انجام شد. در حال انتقال به حساب کاربری…');
+          form.reset();
+          showAlert('ok', 'با موفقیت ثبت شد. در حال انتقال به حساب کاربری…');
           setTimeout(function () { go('account.html'); }, 900);
         });
       }
+      form.reset();
       openCodeView({ email: email, type: 'signup', nextAt: now() + RESEND_SECONDS, fails: 0 },
-        { kind: 'ok', text: 'کد تأیید به ایمیل شما ارسال شد. لطفاً ایمیل خود را بررسی کنید.' });
+        { kind: 'ok', text: 'با موفقیت ثبت شد. کد تأیید به ایمیل شما ارسال شد؛ لطفاً ایمیل خود را بررسی کنید.' });
     });
   });
 
