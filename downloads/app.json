@@ -4,20 +4,12 @@
       "id": "android-1",
       "platform": "android",
       "title": "اندروید",
-      "url": "downloads/Merteks-AI.apk",
+      "url": "downloads/Merteks-AI0_3_.apk",
       "version": "5.3",
+      "note": "",
       "size": 10594609,
       "sha256": "941b87446020c3671c624dfbc0f617b209f4f59c185ff432304e95e423b6c23f",
-      "updated": "2026-10-25",
-      "note": ""
-    },
-    {
-      "id": "windows-1",
-      "platform": "windows",
-      "title": "ویندوز",
-      "url": "",
-      "version": "",
-      "note": ""
+      "updated": "2026-10-27"
     }
   ]
 }
