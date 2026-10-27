@@ -10,7 +10,9 @@ window.MERTEKS_CONFIG = Object.freeze({
   supabaseKey: 'sb_publishable_TboHxYoN_qQLAzZTuRErvw_nbDP5TZW',
   /* Address of the Cloudflare Worker that talks to Gemini (see README.md).
      Example: 'https://merteks-ai.your-name.workers.dev'
-     Leave '' to disable the AI fallback; the ready-made answers keep working.
+      Leave '' to disable the AI fallback; the ready-made answers keep working.
+     IMPORTANT: the CSP (<meta> in each page) no longer allows *.workers.dev. When you set aiEndpoint,
+     add EXACTLY that origin to connect-src in index/chat/... pages (never a wildcard).
      NEVER put the Gemini API key here. */
   aiEndpoint: ''
 });

@@ -1,3 +1,4 @@
+@font-face { font-family: "Vazirmatn"; src: url("../fonts/Vazirmatn.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
 /* Merteks admin — صفحهٔ مستقل، بدون وابستگی به استایل سایت عمومی */
 :root{
   --bg:#101827;--card:#141e2f;--card2:#222831;--text:#EAF4F4;--muted:#93a3b5;--line:#2a3648;

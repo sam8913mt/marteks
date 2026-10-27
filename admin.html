@@ -7,13 +7,12 @@
 <meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="dark">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://xpkckkosnnixshbarieo.supabase.co; connect-src 'self' https://xpkckkosnnixshbarieo.supabase.co; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://xpkckkosnnixshbarieo.supabase.co; connect-src 'self' https://xpkckkosnnixshbarieo.supabase.co; object-src 'none'; base-uri 'none'; form-action 'none'">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="preconnect" href="https://xpkckkosnnixshbarieo.supabase.co" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&amp;display=swap">
-<link rel="stylesheet" href="css/admin.css?v=17">
+<link rel="stylesheet" href="css/admin.css?v=18">
 <script src="js/config.js?v=16" defer></script>
-<script src="js/admin.js?v=17" defer></script>
+<script src="js/admin.js?v=18" defer></script>
 <script src="js/admin-users.js?v=17" defer></script>
 <script src="js/admin-ai.js?v=3" defer></script>
 </head>
@@ -55,10 +54,15 @@
     <button class="ad-tab" role="tab" type="button" data-tab="ai">🤖 هوش مصنوعی</button>
     <button class="ad-tab" role="tab" type="button" data-tab="users">🧑‍💻 کاربران</button>
     <button class="ad-tab" role="tab" type="button" data-tab="comments">💭 نظرات<span class="ad-count" id="badgeComments" hidden></span></button>
+      <button class="ad-tab" role="tab" type="button" data-tab="downloads">📥 دانلودها</button>
   </nav>
 
   <!-- پروژه‌ها -->
-  <section id="paneProjects" class="ad-pane" hidden>
+  <section id="paneDownloads" class="ad-pane" hidden aria-label="مدیریت دانلودها">
+  <iframe id="dlFrame" title="مدیریت دانلود اندروید و ویندوز" src="admin-app.html" loading="lazy" style="width:100%;min-height:82vh;border:0;border-radius:14px;background:#0b1220"></iframe>
+</section>
+<!-- پروژه‌ها -->
+<section id="paneProjects" class="ad-pane" hidden>
     <form class="ad-card" id="projForm">
       <div class="ad-card-head"><strong>افزودن پروژه</strong><span class="ad-muted">نام پروژه و ۱ تا ۳۰ عکس (عکس‌ها خودکار بهینه و فشرده می‌شوند)</span></div>
       <label class="ad-field"><span>نام پروژه</span><input id="projName" type="text" maxlength="100" required placeholder="مثلاً طراحی سایت فروشگاهی"></label>

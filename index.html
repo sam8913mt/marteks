@@ -13,7 +13,7 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://xpkckkosnnixshbarieo.supabase.co; connect-src 'self' https://xpkckkosnnixshbarieo.supabase.co https://*.workers.dev; object-src 'none'; base-uri 'self'; form-action 'self'">
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://xpkckkosnnixshbarieo.supabase.co; connect-src 'self' https://xpkckkosnnixshbarieo.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
 
   <link rel="canonical" href="https://sam8913mt.github.io/marteks/">
   <meta property="og:url" content="https://sam8913mt.github.io/marteks/">
@@ -42,17 +42,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://xpkckkosnnixshbarieo.supabase.co" crossorigin>
   <link rel="stylesheet" id="mxFonts"
-    href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&amp;family=Vazirmatn:wght@400;500;700;800&amp;display=swap" media="print">
+    href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&amp;display=swap" media="print">
   <noscript>
     <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&amp;family=Vazirmatn:wght@400;500;700;800&amp;display=swap">
+      href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&amp;display=swap">
   </noscript>
   <link rel="preload" as="image" href="assets/ms-logo-256.webp" type="image/webp">
-  <link rel="stylesheet" href="css/style.css?v=16">
+  <link rel="stylesheet" href="css/style.css?v=17">
   <link rel="stylesheet" href="css/more.css?v=16">
-  <link rel="stylesheet" href="css/ai.css?v=17">
+  <link rel="stylesheet" href="css/ai.css?v=19">
   <script src="js/config.js?v=16" defer></script>
   <script src="js/app.js?v=16" defer></script>
+  <script src="js/app-download.js?v=3" defer></script>
   <script src="js/extras.js?v=16" defer></script>
 
   <script type="application/ld+json">
@@ -117,24 +118,32 @@
       </div>
     </section>
 
-    <section class="mx-aib-wrap" aria-label="دستیار هوشمند مرتکس">
-      <div class="wrap">
-        <a class="mx-aib" href="chat.html">
-          <span class="mx-aib-icon" aria-hidden="true">م</span>
-          <span class="mx-aib-main">
-            <span class="mx-aib-tag">تازه · دستیار هوش مصنوعی مرتکس</span>
-            <span class="sr-only">دستیار هوشمند مرتکس را رایگان امتحان کنید.</span>
-            <span class="mx-aib-lines" aria-hidden="true">
-              <span>سؤالی دارید؟ <b>دستیار هوشمند مرتکس</b> در چند ثانیه جواب می‌دهد</span>
-              <span>کپشن، ترجمه، ایده یا کد؛ هرچه لازم دارید از او بخواهید</span>
-              <span>همین حالا <b>رایگان</b> امتحانش کنید</span>
-              <span>ساختهٔ تیم مرتکس؛ همین حالا با او گفتگو کنید</span>
-            </span>
-          </span>
-          <span class="mx-aib-cta">گفتگو با دستیار <i aria-hidden="true">←</i></span>
-        </a>
+    <section class="mx-dl-wrap" id="app-download" aria-labelledby="mxDlTitle">
+    <div class="wrap">
+      <div class="mx-dl">
+        <div class="mx-dl-top">
+          <img class="mx-dl-icon" src="assets/merteks-ai-192.png" width="96" height="96" alt="" loading="lazy" decoding="async">
+          <div class="mx-dl-main">
+            <span class="mx-dl-tag">Merteks AI · اندروید و ویندوز</span>
+            <h2 id="mxDlTitle">برنامهٔ مرتکس را دانلود کنید</h2>
+            <p>گفتگو با هوش مصنوعی، تحلیل بازار و درس‌یار در یک برنامه؛ ساختهٔ تیم مرتکس. استفاده از هوش مصنوعی فقط از طریق همین برنامه انجام می‌شود.</p>
+          </div>
+        </div>
+        <div class="mx-dl-list" id="mxDlList">
+          <article class="mx-dl-card" data-platform="android">
+            <div class="mx-dl-cardhead"><span class="mx-dl-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9h10v8a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 7 17V9zM8 7a4 4 0 0 1 8 0M9.5 4.5 8.5 3M14.5 4.5l1-1.5M4.5 10v5M19.5 10v5"/></svg></span>
+              <div class="mx-dl-info"><h3>اندروید</h3><p class="mx-dl-meta">فایل APK · حدود ۱۰٫۶ مگابایت</p></div></div>
+            <a class="mx-dl-btn" href="downloads/Merteks-AI.apk" download="Merteks-AI.apk">دانلود <i aria-hidden="true">↓</i></a>
+          </article>
+          <article class="mx-dl-card" data-platform="windows">
+            <div class="mx-dl-cardhead"><span class="mx-dl-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5 11 4.4v7H3zM12.5 4.2 21 3v8.4h-8.5zM3 12.6h8v7l-8-1.1zM12.5 12.6H21V21l-8.5-1.2z"/></svg></span>
+              <div class="mx-dl-info"><h3>ویندوز</h3><p class="mx-dl-meta">به‌زودی منتشر می‌شود</p></div></div>
+            <span class="mx-dl-btn is-soon" aria-disabled="true">به‌زودی</span>
+          </article>
+        </div>
       </div>
-    </section>
+    </div>
+  </section>
 
     <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>طراحی وب‌سایت</span><span>توسعه فرانت‌اند</span><span>بهبود ظاهر سایت</span><span>سازگاری با موبایل و سرعت</span><span>تولید محتوا و ویدیو</span><span>طراحی وب‌سایت</span><span>توسعه فرانت‌اند</span><span>بهبود ظاهر سایت</span><span>سازگاری با موبایل و سرعت</span><span>تولید محتوا و ویدیو</span></div></div>
 
@@ -254,7 +263,7 @@
                   </svg></span>
                 <span>اینستاگرام</span>
               </a>
-              <a class="social" href="https://t.me/merteks_m" target="_blank" rel="noopener noreferrer">
+              <a class="social" href="https://t.me/mmd2010s" target="_blank" rel="noopener noreferrer">
                 <span class="social-icon"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"
                     focusable="false">
                     <circle cx="12" cy="12" r="10" fill="#26A5E4" />
@@ -312,8 +321,8 @@
   <footer class="foot">
     <div class="wrap foot-in">
       <p>طراحی و توسعه توسط مرتکس. © ۲۰۲۶</p>
-      <nav class="mx-foot-links" aria-label="پیوندهای پایین صفحه"><a href="contact.html">ارتباط با ما</a><a href="privacy.html">حریم خصوصی</a><a
-          href="https://t.me/merteks_m" target="_blank" rel="noopener noreferrer">تلگرام</a><a
+      <nav class="mx-foot-links" aria-label="پیوندهای پایین صفحه"><a href="contact.html">ارتباط با ما</a><a href="index.html#app-download">دانلود برنامه</a><a href="privacy.html">حریم خصوصی</a><a
+          href="https://t.me/mmd2010s" target="_blank" rel="noopener noreferrer">تلگرام</a><a
           href="https://www.instagram.com/merteks.m/" target="_blank" rel="noopener noreferrer">اینستاگرام</a><a href="https://eitaa.com/mmd2010s" target="_blank" rel="noopener noreferrer">ایتا</a><a href="https://ble.ir/mmd2010s" target="_blank" rel="noopener noreferrer">بله</a><a href="en/index.html" hreflang="en" lang="en">English</a><a href="login.html">ورود / ثبت‌نام</a></nav>
       <small>اطلاعاتی که در فرم «شروع پروژه» می‌نویسید فقط برای پاسخ به شما نگه‌داری می‌شود. پرسش‌ها و پاسخ‌های گفتگو
         با دستیار برای بهبود پاسخ‌گویی ذخیره می‌شود؛ شمارهٔ تماس یا اطلاعات شخصی در آن ننویسید.</small>

@@ -37,7 +37,7 @@
   height: 96px;
   margin: 0 auto 18px;
   border-radius: 30px;
-  background: #101827 url("../assets/ms-logo-256.webp") center / cover no-repeat;
+  background: #101827 url("../assets/merteks-ai-192.png") center / cover no-repeat;
   box-shadow: 0 0 0 1px rgba(140, 196, 240, .25), 0 20px 50px rgba(0, 0, 0, .5);
   animation: obFloat 7s ease-in-out infinite;
 }
@@ -119,3 +119,45 @@
 @media (prefers-reduced-motion: reduce) {
   [data-auth-page] .auth-head::before, [data-auth-page] .auth-form:not([hidden]) { animation: none; }
 }
+
+
+/* ---------- same sign-in screen as the app: no site bar, tabs, icons inside the fields ---------- */
+[data-auth-page] .nav, [data-auth-page] .mx-hello, [data-auth-page] .skip { display: none !important; }
+[data-auth-page] .auth-page { min-height: 100dvh; padding-top: max(20px, env(safe-area-inset-top)); }
+[data-auth-page] .auth-back {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin-bottom: 4px;
+  color: var(--ob-muted); font-size: 13.5px; font-weight: 700; text-decoration: none;
+}
+[data-auth-page] .auth-back:hover { color: var(--ob-accent-hi); }
+
+/* segmented tabs (links, so auth.js is not involved) */
+[data-auth-page] .auth-tabs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 0 0 12px; padding: 4px;
+  border: 1px solid var(--ob-line2); border-radius: 18px; background: rgba(20, 30, 47, .88);
+}
+[data-auth-page] .auth-tabs a {
+  display: grid; place-items: center; min-height: 42px; border-radius: 14px;
+  color: var(--ob-text2); font-size: 14.5px; font-weight: 800; text-decoration: none;
+  transition: background .25s var(--ob-ease), color .25s var(--ob-ease);
+}
+[data-auth-page] .auth-tabs a[aria-current="page"] { background: var(--ob-metal); color: var(--ob-on); }
+[data-auth-page] .auth-tabs a:not([aria-current]):hover { color: var(--ob-accent-hi); }
+[data-auth-page] .auth-tabs a:focus-visible { outline: 2px solid var(--ob-accent-hi); outline-offset: 2px; }
+
+/* icons inside the fields, on the start side like in the app */
+[data-auth-page] .field input[type="email"],
+[data-auth-page] .field input[type="tel"],
+[data-auth-page] .field input[autocomplete="given-name"],
+[data-auth-page] .field input[autocomplete="family-name"],
+[data-auth-page] .field .pw input {
+  background-repeat: no-repeat; background-position: right 16px center; background-size: 20px 20px; padding-right: 46px;
+}
+[data-auth-page] .field input[type="email"] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238fa1b6' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='3'/%3E%3Cpath d='m4 7 8 6 8-6'/%3E%3C/svg%3E"); }
+[data-auth-page] .field input[type="tel"] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238fa1b6' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='7' y='2.5' width='10' height='19' rx='2.5'/%3E%3Cpath d='M11 18.5h2'/%3E%3C/svg%3E"); }
+[data-auth-page] .field input[autocomplete="given-name"],
+[data-auth-page] .field input[autocomplete="family-name"] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238fa1b6' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 21c0-4 3.6-7 8-7s8 3 8 7'/%3E%3C/svg%3E"); }
+[data-auth-page] .field .pw input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238fa1b6' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='10.5' width='14' height='10' rx='2.5'/%3E%3Cpath d='M8 10.5V8a4 4 0 0 1 8 0v2.5'/%3E%3C/svg%3E"); }
+@media (prefers-reduced-motion: reduce) { [data-auth-page] .auth-tabs a { transition: none; } }
+
+/* the logo floats up a little; the card must not clip it (auth.css sets overflow: hidden) */
+[data-auth-page] .auth-card, [data-auth-page] .auth-card.wide { overflow: visible; }

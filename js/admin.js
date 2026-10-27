@@ -251,7 +251,7 @@ try { history.replaceState(null, '', '#' + name); } catch (e) {}
 }
 function loadUsersTab() { state.users = null; if (W.MX_ADMIN_USERS) W.MX_ADMIN_USERS.load(true); }
 function loadAiTab() { state.ai = null; if (W.MX_ADMIN_AI) W.MX_ADMIN_AI.load(true); }
-var LOAD = { orders: loadOrders, chats: loadChats, comments: loadComments, projects: loadProjects, team: loadTeam, testimonials: loadTesti, users: loadUsersTab, ai: loadAiTab };
+var LOAD = { downloads: function () {}, orders: loadOrders, chats: loadChats, comments: loadComments, projects: loadProjects, team: loadTeam, testimonials: loadTesti, users: loadUsersTab, ai: loadAiTab };
 var STATE_KEY = { chats: 'chatRows', comments: 'comments', projects: 'projects', team: 'team', testimonials: 'testimonials', users: 'users', ai: 'ai' };
 qa('button.ad-tab').forEach(function (t) { t.addEventListener('click', function () { switchTab(t.getAttribute('data-tab')); }); });
 $('adRefresh').addEventListener('click', function () { LOAD[state.tab](); });
@@ -376,10 +376,24 @@ else { b.disabled = false; toast('حذف انجام نشد: ' + errText(res)); }
 });
 $('orderClear').addEventListener('click', function () {
 if (!state.orders.length) { toast('سفارشی برای حذف وجود ندارد'); return; }
-if (!W.confirm('همهٔ سفارش‌ها حذف شوند؟ این کار قابل برگشت نیست.')) return;
-sb('DELETE', '/rest/v1/orders?id=not.is.null', { prefer: 'return=minimal' }).then(function (res) {
-if (res.ok) { state.orders = []; renderOrders(); toast('همهٔ سفارش‌ها حذف شدند'); } else toast('حذف انجام نشد: ' + errText(res));
-}, function () { toast('اتصال به سرور برقرار نشد'); });
+var cnt = state.orders.length;
+var typed = W.prompt('حذف ' + cnt + ' سفارش قابل برگشت نیست.' + String.fromCharCode(10) + 'برای تأیید، همین عدد (' + cnt + ') را به انگلیسی وارد کنید:');
+if (typed === null || String(typed).trim() !== String(cnt)) { toast('حذف لغو شد'); return; }
+/* فقط همان سفارش‌هایی که در لیست دیده شده‌اند، دسته‌به‌دسته حذف می‌شوند (نه فیلتر «همه»)؛ سفارش تازه‌رسیده دست نمی‌خورد */
+var ids = state.orders.map(function (o) { return o.id; }), left = ids.slice(), failed = '';
+function step() {
+if (!left.length || failed) {
+loadOrders && loadOrders();
+toast(failed ? 'حذف کامل نشد: ' + failed : 'سفارش‌های نمایش‌داده‌شده حذف شدند');
+return;
+}
+var chunk = left.splice(0, 50);
+sb('DELETE', '/rest/v1/orders?id=in.(' + chunk.map(encodeURIComponent).join(',') + ')', { prefer: 'return=minimal' }).then(function (res) {
+if (!res.ok) failed = errText(res);
+step();
+}, function () { failed = 'اتصال به سرور برقرار نشد'; step(); });
+}
+step();
 });
 function loadChats() {
 loadList('chatList', '/rest/v1/chats?select=chat_id,name,phone,device,question,answer,at,type&order=at.asc&limit=5000', function (res) { return 'بارگذاری گفتگوها انجام نشد: ' + esc(errText(res)); }, function (rows) {

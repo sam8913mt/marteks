@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>مدیریت دانلودها | مرتکس</title>
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0b1220">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="stylesheet" href="css/admin-app.css?v=3">
+  <script src="js/admin-app.js?v=8" defer></script>
+</head>
+
+<body>
+  <main class="aa">
+    <header class="aa-head">
+      <a class="aa-back" href="index.html#app-download">← بازگشت به سایت</a>
+      <h1>مدیریت دانلودها</h1>
+      <p>لینک دانلود هر پلتفرم را اینجا عوض کنید، پلتفرم تازه اضافه کنید یا فایل را مستقیم در مخزن GitHub سایت بارگذاری کنید. بعد از «ذخیره»، بخش دانلود سایت خودکار به‌روز می‌شود.</p>
+    </header>
+
+    <section class="aa-card" aria-labelledby="aaConn">
+      <h2 id="aaConn">۱. اتصال به GitHub</h2>
+      <div class="aa-grid">
+        <label>نام کاربری GitHub<input id="owner" type="text" dir="ltr" autocomplete="off" spellcheck="false"></label>
+        <label>نام مخزن<input id="repo" type="text" dir="ltr" autocomplete="off" spellcheck="false"></label>
+      </div>
+      <label>توکن دسترسی (Fine-grained)
+        <input id="token" type="password" dir="ltr" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+      </label>
+      <button id="testConn" class="aa-btn aa-btn-ghost" type="button">بررسی اتصال و دسترسی</button>
+      <details class="aa-help">
+        <summary>توکن را از کجا بسازم؟</summary>
+        <ol>
+          <li>در GitHub بروید به Settings ← Developer settings ← Personal access tokens ← <bdi dir="ltr">Fine-grained tokens</bdi>.</li>
+          <li>روی Generate new token بزنید و برای انقضا یک زمان کوتاه (مثلاً ۳۰ روز) بگذارید.</li>
+          <li>در Repository access فقط <b>همین مخزن</b> را انتخاب کنید.</li>
+          <li>در Permissions ← Repository permissions، گزینهٔ <bdi dir="ltr">Contents</bdi> را روی <bdi dir="ltr">Read and write</bdi> بگذارید.</li>
+          <li>توکن را کپی کنید و همین‌جا بچسبانید.</li>
+        </ol>
+        <p>توکن فقط در حافظهٔ همین صفحه می‌ماند، هیچ‌جا ذخیره نمی‌شود و فقط به <bdi dir="ltr">api.github.com</bdi> فرستاده می‌شود. توکن را برای کسی نفرستید.</p>
+      </details>
+    </section>
+
+    <section class="aa-card" aria-labelledby="aaList">
+      <h2 id="aaList">۲. فهرست دانلودها</h2>
+      <p class="aa-note">هر بخش یک کارت در سایت است. فایل APK یا EXE (و MSI، ZIP و …) را مستقیم از همین‌جا بارگذاری کنید؛ حداکثر ۷۰ مگابایت برای هر فایل. اگر فایل بزرگ‌تر است، آدرس مستقیم (https) بدهید. آدرس خالی = کارت «به‌زودی».</p>
+      <div id="items" class="aa-items"><p class="aa-muted">در حال خواندن فهرست فعلی…</p></div>
+      <div class="aa-actions">
+        <button id="addItem" class="aa-btn aa-btn-ghost" type="button">+ افزودن بخش جدید</button>
+        <button id="save" class="aa-btn" type="button">ذخیرهٔ همهٔ تغییرات</button>
+      </div>
+    </section>
+
+    <section class="aa-card" aria-labelledby="aaLog">
+      <h2 id="aaLog">وضعیت</h2>
+      <ul id="log" class="aa-log" role="status" aria-live="polite"><li class="aa-muted">هنوز کاری انجام نشده است.</li></ul>
+    </section>
+  </main>
+</body>
+
+</html>

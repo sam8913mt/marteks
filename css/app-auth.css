@@ -1,0 +1,203 @@
+@font-face { font-family: "Vazirmatn"; src: url("../fonts/Vazirmatn.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+:root{
+  --bg0: #0b1220;
+  --bg1: #101827;
+  --card: rgba(20, 30, 47, .72);
+  --card-solid: #141e2f;
+  --card2: #1a2638;
+  --line: #24324a;
+  --line2: #34465f;
+  --text: #eaf4f4;
+  --text2: #c3d2d8;
+  --muted: #8fa1b6;
+  --accent: #5aa9e6;
+  --accent-hi: #8cc4f0;
+  --accent-lo: #3a78ab;
+  --on-accent: #0b1220;
+  --metal: linear-gradient(135deg, #a8d4f5 0%, #5aa9e6 52%, #7cbcee 100%);
+  --ok: #4fd18b;
+  --warn: #e3b04f;
+  --bad: #ef6b5f;
+  --font: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --spring: cubic-bezier(.34, 1.56, .64, 1);
+  color-scheme: dark;
+}
+svg.i{ width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.acct-av svg.i{ width: 20px; height: 20px; }
+.type-pill svg.i{ width: 17px; height: 17px; color: var(--accent-hi); }
+.gc-go svg.i{ width: 18px; height: 18px; }
+.g-ai .gc-ic svg.i{ width: 28px; height: 28px; }
+.gc-cta svg.i{ width: 20px; height: 20px; stroke-width: 2.4; transition: transform .2s var(--ease); }
+.g-ai:active .gc-cta svg.i{ transform: translateX(-4px); }
+.btn.ghost-bad{ border-color: rgba(239, 107, 95, .4); background: rgba(239, 107, 95, .08); color: #f6a39b; }
+@keyframes mxSpin{ to { transform: rotate(1turn); } }
+.card svg.i{ width: 22px; height: 22px; color: var(--accent-hi); margin-bottom: 4px; }
+.file-pill svg.i{ width: 18px; height: 18px; color: var(--accent-hi); }
+.bot-tools svg.i{ width: 18px; height: 18px; }
+.send svg.i{ stroke-width: 2.4; }
+.btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 8px 18px;
+  border: 1px solid var(--line2);
+  border-radius: 14px;
+  background: var(--card2);
+  color: var(--text);
+  font-size: 14.5px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform .15s var(--ease), filter .2s;
+}
+.btn:active{ transform: scale(.96); }
+.btn.primary{ border: 0; background: var(--metal); color: var(--on-accent); }
+.btn.block{ width: 100%; }
+.dr-links svg.i{ width: 20px; height: 20px; color: var(--accent-hi); }
+.onboard{ position: fixed; inset: 0; z-index: 40; overflow-y: auto; }
+body.onboarding .chat-app, body.onboarding .mx-bg.soft{ display: none; }
+body.onboarding .onboard::before{ content: ""; position: fixed; inset: 0; background: radial-gradient(120% 70% at 50% -10%, #1b3a60 0%, #101827 50%, #0b1220 100%); }
+.ob-in{ position: relative; z-index: 1; min-height: 100%; width: min(440px, 100%); margin-inline: auto; display: flex; flex-direction: column; justify-content: center; padding: max(28px, env(safe-area-inset-top)) 22px max(24px, env(safe-area-inset-bottom)); }
+.ob-logo{ width: 96px; height: 96px; margin: 0 auto 18px; border-radius: 30px; animation: mxFloat 7s ease-in-out infinite; box-shadow: 0 0 0 1px rgba(140, 196, 240, .25), 0 20px 50px rgba(0, 0, 0, .5); }
+.ob-in h1{ margin: 0; text-align: center; font-size: 1.6rem; font-weight: 900; line-height: 1.5; }
+.ob-in h1 span{ background: var(--metal); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.ob-lead{ margin: 10px 0 22px; text-align: center; color: var(--text2); font-size: 14.5px; line-height: 1.95; }
+.ob-form{ display: grid; gap: 8px; padding: 20px; border: 1px solid var(--line2); border-radius: 26px; background: rgba(20, 30, 47, .88); }
+.ob-form label{ font-size: 13.5px; font-weight: 700; color: var(--text2); }
+.field{ position: relative; }
+.field svg.i{ position: absolute; top: 50%; right: 14px; width: 20px; height: 20px; transform: translateY(-50%); color: var(--muted); }
+.field input{
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 46px 10px 14px;
+  border: 1px solid var(--line2);
+  border-radius: 16px;
+  background: rgba(11, 18, 32, .7);
+  outline: none;
+  font-size: 16px;
+}
+.field input[dir="ltr"]{ text-align: left; }
+.field input:focus{ border-color: var(--accent); box-shadow: 0 0 0 3px rgba(90, 169, 230, .2); }
+.field input[aria-invalid="true"]{ border-color: var(--bad); }
+.ob-err{ min-height: 0; margin: 0; color: #f6a39b; font-size: 13px; }
+.ob-err:empty{ display: none; }
+.ob-hint{ margin: -2px 2px 0; color: var(--muted); font-size: 12px; }
+.ob-tabs{ display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 12px; padding: 4px; border: 1px solid var(--line2); border-radius: 18px; background: rgba(20, 30, 47, .88); }
+.ob-tabs button{ min-height: 42px; border: 0; border-radius: 14px; background: transparent; color: var(--text2); font-size: 14.5px; font-weight: 800; transition: background .25s var(--ease), color .25s var(--ease); }
+.ob-tabs button[aria-selected="true"]{ background: var(--metal); color: var(--on-accent); }
+.ob-form:not([hidden]){ animation: obIn .35s var(--ease); }
+@keyframes obIn{ from { opacity: 0; transform: translateY(8px); } }
+.field .ob-eye{ position: absolute; top: 50%; left: 8px; transform: translateY(-50%); min-height: 36px; padding: 0 10px; border: 0; border-radius: 10px; background: rgba(140, 196, 240, .1); color: var(--accent-hi); font-size: 12.5px; font-weight: 700; }
+.field input[type="password"], .field input:has(+ .ob-eye){ padding-left: 74px; }
+.ob-form .btn{ margin-top: 8px; }
+.ob-perks{ display: grid; gap: 8px; margin: 18px 4px 0; padding: 0; list-style: none; }
+.ob-perks li{ display: flex; align-items: center; gap: 10px; color: var(--text2); font-size: 13.5px; }
+.ob-perks svg.i{ width: 18px; height: 18px; color: var(--ok); }
+.ob-note{ margin: 14px 0 0; text-align: center; color: var(--muted); font-size: 12px; line-height: 1.8; }
+.ms-check svg.i{ width: 16px; height: 16px; stroke-width: 2.6; }
+.pro-tag svg.i{ width: 13px; height: 13px; stroke-width: 2.2; }
+.ms-sep em svg.i{ width: 14px; height: 14px; }
+.mini.primary{ border: 0; background: var(--metal); color: var(--on-accent); }
+.mini svg.i{ width: 16px; height: 16px; }
+.sub-btn svg.i{ width: 20px; height: 20px; }
+.model-tag svg.i{ width: 13px; height: 13px; }
+.dr-acct-actions .btn{ min-height: 40px; padding: 6px 8px; font-size: 12.5px; }
+.dr-pro-ic svg.i{ width: 18px; height: 18px; }
+.ob-accounts{ margin-bottom: 14px; }
+.ob-label{ margin: 0 4px 8px; color: var(--text2); font-size: 13px; font-weight: 800; }
+.ob-acc-list{ display: grid; gap: 8px; }
+.ob-acc{ display: flex; align-items: center; gap: 4px; padding: 4px; border: 1px solid var(--line2); border-radius: 18px; background: rgba(20, 30, 47, .88); }
+.ob-acc-go{ flex: 1; display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 6px 8px; border: 0; background: transparent; text-align: start; }
+.ob-acc-go .av{ width: 42px; height: 42px; display: grid; place-items: center; flex: none; border-radius: 50%; background: var(--metal); color: var(--on-accent); font-weight: 900; font-size: 17px; }
+.ob-acc-go > span:nth-child(2){ flex: 1; display: grid; }
+.ob-acc-go b{ font-size: 15px; }
+.ob-acc-go small{ color: var(--muted); font-size: 12px; text-align: right; }
+.ob-acc-go svg.i{ width: 18px; height: 18px; color: var(--accent-hi); }
+.ob-acc .icon-btn{ color: var(--muted); }
+.ob-or{ display: flex; align-items: center; gap: 10px; margin: 16px 4px 4px; color: var(--muted); font-size: 12.5px; }
+.ob-or::before, .ob-or::after{ content: ""; flex: 1; height: 1px; background: var(--line2); }
+.dr-pro > svg.i{ width: 18px; height: 18px; color: #f2cd85; }
+.sub-crown svg.i{ width: 32px; height: 32px; stroke-width: 2; }
+.sub-feats svg.i{ width: 18px; height: 18px; flex: none; color: #f2cd85; }
+.lock-badge svg.i{ width: 18px; height: 18px; stroke-width: 2.3; }
+html, body{ height: 100%; margin: 0; }
+html, body{ max-width: 100%; overflow-x: hidden; }
+body.gate-page{ touch-action: pan-y; }
+body{
+  font-family: var(--font);
+  background: var(--bg0);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+.mx-bg{ position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; background: radial-gradient(120% 80% at 50% -10%, #17304f 0%, #101827 45%, #0b1220 100%); }
+.mx-bg::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(140, 196, 240, .14) 1.2px, transparent 1.4px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(90% 70% at 50% 30%, #000 20%, transparent 80%);
+  mask-image: radial-gradient(90% 70% at 50% 30%, #000 20%, transparent 80%);
+}
+.mx-orb{ position: absolute; border-radius: 50%; filter: blur(60px); opacity: .55; animation: mxDrift 18s ease-in-out infinite alternate; }
+.mx-orb.o1{ width: 340px; height: 340px; top: -90px; right: -80px; background: #2c6fb0; }
+.mx-orb.o2{ width: 280px; height: 280px; bottom: 8%; left: -110px; background: #1d4f86; animation-duration: 22s; }
+.mx-orb.o3{ width: 200px; height: 200px; top: 42%; right: -60px; background: #3f8fd1; opacity: .3; animation-duration: 26s; }
+@keyframes mxDrift{ to { transform: translate3d(-40px, 50px, 0) scale(1.12); } }
+.mx-bg.aurora::after{ 
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background: conic-gradient(from 200deg at 50% 40%, transparent 0deg, rgba(90, 169, 230, .16) 60deg, transparent 120deg, rgba(64, 120, 200, .12) 220deg, transparent 300deg);
+  filter: blur(40px);
+  animation: mxSpin 38s linear infinite;
+}
+.mx-bg.soft .mx-orb{ opacity: .28; }
+body.onboarding .chat-app, body.onboarding .mx-bg.soft{ display: none; }
+body.onboarding .onboard::before{ content: ""; position: fixed; inset: 0; background: radial-gradient(120% 70% at 50% -10%, #1b3a60 0%, #101827 50%, #0b1220 100%); }
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .thread { scroll-behavior: auto; }
+}
+body.tool-mode .tb-model .chev{ display: none; }
+body.tool-mode .tb-model{ cursor: default; }
+/* website wrapper around the app's sign-in card */
+.ob-wrap { position: relative; z-index: 1; min-height: 100dvh; display: grid; align-content: start; padding: calc(16px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom)); }
+.ob-back { text-align: center; margin: 14px 0 0; }
+.ob-back a { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font-size: 13.5px; font-weight: 700; text-decoration: none; }
+.ob-back a:hover { color: var(--accent-hi); }
+.ob-acc { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; padding: 8px 12px; border: 1px solid var(--line2); border-radius: 14px; background: var(--card2); color: var(--text); font: inherit; text-align: start; cursor: pointer; }
+.ob-acc:hover { border-color: var(--accent); }
+.ob-acc-av { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--metal); color: var(--on-accent); font-weight: 800; }
+.ob-acc-name { display: block; font-weight: 700; font-size: 14.5px; }
+.ob-acc-phone { display: block; color: var(--muted); font-size: 12.5px; direction: ltr; text-align: start; }
+
+/* site pages: keep the app's card centred and inside the screen (the app's own wrapper
+   is a fixed full-screen layer, which does not exist on the website) */
+.ob-wrap .onboard { position: relative; inset: auto; z-index: 1; overflow: visible; width: 100%; }
+.ob-wrap .onboard .ob-in { width: min(440px, 100%); margin: 0 auto !important; padding-inline: 22px; box-sizing: border-box; }
+.ob-wrap .onboard .ob-tabs, .ob-wrap .onboard .ob-form, .ob-wrap .onboard .ob-perks, .ob-wrap .onboard .ob-note { margin-inline: 0 !important; width: 100%; box-sizing: border-box; }
+html, body { overflow-x: hidden; }
+
+/* the app CSS sets display on the forms; the hidden attribute must still win */
+[hidden] { display: none !important; }
+
+/* base form controls, exactly as in the app */
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+.field input { width: 100%; min-height: 52px; padding: 10px 46px 10px 14px; border: 1px solid var(--line2); border-radius: 16px; background: rgba(11, 18, 32, .7); outline: none; font-size: 16px; }
+.field input[dir="ltr"] { text-align: left; }
+.field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(90, 169, 230, .2); }
+.field input[aria-invalid="true"] { border-color: var(--bad); }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* saved accounts: a row with a "forget" button, as in the app */
+.ob-acc-row { display: flex; align-items: center; gap: 8px; }
+.ob-acc-row .ob-acc { flex: 1; }
+.ob-acc-x { flex: none; width: 44px; height: 44px; border: 1px solid var(--line2); border-radius: 12px; background: transparent; color: var(--muted); font-size: 20px; line-height: 1; }
+.ob-acc-x:hover { color: var(--text); border-color: var(--accent); }

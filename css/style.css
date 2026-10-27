@@ -1,3 +1,4 @@
+@font-face { font-family: "Vazirmatn"; src: url("../fonts/Vazirmatn.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
 /* ==========================================================================
    Merteks — site stylesheet
    One file, no override layers. Order: tokens, base, components, sections,

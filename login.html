@@ -1,154 +1,87 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>ورود | مرتکس</title>
-  <meta name="description"
-    content="آشنایی با تیم دو نفرهٔ مرتکس، شیوهٔ کار و ابزارهایی که برای ساخت وب‌سایت استفاده می‌کنیم.">
-  <meta name="robots" content="noindex,nofollow">
-  <meta name="theme-color" content="#101827">
+  <title>ورود | Merteks AI</title>
+  <meta name="description" content="ورود و ثبت‌نام با شماره موبایل و رمز عبور.">
+  <meta name="robots" content="noindex,follow">
+  <meta name="theme-color" content="#0b1220">
   <meta name="color-scheme" content="dark">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
-
-  <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://xpkckkosnnixshbarieo.supabase.co; connect-src 'self' https://xpkckkosnnixshbarieo.supabase.co https://*.workers.dev; object-src 'none'; base-uri 'self'; form-action 'self'">
-
-
-  <link rel="icon" href="favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="manifest" href="site.webmanifest">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://xpkckkosnnixshbarieo.supabase.co" crossorigin>
-  <link rel="stylesheet" id="mxFonts"
-    href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&amp;family=Vazirmatn:wght@400;500;700;800&amp;display=swap" media="print">
-  <noscript>
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&amp;family=Vazirmatn:wght@400;500;700;800&amp;display=swap">
-  </noscript>
-  <link rel="preload" as="image" href="assets/ms-logo-256.webp" type="image/webp">
-  <link rel="stylesheet" href="css/style.css?v=16">
-  <link rel="stylesheet" href="css/more.css?v=16">
-  <link rel="stylesheet" href="css/auth.css?v=16">
-  <link rel="stylesheet" href="css/auth-ai.css?v=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="icon" href="assets/merteks-ai-192.png">
+  <link rel="stylesheet" href="css/app-auth.css?v=1">
   <script src="js/config.js?v=16" defer></script>
-  <script src="js/app.js?v=16" defer></script>
-  <script src="js/extras.js?v=16" defer></script>
-  <script src="js/auth.js?v=18" defer></script>
-
+  <script src="js/auth-server.js?v=1" defer></script>
 </head>
-
-<body data-auth-page="login">
-  <a class="skip" href="#mxDeck">پرش به محتوای اصلی</a>
-
-  <div id="mxScrollBar" aria-hidden="true"></div>
-
-  <nav class="nav" aria-label="ناوبری اصلی">
-    <div class="nav-in">
-      <a class="brand" href="index.html">
-        <img class="brand-logo" src="assets/ms-logo-64.webp" width="40" height="40" decoding="async" alt="">
-        <span>مرتکس</span>
-      </a>
-      <div class="links" id="links">
-        <a href="index.html">خانه</a>
-        <a href="about.html">درباره ما</a>
-        <a href="projects.html">نمونه‌کارها</a>
-        <a href="services.html">خدمات</a>
-        <a href="faq.html">سؤالات متداول</a>
-        <a href="chat.html">دستیار هوشمند</a>
-        <a href="contact.html">ارتباط با ما</a>
-        <a class="links-auth" href="login.html">ورود / ثبت‌نام</a>
+<body data-page="login">
+<div class="mx-bg aurora" aria-hidden="true"><span class="mx-orb o1"></span><span class="mx-orb o2"></span><span class="mx-orb o3"></span></div>
+<main class="ob-wrap">
+<section class="onboard" id="onboard" aria-labelledby="obTitle">
+    <div class="ob-in">
+      <img class="ob-logo" src="assets/merteks-ai-192.png" width="96" height="96" alt="">
+      <h1 id="obTitle">به <span dir="ltr">Merteks AI</span> خوش آمدید</h1>
+      <p class="ob-lead">دستیار هوش مصنوعی ساختهٔ تیم مرتکس. برای شروع وارد حساب خود شوید یا حساب تازه بسازید.</p>
+      <div class="ob-accounts" id="obAccounts" hidden>
+        <p class="ob-label">حساب‌های این گوشی</p>
+        <div class="ob-acc-list" id="obAccList"></div>
+        <p class="ob-or"><span>یا ورود با شماره و رمز عبور</span></p>
       </div>
-      <div class="nav-tools">
-        <a class="lang-switch" href="en/index.html" hreflang="en" lang="en" title="English version" aria-label="English version">EN</a>
-        <a class="nav-auth" id="navAuth" href="login.html" title="ورود / ثبت‌نام" aria-label="ورود یا ثبت‌نام"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></a>
-        <button class="btn btn-primary btn-sm order-nav-btn" id="merteksOrderOpen" type="button">شروع پروژه</button>
-        <button class="menu-btn" id="menuBtn" type="button" aria-label="باز کردن منو" aria-expanded="false"
-          aria-controls="links"><span class="menu-icon" aria-hidden="true"></span></button>
+      <div class="ob-tabs" role="tablist">
+        <button type="button" role="tab" id="obTabIn" data-ob="in" aria-controls="obLogin" aria-selected="true">ورود</button>
+        <button type="button" role="tab" id="obTabUp" data-ob="up" aria-controls="obForm" aria-selected="false">ثبت‌نام</button>
       </div>
-    </div>
-  </nav>
-
-  <main id="mxDeck" tabindex="-1">
-    <section class="auth-page" aria-label="ورود">
-      <div class="wrap">
-        <div class="auth-card">
-        <header class="auth-head"><h1 id="authTitle">ورود به حساب</h1><p id="authLead">با ایمیل و رمز عبور وارد حساب مرتکس خود شوید.</p></header>
-        <div class="auth-alert" id="authAlert" role="alert" hidden></div>
-
-        <form class="auth-form" id="vPassword" data-view="password" data-title="ورود به حساب" data-lead="با ایمیل و رمز عبور وارد حساب مرتکس خود شوید." novalidate>
-          <div class="field"><label for="lpEmail">ایمیل</label><input id="lpEmail" name="lpEmail" type="email" autocomplete="username" class="ltr" inputmode="email" placeholder="example@email.com"><p class="field-err" id="lpEmail-err" hidden></p></div>
-          <div class="field"><label for="lpPass">رمز عبور</label><div class="pw"><input id="lpPass" name="lpPass" type="password" autocomplete="current-password" class="ltr" placeholder="" maxlength="72"><button class="pw-toggle" type="button" aria-pressed="false" aria-label="نمایش یا مخفی کردن رمز عبور">نمایش</button></div><p class="field-err" id="lpPass-err" hidden></p></div>
-          <div class="auth-row">
-            <label class="check"><input type="checkbox" id="lpRemember"> مرا به خاطر بسپار</label>
-            <a class="auth-link" href="#forgot" data-go="forgot">رمز عبور خود را فراموش کرده‌اید؟</a>
-          </div>
-          <button class="btn btn-primary auth-submit" id="lpSubmit" type="submit">ورود به حساب کاربری</button>
-          <div class="auth-links">
-            <a class="auth-link" href="#otp" data-go="otp">ورود با کد یک‌بارمصرف ایمیل</a>
-            <span>در مرتکس حساب کاربری ندارید؟ <a class="auth-link" href="signup.html">همین حالا ثبت‌نام کنید.</a></span>
-          </div>
-        </form>
-
-        <form class="auth-form" id="vOtp" data-view="otp" data-title="ورود با کد یک‌بارمصرف" data-lead="ایمیل خود را وارد کنید تا کد ورود برایتان ارسال شود؛ نیازی به رمز عبور نیست." novalidate hidden>
-          <div class="field"><label for="loEmail">ایمیل</label><input id="loEmail" name="loEmail" type="email" autocomplete="email" class="ltr" inputmode="email" placeholder="example@email.com"><p class="field-err" id="loEmail-err" hidden></p></div>
-          <label class="check"><input type="checkbox" id="loRemember"> مرا به خاطر بسپار</label>
-          <button class="btn btn-primary auth-submit" id="loSubmit" type="submit">ارسال کد ورود</button>
-          <div class="auth-links">
-            <a class="auth-link" href="#" data-go="password">ورود با رمز عبور</a>
-            <span>حساب کاربری ندارید؟ <a class="auth-link" href="signup.html">ثبت‌نام کنید.</a></span>
-          </div>
-        </form>
-
-        <form class="auth-form" id="vForgot" data-view="forgot" data-title="بازیابی رمز عبور" data-lead="ایمیل حساب خود را وارد کنید تا کد بازیابی رمز عبور برایتان ارسال شود." novalidate hidden>
-          <div class="field"><label for="lfEmail">ایمیل</label><input id="lfEmail" name="lfEmail" type="email" autocomplete="email" class="ltr" inputmode="email" placeholder="example@email.com"><p class="field-err" id="lfEmail-err" hidden></p></div>
-          <button class="btn btn-primary auth-submit" id="lfSubmit" type="submit">ارسال کد بازیابی</button>
-          <div class="auth-links"><a class="auth-link" href="#" data-go="password">بازگشت به ورود</a></div>
-        </form>
-
-        <form class="auth-form" id="vCode" data-view="code" data-title="تأیید ایمیل" data-lead="" novalidate hidden>
-          <p class="field-hint" style="margin:0">ایمیل مقصد: <span class="auth-email-echo" id="cdEmail"></span></p>
-          <div class="field"><label for="cdCode">کد تأیید</label>
-            <input id="cdCode" name="code" class="code-input" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="••••••" dir="ltr">
-            <p class="field-err" id="cdCode-err" hidden></p></div>
-          <div class="recovery-only" hidden><div class="field"><label for="cdPass">رمز عبور جدید</label><div class="pw"><input id="cdPass" name="cdPass" type="password" autocomplete="new-password" class="ltr" placeholder="" maxlength="72"><button class="pw-toggle" type="button" aria-pressed="false" aria-label="نمایش یا مخفی کردن رمز عبور">نمایش</button></div><p class="field-err" id="cdPass-err" hidden></p><p class="field-hint">دست‌کم ۸ نویسه، شامل حرف و عدد.</p></div></div>
-          <div class="recovery-only" hidden><div class="field"><label for="cdPass2">تکرار رمز عبور جدید</label><div class="pw"><input id="cdPass2" name="cdPass2" type="password" autocomplete="new-password" class="ltr" placeholder="" maxlength="72"><button class="pw-toggle" type="button" aria-pressed="false" aria-label="نمایش یا مخفی کردن رمز عبور">نمایش</button></div><p class="field-err" id="cdPass2-err" hidden></p></div></div>
-          <button class="btn btn-primary auth-submit" id="cdSubmit" type="submit">تأیید</button>
-          <div class="auth-row">
-            <button class="auth-link" id="cdResend" type="button" disabled>ارسال مجدد کد</button>
-            <button class="auth-link" id="cdBack" type="button">بازگشت</button>
-          </div>
-          <p class="field-hint">کد را در پوشهٔ هرزنامه (Spam) هم بررسی کنید. کد فقط برای مدت کوتاهی معتبر است.</p>
-        </form>
+      <form class="ob-form" id="obLogin" novalidate>
+        <label for="obLPhone">شمارهٔ موبایل ثبت‌شده</label>
+        <div class="field">
+          <svg class="i" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18h2"/></svg>
+          <input id="obLPhone" name="phone" type="tel" inputmode="numeric" autocomplete="username" dir="ltr" maxlength="14" placeholder="09xxxxxxxxx" required aria-describedby="obLErr">
         </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="foot">
-    <div class="wrap foot-in">
-      <p>طراحی و توسعه توسط مرتکس. © ۲۰۲۶</p>
-      <nav class="mx-foot-links" aria-label="پیوندهای پایین صفحه"><a href="contact.html">ارتباط با ما</a><a href="privacy.html">حریم خصوصی</a><a
-          href="https://t.me/mmd2010s" target="_blank" rel="noopener noreferrer">تلگرام</a><a
-          href="https://www.instagram.com/merteks.m/" target="_blank" rel="noopener noreferrer">اینستاگرام</a><a href="https://eitaa.com/mmd2010s" target="_blank" rel="noopener noreferrer">ایتا</a><a href="https://ble.ir/mmd2010s" target="_blank" rel="noopener noreferrer">بله</a><a href="en/index.html" hreflang="en" lang="en">English</a><a href="login.html">ورود / ثبت‌نام</a></nav>
-      <small>اطلاعاتی که در فرم «شروع پروژه» می‌نویسید فقط برای پاسخ به شما نگه‌داری می‌شود. پرسش‌ها و پاسخ‌های گفتگو
-        با دستیار برای بهبود پاسخ‌گویی ذخیره می‌شود؛ شمارهٔ تماس یا اطلاعات شخصی در آن ننویسید.</small>
+        <label for="obLPass">رمز عبور</label>
+        <div class="field">
+          <svg class="i" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+          <input id="obLPass" name="password" type="password" autocomplete="current-password" dir="ltr" maxlength="72" required aria-describedby="obLErr">
+          <button class="ob-eye" type="button" aria-pressed="false" aria-label="نمایش یا مخفی کردن رمز عبور">نمایش</button>
+        </div>
+        <p class="ob-err" id="obLErr" role="alert"></p>
+        <button class="btn primary block" type="submit">ورود و شروع گفتگو</button>
+      </form>
+      <form class="ob-form" id="obForm" novalidate hidden>
+        <label for="obName">نام و نام خانوادگی</label>
+        <div class="field">
+          <svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          <input id="obName" name="name" autocomplete="name" maxlength="30" placeholder="مثلاً سارا رضایی" required aria-describedby="obErr">
+        </div>
+        <label for="obPhone">شمارهٔ موبایل</label>
+        <div class="field">
+          <svg class="i" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18h2"/></svg>
+          <input id="obPhone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" dir="ltr" maxlength="14" placeholder="09xxxxxxxxx" required aria-describedby="obErr">
+        </div>
+        <label for="obPass">رمز عبور</label>
+        <div class="field">
+          <svg class="i" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+          <input id="obPass" name="password" type="password" autocomplete="new-password" dir="ltr" maxlength="72" required aria-describedby="obErr">
+          <button class="ob-eye" type="button" aria-pressed="false" aria-label="نمایش یا مخفی کردن رمز عبور">نمایش</button>
+        </div>
+        <label for="obPass2">تکرار رمز عبور</label>
+        <div class="field">
+          <svg class="i" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+          <input id="obPass2" name="password2" type="password" autocomplete="new-password" dir="ltr" maxlength="72" required aria-describedby="obErr">
+          <button class="ob-eye" type="button" aria-pressed="false" aria-label="نمایش یا مخفی کردن رمز عبور">نمایش</button>
+        </div>
+        <p class="ob-hint">دست‌کم ۸ نویسه، شامل حرف و عدد.</p>
+        <p class="ob-err" id="obErr" role="alert"></p>
+        <button class="btn primary block" type="submit">ساخت حساب و شروع گفتگو</button>
+      </form>
+      <ul class="ob-perks">
+        <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>استفادهٔ رایگان، هر روز</li>
+        <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>ارسال عکس و فایل برای بررسی</li>
+        <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>نوشتن، ترجمه، ایده‌پردازی و کدنویسی</li>
+      </ul>
+      <p class="ob-note">شماره فقط برای ارتباط تیم مرتکس با شما ذخیره می‌شود و جایی نمایش داده نمی‌شود.</p>
     </div>
-  </footer>
-
-  <button class="back-top" id="backTop" type="button" aria-label="بازگشت به بالا">↑</button>
-
-  <button id="mxAiFab" type="button" aria-label="دستیار هوشمند مرتکس" title="دستیار هوشمند مرتکس"><svg viewBox="0 0 24 24"
-      width="26" height="26" aria-hidden="true" focusable="false">
-      <path d="M5 4h14a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3h-7l-5 4v-4H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3z" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-      <path d="M8 9.5h8M8 13h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-    </svg></button>
-
+  </section>
+  <p class="ob-back"><a href="index.html">← بازگشت به سایت مرتکس</a></p>
+</main>
 </body>
-
 </html>
