@@ -1,6 +1,0 @@
-# فقط برای Supabase CLI (استقرار Edge Function). هیچ کلید محرمانه‌ای این‌جا نیست.
-project_id = "xpkckkosnnixshbarieo"
-
-[functions.admin-users]
-# اعتبارسنجی توکن و بررسی مدیر بودن داخل تابع انجام می‌شود (با کلیدهای جدید sb_publishable_ لازم است).
-verify_jwt = false
